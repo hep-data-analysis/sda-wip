@@ -70,8 +70,8 @@ It is the **extended marked Poisson model** of Lab 1, with a histogram as the sh
 | Level | Meaning | In the ROOT API |
 |---|---|---|
 | **Measurement** | the whole analysis, POI, luminosity | `Measurement` |
-| **Channel** | a region with its own data (signal region, control region) | `Channel` |
-| **Sample** | one process: a template histogram | `Sample` |
+| **Channel** | a subset of the data defined by a selection, with its own data (signal region, control region) | `Channel` |
+| **Sample** | one process: a template histogram. The **component** of Lab 1 | `Sample` |
 | **Modifier** | how a parameter changes a sample | see next slide |
 
 Output: a **workspace** with a `ModelConfig`: the same objects you used in Lab 3.

@@ -54,7 +54,7 @@
 
 **SAY:** Now the main formula of the morning. An experiment records n events. Each event has some measured features, for example a mass or an energy. We call these features the marks. \[PAUSE\] The probability of the whole experiment has two parts. The first part is a Poisson distribution for the number of events n. The second part is a product, over all events, of the density of the marks. **The first part is the rate, also called the yield. The second part is the shape.**
 
-*IT: Poisson per il numero di eventi (rate, detto anche yield) × prodotto delle densità (shape). Se rate-only è un conteggio. Dire "yield" qui: la parola ricorre dopo.*
+*IT: questo è il modello di un canale (vedi slide 11). Poisson per il numero di eventi (rate, detto anche yield) × prodotto delle densità (shape). Se rate-only è un conteggio. Dire "yield" qui: la parola ricorre dopo.*
 
 **SAY (to close):** If we only have the rate, we have a counting experiment. If we only care about the shape, we can ignore the number of events. Most real analyses use both. For the details, please read Kyle Cranmer, Practical Statistics for the LHC. The link is on the slide.
 
@@ -80,11 +80,11 @@
 
 *IT: fitTo chiama MINUIT (dettagli nel Lab 2); troppo stretto = best fit sul bordo, errori non affidabili; troppo largo = convergenza lenta o regioni non fisiche; RooFit avvisa se un parametro non ha limiti; partire vicino al valore atteso; limite fisico (mu ≥ 0) vs numerico; setConstant per fissare. Non nominare HESSE/MINOS/MIGRAD qui.*
 
-**\[DO\] slide 11 — Channels and processes**
+**\[DO\] slide 11 — Channels, processes and components**
 
-**SAY:** In a real measurement, several processes contribute to the same channel. For example, signal and background. The total expected number of events is the sum of the contributions. And the total shape is the weighted sum of the shapes. \[PAUSE\] Look at the table, and look at the physics. In LHCb, the signal is the decay of the B zero into a proton and an antiproton. The background is random proton–antiproton pairs. In CUORE, the signal is the neutrinoless double-beta decay of tellurium one-thirty, and the background is the natural radioactivity of the materials. In IceCube, the signal is the oscillation of the muon neutrinos, and the background is atmospheric muons and other neutrino flavours. In MAGIC, the signal is gamma rays, and the background is hadrons, from cosmic-ray showers. \[PAUSE\] Different fields, different detectors. **But the mathematical structure is the same: signal plus background, in a mass, an energy, or an angle.** This is why one toolkit is enough for all of us.
+**SAY:** Three words, and I want you to use them in the right way. \[PAUSE\] **A channel is a subset of the data, defined by a selection criterion. It is not a physical process.** This is the definition of Cranmer, and you find it in his notes. In a channel we count n events, and we measure a quantity x, for example a mass. \[PAUSE\] Be careful: in particle physics, decay channel means something else. It means the decay mode, for example H to four leptons. Here, channel means the selected events. A channel is often named after the process that we want to select, but what defines it is the selection. \[PAUSE\] In a channel, several processes contribute: signal and backgrounds. **Each process gives a component of the model of the channel.** The total expected number of events is the sum of the components. And the total shape is the sum of the shapes, weighted by the number of events. In Lab 4, HistFactory will call a component a sample. It is the same object. \[PAUSE\] Look at the table, and look at the physics. In LHCb, the signal is the decay of the B zero into a proton and an antiproton. The background is random proton–antiproton pairs. In CUORE, the signal is the neutrinoless double-beta decay of tellurium one-thirty, and the background is the natural radioactivity of the materials. In IceCube, the signal is the oscillation of the muon neutrinos, and the background is atmospheric muons and other neutrino flavours. In MAGIC, the signal is gamma rays, and the background is hadrons, from cosmic-ray showers. \[PAUSE\] Different fields, different detectors. **But the mathematical structure is the same: signal plus background, in a mass, an energy, or an angle.** This is why one toolkit is enough for all of us.
 
-*IT: processi nello stesso canale; per ogni esempio nomina il processo fisico (segnale e fondo); stessa struttura in ogni campo. Per IceCube il fondo è da confermare.*
+*IT: canale = sottoinsieme di dati definito da un criterio di selezione, non un processo fisico (Cranmer); attenzione: "decay channel" ha un altro significato; ogni processo dà una componente del modello del canale; in HistFactory (Lab 4) la componente si chiama sample; per ogni esempio nomina il processo fisico (segnale e fondo); stessa struttura in ogni campo. Per IceCube il fondo è da confermare.*
 
 **\[DO\] slide 12 — Why RooFit?**
 
@@ -180,15 +180,25 @@
 
 ---
 
-## 2:55 — Talk C: Composite models (slides 20–22, 15 min)
+## 2:55 — Talk C: Composite models (slides 20–23, 15 min)
 
-**\[DO\] slide 21 — Adding pdfs**
+*Timing: slides 21 and 22 take about 3 minutes each. The RDataFrame slide (23) stays at 1 minute.*
 
-**SAY:** Now the last topic: signal plus background. We add two pdfs, with RooAddPdf. We give two lists: the pdfs, and the coefficients. **The number of coefficients tells RooFit what you mean.** \[PAUSE\] With one coefficient for each pdf, the coefficients are the numbers of events, N signal and N background. This is the extended case. The number of events is Poisson, and it is a parameter of the fit. **This is exactly the marked Poisson model from the beginning of the morning, written in code.** You do not need to tell the fit that it is extended: RooFit sees it from the number of coefficients. \[PAUSE\] With one coefficient fewer, the coefficients are fractions, and the last fraction is one minus the sum of the others. This is the shape-only case. The total number of events is fixed by the data. \[PAUSE\] And to plot only the background, we use Components equals bkg.
+**\[DO\] slide 21 — The model of a channel: extended or shape-only**
 
-*IT: N coefficienti per N pdf = numeri di eventi = esteso (marked Poisson, non serve dirlo al fit); N−1 coefficienti = frazioni, l'ultima è 1−somma = solo forma; Components per plottare il fondo.*
+**SAY:** Now the last topic: signal plus background, in one channel. A channel contains events from several processes. Each process is a component of the model, with its number of events, nu c, and its shape, f c. **What we build is the probability of the channel:** the Poisson for the number of events, times, for each event, the sum of the components. \[PAUSE\] This is exactly the marked Poisson model from the beginning of the morning. And now there are two ways to use it. The first is extended, or shape plus rate: the numbers of events nu c are parameters, and the data constrain both the shapes and the numbers. The second is shape-only: the parameters are only the fractions, and the total number of events is not used. \[PAUSE\] How do you choose? If the number of events is what you want to measure, a cross-section, a branching fraction, a discovery, use the extended model. If only the shapes matter, for example a mass, use shape-only.
 
-**\[DO\] slide 22 — RDataFrame in one slide**
+*IT: il modello di un canale = Poisson × somma pesata delle componenti; esteso (shape + rate, i nu_c sono parametri) vs shape-only (solo le frazioni, n non usato); scelta: rate interessante → esteso; solo forma → shape-only.*
+
+**Ask the class:** I want the branching fraction of a rare decay. Extended or shape-only? **Expected answer:** extended, because I need the number of signal events. **If nobody answers, SAY:** The branching fraction is proportional to the number of signal events. We need the rate.
+
+**\[DO\] slide 22 — Adding components in RooFit: RooAddPdf**
+
+**SAY:** Now the implementation. In RooFit we add the components with RooAddPdf. We give two lists: the components, and the coefficients. **The number of coefficients tells RooFit what you mean.** \[PAUSE\] With one coefficient for each component, the coefficients are the numbers of events. This is the extended model. You do not need to tell the fit that it is extended: RooFit sees it from the number of coefficients. \[PAUSE\] With one coefficient fewer, the coefficients are fractions, and the last fraction is one minus the sum of the others. This is the shape-only model. \[PAUSE\] Look at the code: two lines, and the difference is only the list of coefficients. And to plot one component, for example the background, we use Components equals bkg.
+
+*IT: N coefficienti per N componenti = numeri di eventi = esteso (non serve dirlo al fit); N−1 coefficienti = frazioni, l'ultima è 1−somma = solo forma; Components per plottare una componente.*
+
+**\[DO\] slide 23 — RDataFrame in one slide**
 
 **SAY:** One short remark about data. In real analyses, data are in ROOT files, in trees. RDataFrame is the modern way to read them. You select events with Filter. You create new columns with Define. And you make histograms. \[PAUSE\] RDataFrame is lazy: nothing runs until you ask for a result. And it makes one loop over the events for all your results. With one line, you can use many cores. **We will study RDataFrame again in Lab 4.** For now, remember: Filter, Define, Histo1D. One more thing: the expression in a Define can be a C++ function, compiled just in time. You will try it in exercise C, step four.
 
@@ -196,9 +206,9 @@
 
 ---
 
-## 3:10 — Hands-on C (slides 23–24, 40 min)
+## 3:10 — Hands-on C (slides 24–25, 40 min)
 
-**\[DO\] slide 24 — Exercise C**
+**\[DO\] slide 25 — Exercise C**
 
 **SAY:** Exercise C1 uses the LHCb rare decay, B zero to proton anti-proton. The file is in the data folder. Please fit a Gaussian for the signal, plus an exponential for the background. Use an extended fit. Report the number of signal events and the number of background events, with errors. Plot the components and the pulls. \[PAUSE\] Exercise C2: do the same with fractions, shape-only. What happened to the information on the total yield? **Think about this: the rate is gone.** You have about thirty minutes. If you finish early, step C4 is optional: count the events in a mass window with a C++ function, compiled just in time.
 
@@ -213,7 +223,7 @@
 
 ---
 
-## 3:50 — Wrap-up (slide 25, 10 min)
+## 3:50 — Wrap-up (slide 26, 10 min)
 
 **SAY:** Let's finish. \[PAUSE\] Today you learned three things. First, the marked Poisson model: rate times shape. Second, the RooFit objects: variable, pdf, dataset, frame. Third, unbinned and binned likelihoods, and extended fits. \[PAUSE\] For the next lab, in two weeks, please do four things. One: finish your two notebooks, the ones you choose, and check that every check says PASS. Two: upload them on Virtuale before the deadline. The solutions of all three notebooks will appear after the deadline. Three: read the sections on likelihood and nuisance parameters in Cranmer's paper. Four: open your Codespace once, to check that it still works. \[PAUSE\] **In Lab 2 we open the box: what really happens when we call fitTo.** We will study MINUIT, the likelihood scan, and the nuisance parameters. Thank you very much. See you in two weeks.
 

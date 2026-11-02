@@ -74,7 +74,7 @@
 
 **\[DO\] slide 6 — Building blocks**
 
-**SAY:** Four levels. The measurement: the whole analysis. The channel: a region with its own data, for example a signal region and a control region. The sample: one process, with a template. And the modifiers. \[PAUSE\] The output is a workspace with a ModelConfig. **It is exactly the same object that you used in Lab 3.** So everything you know from RooStats works now.
+**SAY:** Four levels. The measurement: the whole analysis. The channel: a subset of the data defined by a selection, with its own data, for example a signal region and a control region. You know it from Lab 1. The sample: one process, with a template. It is the component of Lab 1: same object, new name. And the modifiers. \[PAUSE\] The output is a workspace with a ModelConfig. **It is exactly the same object that you used in Lab 3.** So everything you know from RooStats works now.
 
 *IT: Measurement > Channel > Sample > modifiers. Output = workspace + ModelConfig.*
 

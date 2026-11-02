@@ -95,6 +95,7 @@ $$P(n,\{\vec{x}_i\}\,|\,\theta) \;=\; \text{Pois}(n\,|\,\nu(\theta)) \;\prod_{i=
 - $\nu(\theta)$: expected number of events → **rate** (also called **yield**)
 - $f(\vec{x}\,|\,\theta)$: normalised pdf of the marks → **shape**
 - Rate-only = counting experiment. Shape-only = $\nu$ is not interesting (fix or ignore)
+- This is the model of **one channel** (see the slide on channels)
 
 Reference: K. Cranmer, *Practical Statistics for the LHC*, [arXiv:1503.07622](https://arxiv.org/abs/1503.07622)
 
@@ -144,13 +145,14 @@ The range of an observable **defines the model**. The range of a parameter **ste
 
 ---
 
-# Channels and processes
+# Channels, processes and components
 
-Several **processes** (signal, backgrounds) contribute to one **channel**:
+A **channel** is a subset of the data defined by a **selection criterion**, not a physical process (K. Cranmer). It has its observed number $n_c$ of events and a measured quantity $x$.
+Each **process** (signal, backgrounds) contributes a **component** to the model of the channel:
 
-$$\nu = \sum_p \nu_p, \qquad f(x) = \sum_p \frac{\nu_p}{\nu}\, f_p(x)$$
+$$\nu = \sum_c \nu_c, \qquad f(x) = \sum_c \frac{\nu_c}{\nu}\, f_c(x)$$
 
-| Example | Observable $x$ | Signal | Background |
+| Example (channel) | Observable $x$ | Signal | Background |
 |---|---|---|---|
 | LHCb | $m(p\bar p)$ | $B^0 \to p\bar p$ decay | random $p\bar p$ pairs (combinatorial) |
 | CUORE-0 | energy | $0\nu\beta\beta$ decay of $^{130}$Te | natural radioactivity of the materials |
@@ -158,6 +160,7 @@ $$\nu = \sum_p \nu_p, \qquad f(x) = \sum_p \frac{\nu_p}{\nu}\, f_p(x)$$
 | MAGIC | image parameter | $\gamma$ rays | hadrons (cosmic-ray showers) |
 
 Different fields, **same structure**.
+*Careful: in particle physics, "decay channel" means something else. In Lab 4, HistFactory calls a component a **sample**.*
 
 ---
 
@@ -287,23 +290,35 @@ Notebook: `course/lab1/ex_B.ipynb`
 
 ---
 
-# Adding pdfs: extended vs shape-only
+# The model of a channel: extended or shape-only
+
+A channel contains events from several processes. **Each process is a component** of the model, with its number of events $\nu_c$ and its shape $f_c(x)$. What we build is the **probability of the channel**:
+
+$$P(n,\{x_i\}) = \text{Pois}(n\,|\,\nu)\prod_{i=1}^{n}\sum_c \frac{\nu_c}{\nu}\,f_c(x_i)$$
+
+- **Extended** (shape + rate): the $\nu_c$ are parameters. The data constrain **shapes and numbers of events**
+- **Shape-only**: only the **fractions** $\nu_c/\nu$ are parameters, and the total $n$ is not used: $f = \sum_c \phi_c f_c$ with $\sum_c\phi_c = 1$
+- The rate is interesting (cross-section, branching fraction, discovery) → **extended**
+- Only the shapes matter (a mass, a lifetime) → **shape-only**
+
+---
+
+# Adding components in RooFit: `RooAddPdf`
 
 The **number of coefficients** tells RooFit what you mean.
 
-**Extended**: one coefficient per pdf = the **number of events** of each component. This is the marked Poisson model of Talk A: $\mathcal{L}=\text{Pois}(n\,|\,N_s+N_b)\prod_i \frac{N_s f_{\rm sig}(x_i)+N_b f_{\rm bkg}(x_i)}{N_s+N_b}$
+- **Extended**: one coefficient per component = the numbers of events
+- **Shape-only**: one coefficient fewer = the fractions. The last is $1-\sum$
 
 ```python
+# extended: 2 components, 2 coefficients (numbers of events)
 model = ROOT.RooAddPdf("model", "sig+bkg", ROOT.RooArgList(sig, bkg), ROOT.RooArgList(nsig, nbkg))
-```
-
-**Shape-only**: **one coefficient fewer** = fractions, the last is $1-\sum$. The total number of events is fixed by the data: $f = f_s f_{\rm sig} + (1-f_s) f_{\rm bkg}$
-
-```python
+# shape-only: 2 components, 1 coefficient (fraction)
 model = ROOT.RooAddPdf("model", "sig+bkg", ROOT.RooArgList(sig, bkg), ROOT.RooArgList(fsig))
-model.fitTo(data)    # the extended term is included automatically when needed
-```
 
+model.fitTo(data)                       # the extended term is included automatically when needed
+model.plotOn(frame, Components="bkg")   # draw one component
+```
 ---
 
 # Getting data in: RDataFrame in one slide

@@ -94,7 +94,9 @@ $$P(n,\{\vec{x}_i\}\,|\,\theta) \;=\; \text{Pois}(n\,|\,\nu(\theta)) \;\prod_{i=
 
 - $\nu(\theta)$: expected number of events → **rate** (also called **yield**)
 - $f(\vec{x}\,|\,\theta)$: normalised pdf of the marks → **shape**
-- Rate-only = counting experiment. Shape-only = $\nu$ is not interesting (fix or ignore)
+- **Rate-only** = counting experiment
+- **Shape-only**: $\nu$ is not interesting. The Poisson term is dropped and $n$ is fixed: $\prod_i f(\vec{x}_i\,|\,\theta)$
+- **Extended** (shape + rate): $\nu$ depends on $\theta$, so the data constrain both. Use it when the rate is the result (cross-section, branching fraction, discovery)
 - This is the model of **one channel** (see the slide on channels)
 
 Reference: K. Cranmer, *Practical Statistics for the LHC*, [arXiv:1503.07622](https://arxiv.org/abs/1503.07622)
@@ -147,8 +149,8 @@ The range of an observable **defines the model**. The range of a parameter **ste
 
 # Channels, processes and components
 
-A **channel** is a subset of the data defined by a **selection criterion**, not a physical process (K. Cranmer). It has its observed number $n_c$ of events and a measured quantity $x$.
-Each **process** (signal, backgrounds) contributes a **component** to the model of the channel:
+A **channel** is a subset of the **data**, defined by a **selection criterion**. It has its observed number $n_c$ of events and a measured quantity $x$.
+A **physics process** (signal, backgrounds) is not a channel: each physics process contributes a **component** to the model of the channel:
 
 $$\nu = \sum_c \nu_c, \qquad f(x) = \sum_c \frac{\nu_c}{\nu}\, f_c(x)$$
 
@@ -290,16 +292,23 @@ Notebook: `course/lab1/ex_B.ipynb`
 
 ---
 
-# The model of a channel: extended or shape-only
+# Adding pdfs: signal + background
 
-A channel contains events from several processes. **Each process is a component** of the model, with its number of events $\nu_c$ and its shape $f_c(x)$. What we build is the **probability of the channel**:
+Two components of the model of a channel: the signal pdf $f_s(x)$ and the background pdf $f_b(x)$.
 
-$$P(n,\{x_i\}) = \text{Pois}(n\,|\,\nu)\prod_{i=1}^{n}\sum_c \frac{\nu_c}{\nu}\,f_c(x_i)$$
+**Shape-only** (one fraction $\phi$):
+$$\prod_{i=1}^{n}\Big[\phi\,f_s(x_i)+(1-\phi)\,f_b(x_i)\Big]$$
 
-- **Extended** (shape + rate): the $\nu_c$ are parameters. The data constrain **shapes and numbers of events**
-- **Shape-only**: only the **fractions** $\nu_c/\nu$ are parameters, and the total $n$ is not used: $f = \sum_c \phi_c f_c$ with $\sum_c\phi_c = 1$
-- The rate is interesting (cross-section, branching fraction, discovery) → **extended**
-- Only the shapes matter (a mass, a lifetime) → **shape-only**
+**Extended** (numbers of events $N_s$, $N_b$):
+$$\text{Pois}(n\,|\,N_s+N_b)\;\prod_{i=1}^{n}\frac{N_s\,f_s(x_i)+N_b\,f_b(x_i)}{N_s+N_b}$$
+
+| | Shape-only | Extended |
+|---|---|---|
+| Free parameters besides the shapes | **1**: $\phi$ | **2**: $N_s$, $N_b$ |
+| Total number of events $n$ | fixed by the data | Poisson, $\nu = N_s+N_b$ |
+| Signal events | derived: $\hat\phi\,n$ | fitted: $\hat N_s$ |
+
+With $\phi = N_s/(N_s+N_b)$: **the extended model has one more free parameter**, the total number of events.
 
 ---
 
@@ -309,6 +318,7 @@ The **number of coefficients** tells RooFit what you mean.
 
 - **Extended**: one coefficient per component = the numbers of events
 - **Shape-only**: one coefficient fewer = the fractions. The last is $1-\sum$
+- The number of coefficients is the number of free parameters: **2** for extended ($N_s$, $N_b$), **1** for shape-only ($\phi$)
 
 ```python
 # extended: 2 components, 2 coefficients (numbers of events)

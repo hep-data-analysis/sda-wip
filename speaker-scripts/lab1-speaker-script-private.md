@@ -182,25 +182,31 @@
 
 ---
 
-## 2:55 — Talk C: Composite models (slides 20–23, 15 min)
+## 2:55 — Talk C: Composite models (slides 20–24, 15 min)
 
-*Timing: slides 21 and 22 take about 3 minutes each. The RDataFrame slide (23) stays at 1 minute.*
+*Timing: slides 21 and 22 take about 2 minutes each. The RDataFrame slide (23) stays at 1 minute.*
 
 **\[DO\] slide 21 — Adding pdfs: signal + background**
 
-**SAY:** Now the last topic: adding pdfs. In a channel we have two components, the signal pdf and the background pdf. Let's write the model in the two ways. \[PAUSE\] **First, shape-only.** We have one fraction, phi. The pdf of one event is phi times the signal, plus one minus phi times the background. The model is the product over the events. The number of events n is fixed by the data. \[PAUSE\] **Second, extended.** Now we have the number of signal events, N s, and the number of background events, N b. The first factor is a Poisson for the total number of events, with expected value N s plus N b. The second factor is the product over events of the same sum, with the fraction written with the two numbers. \[PAUSE\] Look at the table. **In the extended model there is one more free parameter: the total number of events.** Shape-only has one parameter, phi. Extended has two, N s and N b. The signal events are derived in the first case, as phi times n, and fitted in the second case.
+**SAY:** Now the last topic: adding pdfs. In a channel we have two components, the signal pdf and the background pdf. Let's write the model in the two ways. \[PAUSE\] **First, shape-only.** We have one fraction, phi, of signal. The pdf of one event is phi times the signal, plus one minus phi times the background. The model is the product over the events. The number of events n is fixed by the data. \[PAUSE\] **Second, extended.** Now we have the expected number of signal events, nu s, and of background events, nu b. The first factor is a Poisson for the total number of events, with expected value nu s plus nu b. The second factor is the product over events of the same sum, with the fraction written with the two numbers.
 
-*IT: formule S+B affiancate: shape-only con una frazione φ (n fisso), esteso con N_s e N_b e il Poisson sul totale; il numero di parametri liberi è diverso (1 contro 2): l'esteso ha un parametro in più, il numero totale di eventi; N_s derivato vs fittato.*
+*IT: formule S+B affiancate (grandi): shape-only con una frazione φ (n fisso); esteso con ν_s e ν_b e il Poisson sul totale.*
 
-**Ask the class:** How many free parameters do the two models have, besides the shapes? **Expected answer:** one for shape-only, two for extended. **If nobody answers, SAY:** Phi for the first. N s and N b for the second.
+**\[DO\] slide 22 — Shape-only or extended: free parameters**
 
-**\[DO\] slide 22 — Adding components in RooFit: RooAddPdf**
+**SAY:** Look at the table. **In the extended model there is one more free parameter: the total number of events.** Shape-only has one parameter, phi. Extended has two, nu s and nu b. If we write phi as nu s over nu s plus nu b, the two models have the same fraction, but the extended model also has the total. \[PAUSE\] The signal events are derived in the first case, as phi times n, and fitted in the second case. \[PAUSE\] And a general rule: a mixture of k normalised pdfs needs only k minus one independent coefficients, because the sum must be one. In an extended fit, each component has its own yield, so we need k parameters.
+
+*IT: tabella: parametri liberi 1 contro 2, n fisso contro Poisson, N_s derivato contro fittato; regola generale k−1 contro k.*
+
+**Ask the class:** How many free parameters do the two models have, besides the shapes? **Expected answer:** one for shape-only, two for extended. **If nobody answers, SAY:** Phi for the first. Nu s and nu b for the second.
+
+**\[DO\] slide 23 — Adding components in RooFit: RooAddPdf**
 
 **SAY:** Now the implementation. In RooFit we add the components with RooAddPdf. We give two lists: the components, and the coefficients. **The number of coefficients tells RooFit what you mean.** \[PAUSE\] With one coefficient for each component, the coefficients are the numbers of events. This is the extended model. You do not need to tell the fit that it is extended: RooFit sees it from the number of coefficients. \[PAUSE\] With one coefficient fewer, the coefficients are fractions, and the last fraction is one minus the sum of the others. This is the shape-only model. \[PAUSE\] **The number of coefficients is the number of free parameters: two for extended, one for shape-only.** Look at the code: two lines, and the difference is only the list of coefficients. And to plot one component, for example the background, we use Components equals bkg.
 
-*IT: N coefficienti per N componenti = numeri di eventi = esteso (non serve dirlo al fit); N−1 coefficienti = frazioni, l'ultima è 1−somma = solo forma; Components per plottare una componente.*
+*IT: k coefficienti per k componenti = numeri di eventi = esteso (non serve dirlo al fit); N−1 coefficienti = frazioni, l'ultima è 1−somma = solo forma; Components per plottare una componente.*
 
-**\[DO\] slide 23 — RDataFrame in one slide**
+**\[DO\] slide 24 — RDataFrame in one slide**
 
 **SAY:** One short remark about data. In real analyses, data are in ROOT files, in trees. RDataFrame is the modern way to read them. You select events with Filter. You create new columns with Define. And you make histograms. \[PAUSE\] RDataFrame is lazy: nothing runs until you ask for a result. And it makes one loop over the events for all your results. With one line, you can use many cores. **We will study RDataFrame again in Lab 4.** For now, remember: Filter, Define, Histo1D. One more thing: the expression in a Define can be a C++ function, compiled just in time. You will try it in exercise C, step four.
 
@@ -208,9 +214,9 @@
 
 ---
 
-## 3:10 — Hands-on C (slides 24–25, 40 min)
+## 3:10 — Hands-on C (slides 25–26, 40 min)
 
-**\[DO\] slide 25 — Exercise C**
+**\[DO\] slide 26 — Exercise C**
 
 **SAY:** Exercise C1 uses the LHCb rare decay, B zero to proton anti-proton. The file is in the data folder. Please fit a Gaussian for the signal, plus an exponential for the background. Use an extended fit. Report the number of signal events and the number of background events, with errors. Plot the components and the pulls. \[PAUSE\] Exercise C2: do the same with fractions, shape-only. What happened to the information on the total yield? **Think about this: the rate is gone.** You have about thirty minutes. If you finish early, step C4 is optional: count the events in a mass window with a C++ function, compiled just in time.
 
@@ -225,7 +231,7 @@
 
 ---
 
-## 3:50 — Wrap-up (slide 26, 10 min)
+## 3:50 — Wrap-up (slide 27, 10 min)
 
 **SAY:** Let's finish. \[PAUSE\] Today you learned three things. First, the marked Poisson model: rate times shape. Second, the RooFit objects: variable, pdf, dataset, frame. Third, unbinned and binned likelihoods, and extended fits. \[PAUSE\] For the next lab, in two weeks, please do four things. One: finish your two notebooks, the ones you choose, and check that every check says PASS. Two: upload them on Virtuale before the deadline. The solutions of all three notebooks will appear after the deadline. Three: read the sections on likelihood and nuisance parameters in Cranmer's paper. Four: open your Codespace once, to check that it still works. \[PAUSE\] **In Lab 2 we open the box: what really happens when we call fitTo.** We will study MINUIT, the likelihood scan, and the nuisance parameters. Thank you very much. See you in two weeks.
 

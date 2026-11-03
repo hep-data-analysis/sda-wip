@@ -23,7 +23,7 @@ G. Sirri · Hands-on sessions, 9:00–13:00
 
 Discuss in pairs, then we compare:
 
-1. In the marked Poisson model, which factor is the **rate** and which the **shape**?
+1. In the marked Poisson model, which factor is the **rate** and which the **shape**? What is a **channel**, and what is a **component**?
 2. Extended fit vs fit with fractions: what information is lost with fractions?
 3. A binned likelihood is **not** a $\chi^2$ fit. Why does it matter for low counts?
 4. Which two Lab 1 notebooks did you submit? Which cell was the hardest?
@@ -35,13 +35,16 @@ Discuss in pairs, then we compare:
 | Time | |
 |---|---|
 | 9:00 | Recap and Lab 1 questions |
-| 9:10 | Talk A: what happens in `fitTo` |
+| 9:10 | Talk A: what happens in `fitTo` (15 min) |
+| 9:25 | **Live coding**: the NLL and MIGRAD (5 min) |
 | 9:30 | Hands-on A: anatomy of a fit |
 | 10:15 | **Break (15 min)** |
-| 10:30 | Talk B: likelihood intervals, nuisance parameters |
+| 10:30 | Talk B: likelihood intervals, nuisance parameters (15 min) |
+| 10:45 | **Live coding**: the on/off model (5 min) |
 | 10:50 | Hands-on B: the on/off problem |
 | 11:35 | **Break (10 min)** |
-| 11:45 | Talk C: validate with toys |
+| 11:45 | Talk C: validate with toys (10 min) |
+| 11:55 | **Live coding**: the toy loop (5 min) |
 | 12:00 | Hands-on C: pulls, bias, coverage |
 | 12:25 | Open lab: finish a notebook, ask questions |
 | 12:55 | Wrap-up |
@@ -128,6 +131,7 @@ Same data and model as Lab 1, Exercise C (LHCb, signal + background).
 4. Plot the NLL scan in `nsig`, the **profile** NLL and the **HESSE parabola** together
 5. Draw the 1σ and 2σ **contour** of (`nsig`, `nbkg`)
 
+We write step 1 **together**, live (5 min), then you continue.
 Notebook: `course/lab2/ex_A.ipynb`
 
 ---
@@ -199,6 +203,7 @@ Counting experiment: $n_{\rm on}=17$, $n_{\rm off}=40$, $\tau=10.53$ (top-quark 
 3. Compare with the **slice** at $b=\hat b$
 4. Repeat with a poorer control region: $n_{\rm off}=4$, $\tau=1.053$ (same $\hat b$). What changes?
 
+We write the model of step 1 **together**, live (5 min), then you continue.
 Notebook: `course/lab2/ex_B.ipynb`
 
 ---
@@ -228,7 +233,7 @@ Healthy fit: pull **mean ≈ 0** (no bias), **RMS ≈ 1** (errors have the right
 # What goes wrong at low statistics
 
 - Poisson fluctuations make the likelihood **non-parabolic**
-- Parameters hit **boundaries** (e.g. $N_s \ge 0$): pulls are no longer Gaussian
+- Parameters hit **boundaries** (e.g. $\nu_s \ge 0$): pulls are no longer Gaussian
 - A small bias on the mean is common; a wrong RMS means **wrong errors**
 
 Remedy: report **MINOS or profile intervals**, or run a Neyman construction with toys (Lab 3).
@@ -247,11 +252,12 @@ Always check the **fraction of failed fits**: toys that fail to converge are not
 
 Model: LHCb signal + background, extended.
 
-1. Write the toy loop: **generate → fit → pull**, for $N_s=33$
+1. Write the toy loop: **generate → fit → pull**, for $\nu_s=33$
 2. Fill a histogram of the pulls. Mean, RMS, coverage
-3. Repeat with $N_s=5$. What happens to the pulls? How many fits fail or sit at the boundary?
+3. Repeat with $\nu_s=5$. What happens to the pulls? How many fits fail or sit at the boundary?
 4. *(optional)* The same loop **in C++** (`gInterpreter.Declare`): compare the time
 
+We write the toy loop of step 1 **together**, live (5 min), then you continue.
 Notebook: `course/lab2/ex_C.ipynb`
 
 ---

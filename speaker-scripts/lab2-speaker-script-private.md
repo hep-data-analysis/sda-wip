@@ -53,13 +53,13 @@
 
 **\[DO\] slide 2 — Recap**
 
-**SAY:** First, a short recap. Four questions. Please discuss in pairs, for two minutes. \[PAUSE\] Question one: in the marked Poisson model, which factor is the rate, and which is the shape? Question two: extended fit, or fit with fractions. What information do we lose with fractions? Question three: why is a binned likelihood not a chi-square fit? Question four: which two notebooks of Lab 1 did you submit, and which cell was the hardest?
+**SAY:** First, a short recap. Four questions. Please discuss in pairs, for two minutes. \[PAUSE\] Question one: in the marked Poisson model, which factor is the rate, and which is the shape? And what is a channel, and what is a component? Question two: extended fit, or fit with fractions. What information do we lose with fractions? Question three: why is a binned likelihood not a chi-square fit? Question four: which two notebooks of Lab 1 did you submit, and which cell was the hardest?
 
 **After two minutes, SAY:** Let's compare. Question one? \[PAUSE\]
 
 **Expected answers:**
 
-1. Rate = Poisson term for n. Shape = product of the densities.
+1. Rate = Poisson term for n. Shape = product of the densities. A channel is a subset of the data defined by a selection. A component is the part of the model that describes one physics process.
 2. With fractions we lose the total yield: the rate.
 3. The binned likelihood is Poisson in each bin: exact also with few or zero counts. Chi-square assumes Gaussian errors.
 4. Collect two or three answers. Note the hardest cells on the board: they tell you what to repeat today. Remind them of the rule: two notebooks out of three.
@@ -68,11 +68,13 @@
 
 **\[DO\] slide 3 — Schedule**
 
-**SAY:** This is our plan. Three talks, three hands-on parts, two breaks. At the end, thirty minutes of open lab, to finish a notebook with me. \[PAUSE\] Please do not skip it: it is the most useful time for you.
+**SAY:** This is our plan. Three talks, three hands-on parts, two breaks. **Before each hands-on, we write the first hard step together, live, for five minutes.** At the end, thirty minutes of open lab, to finish a notebook with me. \[PAUSE\] Please do not skip it: it is the most useful time for you.
 
 ---
 
-## 0:10 — Talk A: What happens in fitTo (slides 4–8, 20 min)
+## 0:10 — Talk A: What happens in fitTo (slides 4–8, 15 min)
+
+*Time-box: 15 minutes. Keep a timer on the desk. If you are late, say only the bold line of slide 8.*
 
 **\[DO\] slide 5 — From pdf to number**
 
@@ -102,6 +104,18 @@
 
 ---
 
+## 0:25 — Live coding A1: the NLL and MIGRAD (5 min)
+
+**\[DO\]** Open the notebook ex A, cell A1. The model, the data, and the printing lines are already there. We fill the TODO lines on the screen, one at a time. Students may follow, but it is not required.
+
+**SAY:** Now we write step one together. \[PAUSE\] First, the negative log-likelihood: nll equals model dot createNLL, data, and Extended True. We write Extended explicitly, to make clear that the model is extended. \[PAUSE\] Second, the minimiser: minim equals RooMinimizer of nll. \[PAUSE\] Third, three calls: set print level to minus one, to keep the output short; minimize, Minuit2, Migrad, which is MIGRAD; and hesse, which is HESSE. Fourth, we save the result: res equals minim dot save. \[PAUSE\] **Look at the line that is already in the notebook: err hesse equals nsig dot getError. We keep the HESSE error now, because MINOS will change the error object later.** \[PAUSE\] The last lines print three numbers: the status, the covariance quality, and the EDM.
+
+*IT: riempi dal vivo i TODO di A1 (circa 5 min): createNLL con Extended(True) esplicito → RooMinimizer → setPrintLevel(-1), minimize Migrad, hesse → save. La riga err_hesse c'è già: spiega perché (MINOS cambia l'errore). Si stampano status, covQual, EDM.*
+
+**Expected:** status 0, covQual 3, EDM very small. **If it fails:** the model is probably not defined: run the cells above.
+
+---
+
 ## 0:30 — Hands-on A: Anatomy of a fit (slides 9–10, 45 min)
 
 **\[DO\] slide 10 — Exercise A**
@@ -127,7 +141,9 @@
 
 ---
 
-## 1:30 — Talk B: Intervals and nuisance parameters (slides 11–14, 20 min)
+## 1:30 — Talk B: Intervals and nuisance parameters (slides 11–14, 15 min)
+
+*Time-box: 15 minutes. If you are late, shorten slide 13 to the bold sentence.*
 
 **\[DO\] slide 12 — Likelihood-ratio intervals**
 
@@ -148,6 +164,18 @@
 *IT: on/off: due Poisson. b = n\_off/tau; s = n\_on − b. L'incertezza su b viene dalla regione di controllo.*
 
 **Ask the class:** If tau is small, what happens to the uncertainty on b? **Answer:** it gets larger: the control region is small.
+
+---
+
+## 1:45 — Live coding B1: the on/off model (5 min)
+
+**\[DO\]** Open the notebook ex B, cell B1. The parameters, the observables and the dataset are already there. We fill the five model lines on the screen. The students write the NLL and the minimiser, which they have just seen in step A1.
+
+**SAY:** Now we write the model of step one together. \[PAUSE\] Look at the top of the cell: s and b are the parameters, n on and n off are the observables, and tau is a constant. \[PAUSE\] The expected count in the signal region is s plus b: we write it with a RooFormulaVar, at zero plus at one. The expected count in the control region is tau times b. \[PAUSE\] For each region, a RooPoisson: the observable, and the expected count. And the model is the product of the two, with RooProdPdf. **Two regions: two Poisson, one product. Notice that b appears in both.** \[PAUSE\] Now it is your turn: the NLL and the minimiser, as in exercise A.
+
+*IT: riempi dal vivo i 5 TODO del modello di B1 (circa 5 min): RooFormulaVar s+b e tau*b; due RooPoisson; RooProdPdf. NLL e minimizer li scrivono loro, come in A1. Nota: b compare in entrambe le regioni.*
+
+**Expected at the end of B1 (for the students):** b hat close to 3.80, s hat close to 13.2, error on b close to 0.60.
 
 ---
 
@@ -176,7 +204,9 @@
 
 ---
 
-## 2:45 — Talk C: Validate with toys (slides 17–19, 15 min)
+## 2:45 — Talk C: Validate with toys (slides 17–19, 10 min)
+
+*Time-box: 10 minutes. If you are late, skip slide 19 and say its bold sentence at the end of the exercise.*
 
 **\[DO\] slide 18 — Why toys?**
 
@@ -192,13 +222,23 @@
 
 ---
 
+## 2:55 — Live coding C1: the toy loop (5 min)
+
+**\[DO\]** Open the notebook ex C, cell C1. The loop is already written, with two TODO lines. We read it from the top, and we fill the two lines on the screen. Run it with three toys, not three hundred (change ntoys for the first run).
+
+**SAY:** Now the toy loop. \[PAUSE\] Read the function from the top. For each toy, **first we reset the parameters to their true values: this is the line that everybody forgets, and it is already there for you.** \[PAUSE\] Second, we generate a dataset: model dot generate, with the observable, and Extended True. Third, we fit it: model dot fitTo, with Extended True, Save, and print level minus one. \[PAUSE\] Fourth, the check that is already in the notebook: if the status is not zero, we count a failed fit and go to the next toy. Fifth, if the fit is good, the pull: the fitted value, minus the true value, divided by the error. \[PAUSE\] We run three toys to see that it works. Now you run three hundred. It takes about a minute.
+
+*IT: leggi il loop dall'alto e riempi i 2 TODO dal vivo (circa 5 min): generate con Extended(True), fitTo con Extended, Save, PrintLevel(-1). Il reset, il controllo dello status e il pull ci sono già: spiegali. Esegui con 3 toy; poi loro con 300.*
+
+---
+
 ## 3:00 — Hands-on C: pulls, bias, coverage (slides 20–21, 25 min)
 
 **\[DO\] slide 21 — Exercise C**
 
 **SAY:** Exercise C is short. We use the LHCb model again. \[PAUSE\] Step one. Write the toy loop: generate, fit, compute the pull. Use thirty-three signal events. Fill a histogram. Compute the mean, the RMS and the coverage. Step two. Repeat with five signal events. What happens to the pulls? How many fits sit at the boundary? \[PAUSE\] The loop takes about a minute. While it runs, please read the questions in the notebook. If you finish early, step C3 is optional: the same loop written in C++. Compare the time.
 
-*IT: loop toy; N\_s=33 poi N\_s=5. Il loop impiega circa un minuto.*
+*IT: loop toy; nu\_s=33 poi nu\_s=5. Il loop impiega circa un minuto.*
 
 **While walking around:**
 
@@ -236,8 +276,10 @@
 
 ## Emergency notes
 
+- **Talk time-boxes:** A 15 min, B 15 min, C 10 min. Keep a timer on the desk: in Lab 1 the talks were too long for some students.
 - **Running late?** Shorten slide 8 (when fits go wrong) and skip the contour in A5. Do not skip the toys: it is the bridge to Lab 3.
 - **Toy loop too slow?** Say: Please use two hundred toys instead of three hundred.
+- **A student asks about RDataFrame?** Say: Good question. There is a short backup slide in lab1 backup, and we use it again in Lab 4. Come to me at the break.
 - **A student asks about Bayesian intervals?** Say: Good question. We see the frequentist and Bayesian tools in Lab 3, with RooStats.
 - **Confusion between slice and profile?** Draw two curves on the board: the narrow one is the slice, the wide one is the profile.
 

@@ -92,12 +92,13 @@ An experiment records $n$ events, each with measured features $\vec{x}_i$ (the "
 
 $$P(n,\{\vec{x}_i\}\,|\,\theta) \;=\; \text{Pois}(n\,|\,\nu(\theta)) \;\prod_{i=1}^{n} f(\vec{x}_i\,|\,\theta)$$
 
-- $\nu(\theta)$: expected number of events → **rate** (also called **yield**)
-- $f(\vec{x}\,|\,\theta)$: normalised pdf of the marks → **shape**
+$\nu(\theta)$: expected number of events → **rate** (also called **yield**)
+$f(\vec{x}\,|\,\theta)$: normalised pdf of the marks → **shape**
 - **Rate-only** = counting experiment
 - **Shape-only**: $\nu$ is not interesting. The Poisson term is dropped and $n$ is fixed: $\prod_i f(\vec{x}_i\,|\,\theta)$
 - **Extended** (shape + rate): $\nu$ depends on $\theta$, so the data constrain both. Use it when the rate is the result (cross-section, branching fraction, discovery)
-- This is the model of **one channel** (see the slide on channels)
+
+_This is the model of **one channel** (see the slide on channels)_
 
 Reference: K. Cranmer, *Practical Statistics for the LHC*, [arXiv:1503.07622](https://arxiv.org/abs/1503.07622)
 
@@ -128,7 +129,7 @@ Example, a Gaussian: $\text{Gauss}(x;\mu,\sigma)=\dfrac{1}{\sqrt{2\pi}\,\sigma}\
 | You must give | the **range** | a **starting value** and an **allowed interval** (or fix it) |
 | What the range is | the domain where the pdf is **normalised**: $\int f\,dx = 1$ | a **bound for the minimiser**: it cannot leave it |
 | Events outside | **not in the fit** | not applicable |
-| The fit depends on it | **yes**: shape, normalisation, and the rates $N_s$, $N_b$ (number of events in the range) | **yes**: if the minimum is near a limit, or the interval is badly chosen |
+| The fit depends on it | **yes**: shape, normalisation, and the rates $\nu_s$, $\nu_b$ (number of events in the range) | **yes**: if the minimum is near a limit, or the interval is badly chosen |
 
 The range of an observable **defines the model**. The range of a parameter **steers the search**.
 
@@ -296,19 +297,26 @@ Notebook: `course/lab1/ex_B.ipynb`
 
 Two components of the model of a channel: the signal pdf $f_s(x)$ and the background pdf $f_b(x)$.
 
-**Shape-only** (one fraction $\phi$):
+**Shape-only**: one fraction $\phi$ of signal
 $$\prod_{i=1}^{n}\Big[\phi\,f_s(x_i)+(1-\phi)\,f_b(x_i)\Big]$$
 
-**Extended** (numbers of events $N_s$, $N_b$):
-$$\text{Pois}(n\,|\,N_s+N_b)\;\prod_{i=1}^{n}\frac{N_s\,f_s(x_i)+N_b\,f_b(x_i)}{N_s+N_b}$$
+**Extended**: the expected numbers of signal and background events, $\nu_s$ and $\nu_b$
+$$\text{Pois}(n\,|\,\nu_s+\nu_b)\;\prod_{i=1}^{n}\frac{\nu_s\,f_s(x_i)+\nu_b\,f_b(x_i)}{\nu_s+\nu_b}$$
 
-| | Shape-only | Extended |
+---
+
+# Shape-only or extended: free parameters
+
+| | **Shape-only** | **Extended** |
 |---|---|---|
-| Free parameters besides the shapes | **1**: $\phi$ | **2**: $N_s$, $N_b$ |
-| Total number of events $n$ | fixed by the data | Poisson, $\nu = N_s+N_b$ |
-| Signal events | derived: $\hat\phi\,n$ | fitted: $\hat N_s$ |
+| free parameters (besides the shapes) | **1**: $\phi$, fraction of signal | **2**: $\nu_s$, $\nu_b$, expected numbers of signal and background events |
+| total number of events | $n$ fixed by the data | $n$ is Poisson, with $\nu = \nu_s+\nu_b$ |
+| number of signal events | derived: $\hat\phi\,n$ | fitted: $\hat\nu_s$ |
 
-With $\phi = N_s/(N_s+N_b)$: **the extended model has one more free parameter**, the total number of events.
+With $\phi = \nu_s/(\nu_s+\nu_b)$: **the extended model has one more free parameter**, the total number of events.
+
+- **Shape-only fit:** a mixture of $k$ normalised pdfs needs only $k-1$ independent coefficients, because their sum must be one
+- **Extended fit:** each component has its own yield parameter, so $k$ components need $k$ independent yield parameters
 
 ---
 
@@ -318,7 +326,7 @@ The **number of coefficients** tells RooFit what you mean.
 
 - **Extended**: one coefficient per component = the numbers of events
 - **Shape-only**: one coefficient fewer = the fractions. The last is $1-\sum$
-- The number of coefficients is the number of free parameters: **2** for extended ($N_s$, $N_b$), **1** for shape-only ($\phi$)
+- The number of coefficients is the number of free parameters: **2** for extended ($\nu_s$, $\nu_b$), **1** for shape-only ($\phi$)
 
 ```python
 # extended: 2 components, 2 coefficients (numbers of events)
@@ -363,12 +371,12 @@ h  = df.Histo1D(("h", ";m;events", 100, 100, 150), "m")
 
 **C1. Extended fit, signal + background** — `examples/lhcb-b0-ppbar/data/rarest_b0_decay.dat`
 Gaussian signal + exponential background, extended ML.
-Report $N_s$, $N_b$ with errors. Plot with the components and the pulls.
+Report $\nu_s$, $\nu_b$ with errors. Plot with the components and the pulls.
 
 **C2. Same exercise, shape-only (fractions)**
 What happened to the information on the total yield?
 
-**Questions C.** Which error is larger, and why? When would you *need* the rate? Is the signal significant? (Compare $N_s$ with its error: no p-value yet, we do it in Lab 3.)
+**Questions C.** Which error is larger, and why? When would you *need* the rate? Is the signal significant? (Compare $\nu_s$ with its error: no p-value yet, we do it in Lab 3.)
 
 **C4. (optional, 10 min)** Count the events in a mass window with `RDataFrame` and a **C++ function** (JIT).
 

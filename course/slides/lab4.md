@@ -40,7 +40,7 @@ Today closes the chain: **binned models**, and a first look at **event selection
 | 10:15 | Talk B: RDataFrame `Vary` and modern C++ |
 | 10:30 | Hands-on B: HistFactory on CMS $H\to4\ell$ |
 | 11:05 | **Break (10 min)** |
-| 11:15 | Talk C: selecting events with TMVA (slides `lab4_tmva.md`) |
+| 11:15 | Talk C: selecting events with TMVA (slides [`lab4_tmva.md`](./lab4_tmva.md)) |
 | 11:35 | Guided demo C: BDT, efficiency, Asimov significance |
 | 12:10 | Open lab: finish A and B, ask questions |
 | 12:45 | Wrap-up and feedback |
@@ -109,7 +109,7 @@ What you learn today is what ATLAS and CMS use to publish their statistical mode
 
 # Exercise A (≈ 40 min)
 
-ROOT Team course `02-roofit`, in `third_party/root-cpp-course-roofit/`:
+ROOT Team course `02-roofit`, in [`third_party/root-cpp-course-roofit/`](../../third_party/root-cpp-course-roofit/):
 
 1. Run the pipeline (`make_toys`, `unbinned`, `analysis`, `histfactory`, `likelihood`)
 2. **Where do $\mu$ and $\theta$ act in the simulation?** (look at `physics.h`)
@@ -117,7 +117,7 @@ ROOT Team course `02-roofit`, in `third_party/root-cpp-course-roofit/`:
 4. Read $\hat\theta=\theta_{\rm nom}+\hat\alpha\,\Delta\theta$ and compare with $\theta_{\rm true}=1.3$
 5. Compare the slice and the profile of $\mu$ with Lab 2
 
-Notebook: `course/lab4/ex_A.ipynb` (guide, C++ macros run from Python)
+Notebook: [`course/lab4/ex_A.ipynb`](../lab4/ex_A.ipynb) (guide, C++ macros run from Python)
 
 ---
 
@@ -143,7 +143,7 @@ h_up, h_down = variations["bkg_shape:theta_up"], variations["bkg_shape:theta_dow
 - The varied histograms are exactly the `HistoSys` inputs
 - Cost: close to a single loop, not $1+2N$ loops
 
-Code from the ROOT Team course: `analysis.cpp`.
+Code from the ROOT Team course: [`analysis.cpp`](../../third_party/root-cpp-course-roofit/analysis.cpp).
 
 ---
 
@@ -161,7 +161,7 @@ df = df.Define("m_up", "mass_scale(m, 0.005)")
 - A Python loop over events does **not** scale; RDataFrame does
 - Production code (experiment frameworks) is C++: you can read and write both
 
-See the optional notebook `course/optional/rdf_cpp_speed.ipynb`.
+See the optional notebook [`course/optional/rdf_cpp_speed.ipynb`](../optional/rdf_cpp_speed.ipynb).
 
 ---
 
@@ -173,7 +173,7 @@ See the optional notebook `course/optional/rdf_cpp_speed.ipynb`.
 
 # The case
 
-CMS Open Data, $H\to ZZ^*\to4\ell$ (arXiv:1207.7235). Real data and simulated templates.
+CMS Open Data, $H\to ZZ^*\to4\ell$ ([arXiv:1207.7235](https://arxiv.org/abs/1207.7235)). Real data and simulated templates.
 
 | | Signal region | Control region |
 |---|---|---|
@@ -195,7 +195,7 @@ CMS Open Data, $H\to ZZ^*\to4\ell$ (arXiv:1207.7235). Real data and simulated te
 4. Add a 5 % luminosity uncertainty (`OverallSys`; **illustrative size**). What changes?
 5. Slice vs profile of $\mu$: how correlated are $\mu$ and $k_{ZZ}$?
 
-Notebook: `course/lab4/ex_B.ipynb`
+Notebook: [`course/lab4/ex_B.ipynb`](../lab4/ex_B.ipynb)
 
 ---
 
@@ -212,7 +212,7 @@ Notebook: `course/lab4/ex_B.ipynb`
 - Solutions of all labs appear after the deadline
 
 **Before you leave**
-- Optional material: `course/optional/`
+- Optional material: [`course/optional/`](../optional/)
 - Short anonymous feedback form (5 questions)
 
 Thank you!

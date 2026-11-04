@@ -74,17 +74,17 @@
 
 ## 0:10 — Talk A: What happens in fitTo (slides 4–8, 15 min)
 
-*Time-box: 15 minutes. Keep a timer on the desk. If you are late, say only the bold line of slide 8.*
+*Time-box: 15 minutes, plus the 5-minute live coding. Keep a timer on the desk. No slide is removed: if you are late, say the bold line of slide 8 now, and come back to its table at the end of the hands-on.*
 
 **\[DO\] slide 5 — From pdf to number**
 
-**SAY:** When you write fit-to, four things happen. \[PAUSE\] First, RooFit builds the negative log-likelihood. It is a function of the parameters. Second, the minimiser, called MINUIT, finds the minimum. The command is MIGRAD. Third, HESSE computes the covariance matrix from the second derivatives. Fourth, if you ask, MINOS computes asymmetric errors. **Today we call each step ourselves, with a class called RooMinimizer.**
+**SAY:** When you write fit-to, four things happen. \[PAUSE\] First, RooFit builds the negative log-likelihood. It is a function of the parameters. Second, the minimiser finds the minimum. The minimiser is MINUIT, the minimisation library of ROOT, used in particle physics since the nineteen seventies. The algorithm is called MIGRAD. Third, HESSE computes the covariance matrix from the second derivatives. Fourth, if you ask, MINOS computes asymmetric errors. **Today we call each step ourselves, with a class called RooMinimizer.**
 
-*IT: fitTo = NLL → MIGRAD → HESSE → (MINOS). Oggi li chiamiamo uno a uno.*
+*IT: fitTo = NLL → MIGRAD → HESSE → (MINOS), tre algoritmi di MINUIT, la libreria di minimizzazione di ROOT. Oggi li chiamiamo uno a uno. Perché MINUIT e i rischi di un altro minimizzatore: slide di backup (link in slide 5).*
 
 **\[DO\] slide 6 — MIGRAD, HESSE, MINOS**
 
-**SAY:** Look at the table. MIGRAD follows the gradient. It stops when the estimated distance to the minimum, the EDM, is very small. HESSE computes the matrix of second derivatives, and inverts it. The inverse is the covariance matrix. This gives symmetric errors and the correlations. \[PAUSE\] MINOS is different. It scans the likelihood. For each parameter, it looks for the points where the negative log-likelihood rises by zero point five. This gives asymmetric errors. **HESSE assumes the likelihood is a parabola. MINOS does not.** If they disagree, the likelihood is not a parabola, and we trust MINOS.
+**SAY:** Look at the table. These are three algorithms of MINUIT. MIGRAD follows the gradient. It stops when the estimated distance to the minimum, the EDM, is very small. HESSE computes the matrix of second derivatives, and inverts it. The inverse is the covariance matrix. This gives symmetric errors and the correlations. \[PAUSE\] MINOS is different. It scans the likelihood. For each parameter, it looks for the points where the negative log-likelihood rises by zero point five. This gives asymmetric errors. **HESSE assumes the likelihood is a parabola. MINOS does not.** If they disagree, the likelihood is not a parabola, and we trust MINOS.
 
 *IT: HESSE = parabola, simmetrico. MINOS = scansione, asimmetrico. Se discordano, fidati di MINOS.*
 
@@ -143,7 +143,7 @@
 
 ## 1:30 — Talk B: Intervals and nuisance parameters (slides 11–14, 15 min)
 
-*Time-box: 15 minutes. If you are late, shorten slide 13 to the bold sentence.*
+*Time-box: 15 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold sentence of slide 13 now, and come back to the rest at the end of the hands-on.*
 
 **\[DO\] slide 12 — Likelihood-ratio intervals**
 
@@ -206,7 +206,7 @@
 
 ## 2:45 — Talk C: Validate with toys (slides 17–19, 10 min)
 
-*Time-box: 10 minutes. If you are late, skip slide 19 and say its bold sentence at the end of the exercise.*
+*Time-box: 10 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold sentence of slide 19 now, and come back to it at the end of the hands-on.*
 
 **\[DO\] slide 18 — Why toys?**
 

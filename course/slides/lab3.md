@@ -110,7 +110,7 @@ Top-quark case: $n_{\rm on}=17$, $n_{\rm off}=40$, $\tau=10.53$, i.e. “backgro
 3. Repeat with a poor control region ($n_{\rm off}=4$, $\tau=1.053$): which model is **too optimistic**?
 4. When is it fine to use a constraint?
 
-Notebook: `course/lab3/ex_A.ipynb`
+Notebook: [`course/lab3/ex_A.ipynb`](../lab3/ex_A.ipynb)
 
 ---
 
@@ -147,7 +147,7 @@ $$q_0=-2\ln\frac{L(0,\hat{\hat\theta})}{L(\hat\mu,\hat\theta)}\quad(\hat\mu\ge 0
 | evidence | 3 | $1.3\times10^{-3}$ |
 | discovery | 5 | $2.9\times10^{-7}$ |
 
-**Counting estimate, background known:** (Cowan, Cranmer, Gross, Vitells 2011)
+**Counting estimate, background known:** ([Cowan, Cranmer, Gross, Vitells 2011](https://arxiv.org/abs/1007.1727))
 
 $$Z_A=\sqrt{2\Big[(s+b)\ln\Big(1+\frac{s}{b}\Big)-s\Big]}\;\xrightarrow{s\ll b}\;\frac{s}{\sqrt b}$$
 
@@ -186,7 +186,7 @@ Same top-quark model, now in a **workspace** with a `ModelConfig`.
 3. **Significance** and p-value of the background-only hypothesis
 4. Compare with $Z_A$ (background known) and with $s/\sqrt b$. Which is closest to the RooStats result, and why?
 
-Notebook: `course/lab3/ex_B.ipynb`
+Notebook: [`course/lab3/ex_B.ipynb`](../lab3/ex_B.ipynb)
 
 ---
 
@@ -227,7 +227,7 @@ This is exactly what HistFactory, `pyhf` and CMS/ATLAS combinations do under the
 
 # A real problem: OPERA $\nu_\tau$ appearance
 
-Final OPERA analysis (arXiv:1804.04912, Table III): 4 channels, 10 candidates.
+Final OPERA analysis ([arXiv:1804.04912](https://arxiv.org/abs/1804.04912), Table III): 4 channels, 10 candidates.
 
 | Channel | Bkg: charm | had. re-int. | large-$\mu$ scat. | Signal $\mu=1$ | Observed |
 |---|---|---|---|---|---|
@@ -257,7 +257,7 @@ Final OPERA analysis (arXiv:1804.04912, Table III): 4 channels, 10 candidates.
 4. Add a **signal uncertainty** of 20 % per channel with correlation $\rho$ between channels. Scan $\rho=0,\,0.5,\,1$
 5. How much does the interval on $\mu$ change? Does $Z_0$ change? Why?
 
-Notebook: `course/lab3/ex_C.ipynb`
+Notebook: [`course/lab3/ex_C.ipynb`](../lab3/ex_C.ipynb)
 
 ---
 
@@ -283,8 +283,8 @@ If the answer to the last one is "almost nothing", say it in your notebook: that
 - correlated systematics: covariance, diagonalisation, rank
 
 **By Lab 4**
-1. Submit **2 of the 3** notebooks of `lab3/` (A, B, C: your choice) on **Virtuale**, every check `PASS`
+1. Submit **2 of the 3** notebooks of [`lab3/`](../lab3/) (A, B, C: your choice) on **Virtuale**, every check `PASS`
 2. Solutions of all three appear after the deadline
-3. Read the HistFactory section of the ROOT manual (`root.cern/manual/roofit/`) and look at `third_party/root-cpp-course-roofit/README.md`
+3. Read the HistFactory section of the ROOT manual ([`root.cern/manual/roofit/`](https://root.cern/manual/roofit/)) and look at [`third_party/root-cpp-course-roofit/README.md`](../../third_party/root-cpp-course-roofit/README.md)
 
 **Next time:** HistFactory, the anatomy of a binned likelihood, RDataFrame `Vary`, and a TMVA demo.

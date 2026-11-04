@@ -137,7 +137,7 @@ The range of an observable **defines the model**. The range of a parameter **ste
 
 # Parameter limits: what can go wrong
 
-`fitTo` calls the minimiser **MINUIT**: it moves the parameters inside their allowed interval and returns the best values and their errors (details in Lab 2).
+`fitTo` calls **MINUIT**, the minimisation library of ROOT, standard in particle physics since the 1970s ([Minuit2](https://root.cern/doc/master/Minuit2Page.html)). It moves the parameters inside their allowed interval and returns the best values and their errors (details in Lab 2).
 
 - **Too narrow**: the best fit sits on the boundary. The printout shows it, and the **errors are not reliable** there
 - **Too wide**: slow or failed convergence, and unphysical regions ($\sigma \le 0$, negative numbers of events)
@@ -229,7 +229,7 @@ Generate 10 000 **unbinned** events, fit with ML, plot the result.
 2. Repeat A1 with 100 events instead of 10 000. What changes?
 3. Why is the error on $\sigma$ different from the error on the mean?
 
-Notebook: `course/lab1/ex_A.ipynb`  ·  Reference: ROOT [RooFit tutorials](https://root.cern/doc/master/group__tutorial__roofit__main.html), in C++ and Python: `rf101_basics`, `rf201_composite`, `rf202_extendedmlfit`
+Notebook: [`course/lab1/ex_A.ipynb`](../lab1/ex_A.ipynb)  ·  Reference: ROOT [RooFit tutorials](https://root.cern/doc/master/group__tutorial__roofit__main.html), in C++ and Python: `rf101_basics`, `rf201_composite`, `rf202_extendedmlfit`
 
 ---
 
@@ -251,7 +251,7 @@ Notebook: `course/lab1/ex_A.ipynb`  ·  Reference: ROOT [RooFit tutorials](https
 Rules of thumb
 - Observables have a **range**; parameters have a **range and a start value**
 - A pdf is **normalised over the observable** automatically
-- `fitTo` minimises $-\ln L$ with MINUIT (more in Lab 2)
+- `fitTo` minimises $-\ln L$ with MINUIT, the minimisation library of ROOT (more in Lab 2)
 
 ---
 
@@ -269,11 +269,13 @@ $$-\ln L = \sum_j \big[\nu_j(\theta) - n_j \ln \nu_j(\theta)\big]$$
 - Binned loses information if bins are wide; unbinned is slower with many events
 - **In RooFit** the pdf and the code are the same: only the dataset changes (`RooDataSet` unbinned, `RooDataHist` binned)
 
+*More: [binned likelihood and $\chi^2$ (backup)](./lab1_backup.md)*
+
 ---
 
 # Exercise B (≈ 55 min)
 
-**B1. LHCb $B^0_s$ mass** — file `examples/lhcb-b0-ppbar/data/b0_invariant_mass.root`.
+**B1. LHCb $B^0_s$ mass** — file [`examples/lhcb-b0-ppbar/data/b0_invariant_mass.root`](../../examples/lhcb-b0-ppbar/data/b0_invariant_mass.root).
 Import the histogram as a `RooDataHist`. Fit a Breit–Wigner. Add a Gaussian
 resolution and compare the result with the PDG mass.
 
@@ -283,7 +285,7 @@ for $N$ = 2, 5, 10, 20. Where does the Gaussian stop being a good model?
 
 *Inspired by LHCb, “First observation of the rare purely baryonic decay $B^0 \to p\bar p$”.*
 
-Notebook: `course/lab1/ex_B.ipynb`
+Notebook: [`course/lab1/ex_B.ipynb`](../lab1/ex_B.ipynb)
 
 ---
 
@@ -357,7 +359,9 @@ h  = df.Histo1D(("h", ";m;events", 100, 100, 150), "m")
 - The expression is **C++ compiled just in time**: Python convenience, C++ speed (try it in exercise C4)
 - Multi-threading with `ROOT.EnableImplicitMT()`
 - Full RDataFrame treatment: Lab 4 (systematic variations with `Vary`)
-- Fill a `RooDataSet` from RDataFrame: see `unbinned.cpp` in the ROOT Team course
+- Fill a `RooDataSet` from RDataFrame: see [`unbinned.cpp`](../../third_party/root-cpp-course-roofit/unbinned.cpp) in the ROOT Team course
+
+*More: [RDataFrame in three lines (backup)](./lab1_backup.md)*
 
 ---
 
@@ -369,7 +373,7 @@ h  = df.Histo1D(("h", ";m;events", 100, 100, 150), "m")
 
 # Exercise C (≈ 35 min)
 
-**C1. Extended fit, signal + background** — `examples/lhcb-b0-ppbar/data/rarest_b0_decay.dat`
+**C1. Extended fit, signal + background** — [`examples/lhcb-b0-ppbar/data/rarest_b0_decay.dat`](../../examples/lhcb-b0-ppbar/data/rarest_b0_decay.dat)
 Gaussian signal + exponential background, extended ML.
 Report $\nu_s$, $\nu_b$ with errors. Plot with the components and the pulls.
 
@@ -390,7 +394,7 @@ What happened to the information on the total yield?
 - unbinned vs binned likelihood, extended fits
 
 **By Lab 2**
-1. Submit **2 of the 3** notebooks of `lab1/` (A, B, C: your choice), run top to bottom with every check `PASS`
+1. Submit **2 of the 3** notebooks of [`lab1/`](../lab1/) (A, B, C: your choice), run top to bottom with every check `PASS`
 2. Upload them on **Virtuale**
 3. Read *Practical Statistics for the LHC*, sections on likelihood and nuisance parameters
 4. Open your Codespace once, to confirm it still works

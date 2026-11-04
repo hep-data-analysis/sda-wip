@@ -58,6 +58,17 @@ Students are encouraged to **bring a laptop with a working ROOT environment, pre
 Binder and Colab are fallback options: sessions are temporary, so download your notebooks before closing.
 
 
+## References
+
+Start here: the chapters on **Probability** and **Statistics** of the [Review of Particle Physics](https://pdg.lbl.gov/) of the PDG (Reviews, Tables and Plots → Mathematical Tools). Short, standard, and updated every year.
+
+- G. Cowan, *Statistical Data Analysis*, Oxford University Press (1998)
+- K. Cranmer, *Practical Statistics for the LHC*, [arXiv:1503.07622](https://arxiv.org/abs/1503.07622)
+- G. Cowan, K. Cranmer, E. Gross, O. Vitells, *Asymptotic formulae for likelihood-based tests of new physics*, Eur. Phys. J. C 71 (2011) 1554, [arXiv:1007.1727](https://arxiv.org/abs/1007.1727)
+- F. James and M. Roos, *MINUIT*, Comput. Phys. Commun. 10 (1975) 343
+- S. Baker and R. D. Cousins, *Clarification of the use of chi-square and likelihood functions in fits to histograms*, Nucl. Instrum. Methods 221 (1984) 437
+- ROOT: [RooFit](https://root.cern/manual/roofit/), [RooStats](https://root.cern/doc/master/group__Roostats.html), [HistFactory](https://root.cern/doc/master/group__HistFactory.html), [RooFit tutorials](https://root.cern/doc/master/group__tutorial__roofit__main.html)
+
 ## License
 
 Code, notebooks, slides and exercise texts: licensed under the EUPL-1.2 (European Union Public Licence, see [`LICENSE`](LICENSE)).

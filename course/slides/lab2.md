@@ -35,16 +35,13 @@ Discuss in pairs, then we compare:
 | Time | |
 |---|---|
 | 9:00 | Recap and Lab 1 questions |
-| 9:10 | Talk A: what happens in `fitTo` (15 min) |
-| 9:25 | **Live coding**: the NLL and MIGRAD (5 min) |
+| 9:10 | Talk A: what happens in `fitTo` |
 | 9:30 | Hands-on A: anatomy of a fit |
 | 10:15 | **Break (15 min)** |
-| 10:30 | Talk B: likelihood intervals, nuisance parameters (15 min) |
-| 10:45 | **Live coding**: the on/off model (5 min) |
+| 10:30 | Talk B: likelihood intervals, nuisance parameters |
 | 10:50 | Hands-on B: the on/off problem |
 | 11:35 | **Break (10 min)** |
-| 11:45 | Talk C: validate with toys (10 min) |
-| 11:55 | **Live coding**: the toy loop (5 min) |
+| 11:45 | Talk C: validate with toys |
 | 12:00 | Hands-on C: pulls, bias, coverage |
 | 12:25 | Open lab: finish a notebook, ask questions |
 | 12:55 | Wrap-up |
@@ -62,7 +59,7 @@ Discuss in pairs, then we compare:
 `pdf.fitTo(data)` does four things:
 
 1. Builds the **negative log-likelihood** $-\ln L(\theta)$ (a function of the parameters)
-2. Minimises it with **MINUIT**: `MIGRAD`
+2. Minimises it with **MINUIT**, the minimisation library of ROOT: the algorithm `MIGRAD`
 3. Computes the covariance matrix: `HESSE`
 4. (On request) computes asymmetric errors: `MINOS`
 
@@ -70,9 +67,13 @@ $$-\ln L(\theta) = -\sum_i \ln f(x_i\,|\,\theta) \;\;[+\,\nu(\theta)\;\text{ if 
 
 Today we open the box and call each step ourselves, with `RooMinimizer`.
 
+*More: [why MINUIT, and the risks of another minimiser (backup)](./lab2_backup.md)*
+
 ---
 
 # MIGRAD, HESSE, MINOS
+
+Three algorithms of **MINUIT**, the minimisation library of ROOT:
 
 | Step | What it does | Output |
 |---|---|---|
@@ -132,7 +133,7 @@ Same data and model as Lab 1, Exercise C (LHCb, signal + background).
 5. Draw the 1σ and 2σ **contour** of (`nsig`, `nbkg`)
 
 We write step 1 **together**, live (5 min), then you continue.
-Notebook: `course/lab2/ex_A.ipynb`
+Notebook: [`course/lab2/ex_A.ipynb`](../lab2/ex_A.ipynb)
 
 ---
 
@@ -204,7 +205,7 @@ Counting experiment: $n_{\rm on}=17$, $n_{\rm off}=40$, $\tau=10.53$ (top-quark 
 4. Repeat with a poorer control region: $n_{\rm off}=4$, $\tau=1.053$ (same $\hat b$). What changes?
 
 We write the model of step 1 **together**, live (5 min), then you continue.
-Notebook: `course/lab2/ex_B.ipynb`
+Notebook: [`course/lab2/ex_B.ipynb`](../lab2/ex_B.ipynb)
 
 ---
 
@@ -258,7 +259,7 @@ Model: LHCb signal + background, extended.
 4. *(optional)* The same loop **in C++** (`gInterpreter.Declare`): compare the time
 
 We write the toy loop of step 1 **together**, live (5 min), then you continue.
-Notebook: `course/lab2/ex_C.ipynb`
+Notebook: [`course/lab2/ex_C.ipynb`](../lab2/ex_C.ipynb)
 
 ---
 
@@ -282,8 +283,8 @@ Ask for help early. I walk around.
 - toys, pulls, bias and coverage
 
 **By Lab 3**
-1. Submit **2 of the 3** notebooks of `lab2/` (A, B, C: your choice) on **Virtuale**, every check `PASS`
+1. Submit **2 of the 3** notebooks of [`lab2/`](../lab2/) (A, B, C: your choice) on **Virtuale**, every check `PASS`
 2. Solutions of all three appear after the deadline
-3. Read Cowan, Cranmer, Gross, Vitells, *Asymptotic formulae for likelihood-based tests of new physics* (arXiv:1007.1727), Sections 1–2
+3. Read Cowan, Cranmer, Gross, Vitells, *Asymptotic formulae for likelihood-based tests of new physics* ([arXiv:1007.1727](https://arxiv.org/abs/1007.1727)), Sections 1–2
 
 **Next time:** constraints and auxiliary measurements, RooStats, correlated systematics (a real problem: OPERA).

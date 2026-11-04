@@ -68,7 +68,7 @@ Example: $s=3$, $b=0.1$ gives $s/\sqrt b\approx 9.5$ from three events.
 
 # The Asimov significance
 
-From the profile-likelihood ratio, with $b$ known (Cowan, Cranmer, Gross, Vitells 2011):
+From the profile-likelihood ratio, with $b$ known ([Cowan, Cranmer, Gross, Vitells 2011](https://arxiv.org/abs/1007.1727)):
 
 $$Z_A=\sqrt{2\Big[(s+b)\ln\Big(1+\frac{s}{b}\Big)-s\Big]}\;\le\;\frac{s}{\sqrt b}$$
 
@@ -86,7 +86,7 @@ $$Z_A=\sqrt{2\Big[(s+b)\ln\Big(1+\frac{s}{b}\Big)-s\Big]}\;\le\;\frac{s}{\sqrt b
 4. Scan the cut: $\varepsilon_s$, $\varepsilon_b$, purity, $s/\sqrt b$, $Z_A$
 5. Find the optimal cut for two sets of expected yields: **it moves**
 
-Notebook: `course/lab4/demo_C_tmva.ipynb` (guided demo)
+Notebook: [`course/lab4/demo_C_tmva.ipynb`](../lab4/demo_C_tmva.ipynb) (guided demo)
 
 ---
 
@@ -97,4 +97,4 @@ Notebook: `course/lab4/demo_C_tmva.ipynb` (guided demo)
 - Optimising on the test sample and measuring on the same sample is a bias: use independent samples
 - The efficiency is a **systematic**: model it as a nuisance parameter (Lab 3)
 
-**Reference:** arXiv:1007.1727
+**Reference:** [arXiv:1007.1727](https://arxiv.org/abs/1007.1727)

@@ -19,7 +19,7 @@ G. Sirri · Hands-on sessions, 9:00–13:00
 
 ---
 
-# Recap (10 minutes)
+# Recap (5 minutes)
 
 Discuss in pairs, then we compare:
 
@@ -30,20 +30,30 @@ Discuss in pairs, then we compare:
 
 ---
 
+# Solutions of Lab 2 (15 minutes)
+
+The solutions are in [`solutions/lab2/`](https://github.com/gabriele-sirri/statistical-data-analysis/tree/main/solutions/lab2), from today.
+
+- **[A](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab2/ex_A_solution.ipynb)**: `HESSE`, `MINOS` and the contour (A1, A2, A5)
+- **[B](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab2/ex_B_solution.ipynb)**: the on/off model, and the profile interval versus `MINOS` (B1, B2)
+- **[C](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab2/ex_C_solution.ipynb)**: the toy loop, the pulls and the failed fits (C1, C2)
+
+---
+
 # Today's schedule
 
 | Time | |
 |---|---|
 | 9:00 | Recap and Lab 2 questions |
-| 9:10 | Talk A: constraints vs auxiliary measurements |
-| 9:30 | Hands-on A: on/off with a Gaussian constraint |
-| 10:10 | **Break (15 min)** |
-| 10:25 | Talk B: RooStats, significance, intervals |
-| 10:45 | Hands-on B: ModelConfig and hypothesis test |
-| 11:25 | **Break (10 min)** |
-| 11:35 | Talk C: correlated systematics |
-| 11:50 | Hands-on C: a real problem, OPERA |
-| 12:30 | Open lab: finish a notebook, ask questions |
+| 9:20 | Talk A: constraints vs auxiliary measurements |
+| 9:40 | Hands-on A: on/off with a Gaussian constraint |
+| 10:20 | **Break (15 min)** |
+| 10:35 | Talk B: RooStats, significance, intervals |
+| 10:55 | Hands-on B: ModelConfig and hypothesis test |
+| 11:35 | **Break (10 min)** |
+| 11:45 | Talk C: correlated systematics |
+| 12:00 | Hands-on C: a real problem, OPERA |
+| 12:40 | Open lab: finish a notebook, ask questions |
 | 12:55 | Wrap-up |
 
 ---
@@ -261,7 +271,7 @@ Notebook: [`course/lab3/ex_C.ipynb`](../lab3/ex_C.ipynb)
 
 ---
 
-# Open lab (25 min)
+# Open lab (15 min)
 
 Finish a notebook, or start the one you have not done. The three of today are independent.
 
@@ -284,7 +294,7 @@ If the answer to the last one is "almost nothing", say it in your notebook: that
 
 **By Lab 4**
 1. Submit **2 of the 3** notebooks of [`lab3/`](../lab3/) (A, B, C: your choice) on **Virtuale**, every check `PASS`
-2. Solutions of all three appear after the deadline
+2. We look at the solutions of all three at the beginning of Lab 4
 3. Read the HistFactory section of the ROOT manual ([`root.cern/manual/roofit/`](https://root.cern/manual/roofit/)) and look at [`third_party/root-cpp-course-roofit/README.md`](../../third_party/root-cpp-course-roofit/README.md)
 
 **Next time:** HistFactory, the anatomy of a binned likelihood, RDataFrame `Vary`, and a TMVA demo.

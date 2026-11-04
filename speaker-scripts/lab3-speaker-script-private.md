@@ -41,7 +41,7 @@
 
 ---
 
-## 0:00 — Recap (slides 1–3, 10 min)
+## 0:00 — Recap and solutions of Lab 2 (slides 1–4, 20 min)
 
 **SAY (slide 1):** Good morning, and welcome back. This is Lab 3: systematics and inference. In Lab 2 we saw the profile likelihood and the on/off problem. Today we ask the real question of every analysis: how do we treat what we do not know? \[PAUSE\] We have three parts. First, how to write a systematic uncertainty. Second, how to make statistical statements with RooStats. Third, a real problem, with correlated uncertainties.
 
@@ -56,23 +56,34 @@
 1. Profile is wider: nuisance parameters are re-fitted, so their uncertainty adds.
 2. From the control region: it is the Poisson uncertainty of n off, divided by tau.
 3. The errors are underestimated by thirty percent: the fit errors are too small.
-4. Collect two or three answers. Note which notebook of Lab 2 was the hardest, and what students found unclear.
+4. Collect two or three answers. Note which notebook of Lab 2 was the hardest, and what students found unclear: those are the first cells to open in the solutions.
 
-**\[DO\] slide 3 — Schedule**
+**\[DO\] slide 3 — Solutions of Lab 2 (15 min)**
 
-**SAY:** Here is today's plan. Three talks, three hands-on parts, two breaks. The last twenty-five minutes are an open lab: you finish a notebook, and I help you. Every systematic you will write today has a name, a source and a size. Please listen with these three words in mind.
+**SAY:** Now the solutions of Lab 2. I show the cells that were the hardest for you, the ones you named in the recap. \[PAUSE\] Open the solution notebooks, run them from the top, and go to the key cells. One minute of explanation and one question for each.
+
+*IT: 15 minuti: soluzioni del Lab 2, solo le celle più difficili. Una domanda per ciascuno.*
+
+- **Exercise A (5 min).** A1: NLL, MIGRAD, HESSE. A2: MINOS. A5: the contour. **Ask:** HESSE and MINOS differ: which one do you trust? **Expected:** MINOS: the likelihood is not a parabola.
+- **Exercise B (5 min).** B1: the on/off model, b hat close to 3.8 and s hat close to 13.2. B2: the profile interval against MINOS. B3: slice against profile, with a poorer control region. **Ask:** why is the profile wider than the slice? **Expected:** the nuisance parameter is re-fitted, so its uncertainty adds.
+- **Exercise C (5 min).** C1: the toy loop and the pulls. C2: low statistics, failed fits and boundaries. **Ask:** what does a pull RMS of 1.3 tell you? **Expected:** the errors are underestimated by about thirty percent.
+- If a student asks for another cell, show it. The solutions are in the repository from today.
+
+**\[DO\] slide 4 — Schedule**
+
+**SAY:** Here is today's plan. Three talks, three hands-on parts, two breaks. The last fifteen minutes are an open lab: you finish a notebook, and I help you. Every systematic you will write today has a name, a source and a size. Please listen with these three words in mind.
 
 ---
 
-## 0:10 — Talk A: Constraints vs auxiliary measurements (slides 4–7, 20 min)
+## 0:20 — Talk A: Constraints vs auxiliary measurements (slides 5–8, 20 min)
 
-**\[DO\] slide 5 — Two ways to model a systematic**
+**\[DO\] slide 6 — Two ways to model a systematic**
 
 **SAY:** A nuisance parameter is a quantity that we need in the model, but we know it only with an uncertainty. Where does our knowledge come from? \[PAUSE\] There are two ways to write it. The first: an auxiliary measurement. We write the likelihood of the control data. For example, a Poisson for n off. The second: a constraint term. We write a probability distribution for the result of that measurement. For example, a Gaussian centred on the background estimate, with the quoted uncertainty. \[PAUSE\] Look at the table. With the auxiliary measurement, you need the control data. With the constraint, you need only the summary, for example a paper that says: background three point eight, plus or minus zero point six. **Both enter the likelihood as a factor. The second one is an approximation of the first.**
 
 *IT: misura ausiliaria (likelihood dei dati di controllo) vs vincolo (pdf del risultato). Il vincolo è un'approssimazione.*
 
-**\[DO\] slide 6 — From on/off to a Gaussian constraint**
+**\[DO\] slide 7 — From on/off to a Gaussian constraint**
 
 **SAY:** Let us see when the approximation is good. The control measurement gives b hat equal to n off divided by tau. And the uncertainty is the square root of n off, divided by tau. For a large n off, the Poisson is almost Gaussian. This works for about thirty to fifty counts, or more. \[PAUSE\] For few counts, it fails. The Gaussian is symmetric. It allows negative background. And it makes the significance too high. \[PAUSE\] Two alternatives. If the uncertainty is multiplicative and the quantity is positive, for example an efficiency, use a log-normal. If you know the number of control events, the exact partner of the Poisson is the Gamma distribution. **Rule: use the measurement when you have it. Use a constraint when you have only its result.**
 
@@ -80,7 +91,7 @@
 
 **Ask the class:** A paper says: background zero point five plus or minus zero point four. Can you use a Gaussian? **Answer:** No: the Gaussian gives weight to negative values. Use a log-normal or a Gamma.
 
-**\[DO\] slide 7 — The full model, and global observables**
+**\[DO\] slide 8 — The full model, and global observables**
 
 **SAY:** Now the full model. It is the one from Lab 1: the extended marked Poisson. A Poisson for the number of events, times the product of the densities. And now, a new factor: the product of all the constraint terms. \[PAUSE\] In a constraint term, a j is the result of the auxiliary measurement. We call it a global observable. Remember this rule. **In the fit, the global observables are constants. In toy experiments, they are thrown again, together with the data.** In RooFit, you tell this to createNLL with the option GlobalObservables. In RooStats, with ModelConfig.
 
@@ -88,9 +99,9 @@
 
 ---
 
-## 0:30 — Hands-on A: On/off with a Gaussian constraint (slides 8–9, 40 min)
+## 0:40 — Hands-on A: On/off with a Gaussian constraint (slides 9–10, 40 min)
 
-**\[DO\] slide 9 — Exercise A**
+**\[DO\] slide 10 — Exercise A**
 
 **SAY:** Exercise A. We use the top-quark numbers: seventeen events, background three point eight plus or minus zero point six. \[PAUSE\] Step one: build the model with a Gaussian constraint. The function build Poisson aux is given, as a reference. You write build Gauss. Step two: compute the significance for both models. You write the function z zero: a free fit, a fit with s equal to zero, and the square root of two delta NLL. The two models should agree. Step three: repeat with a poor control region, four events. Which model is too optimistic? \[PAUSE\] Open ex A in the lab 3 folder. Forty minutes.
 
@@ -107,27 +118,27 @@
 
 ---
 
-## 1:15 — BREAK (15 min)
+## 1:20 — BREAK (15 min)
 
 **SAY:** Let's take a break. We restart at 10:25.
 
 ---
 
-## 1:25 — Talk B: RooStats (slides 10–13, 20 min)
+## 1:35 — Talk B: RooStats (slides 11–14, 20 min)
 
-**\[DO\] slide 11 — Roles in RooStats**
+**\[DO\] slide 12 — Roles in RooStats**
 
 **SAY:** Welcome back. Now RooStats. RooStats needs to know the role of every element of the model. \[PAUSE\] Look at the table. The model: SetPdf. The parameters of interest: for us, the signal strength. The nuisance parameters. The observables, the data. And the global observables. All of these live in an object called ModelConfig. Then the calculators work on a pair: the data, and the ModelConfig. **If you give the right roles, RooStats does the rest.** The calculators we see: the profile likelihood calculator, the asymptotic calculator, the frequentist calculator with toys, and the hypothesis test inverter for limits.
 
 *IT: ModelConfig = ruoli degli elementi. I calcolatori lavorano su (dati, ModelConfig).*
 
-**\[DO\] slide 12 — Hypothesis test and significance**
+**\[DO\] slide 13 — Hypothesis test and significance**
 
 **SAY:** The hypothesis test. The null hypothesis is: no signal, mu equal to zero. The test statistic, q zero, is minus two times the log of the profile likelihood ratio. The significance Z is the square root of q zero. And the p-value is one minus the Gaussian cumulative of Z. \[PAUSE\] Two numbers to remember. Three sigma, one in about eight hundred: evidence. Five sigma, about three in ten million: discovery. \[PAUSE\] And a useful formula, from the paper of Cowan, Cranmer, Gross and Vitells. When the background is known, the Asimov significance is: square root of two times s plus b, times the log of one plus s over b, minus s. For s much smaller than b it becomes s over square root of b. **But s over root b overestimates the significance when s is not small. Do not use it for a result.**
 
 *IT: q0, Z=sqrt(q0), p; 3σ=1.3e-3, 5σ=2.9e-7; formula di Asimov; s/√b sovrastima.*
 
-**\[DO\] slide 13 — Intervals and limits**
+**\[DO\] slide 14 — Intervals and limits**
 
 **SAY:** Three questions, three tools. How significant is the excess? The hypothesis test. What is mu, with its uncertainty? The profile likelihood interval, as in Lab 2. Nothing is seen: how large can mu be? The upper limit, with the CLs method. \[PAUSE\] Asymptotic formulae are fast, and good for large samples. With few counts you need toys. **Choose the calculator from the question, not from habit.**
 
@@ -135,9 +146,9 @@
 
 ---
 
-## 1:45 — Hands-on B: ModelConfig and hypothesis test (slides 14–15, 40 min)
+## 1:55 — Hands-on B: ModelConfig and hypothesis test (slides 15–16, 40 min)
 
-**\[DO\] slide 15 — Exercise B**
+**\[DO\] slide 16 — Exercise B**
 
 **SAY:** Exercise B. The same top-quark model, now in a workspace. \[PAUSE\] Step one: import the model and the data, and define the roles in the ModelConfig. Step two: the sixty-eight and ninety-five percent intervals on s, with the profile likelihood calculator. Step three: the significance and the p-value. Step four: compare with s over root b, and with the Asimov formula. Which is closest to RooStats? And why? \[PAUSE\] Forty minutes.
 
@@ -154,27 +165,27 @@
 
 ---
 
-## 2:25 — BREAK (10 min)
+## 2:35 — BREAK (10 min)
 
 **SAY:** Let's take a short break. We restart at 11:35.
 
 ---
 
-## 2:35 — Talk C: Correlated systematics (slides 16–19, 15 min)
+## 2:45 — Talk C: Correlated systematics (slides 17–20, 15 min)
 
-**\[DO\] slide 17 — Systematics are correlated**
+**\[DO\] slide 18 — Systematics are correlated**
 
 **SAY:** A systematic uncertainty rarely affects only one number. A source, for example the charm cross section, or the tagging efficiency, or the luminosity, moves several yields together. \[PAUSE\] We write this with a covariance matrix. Sigma i j is the sum, over the sources, of the effect of source k on channel i, times the effect on channel j. If the errors are independent, the matrix is diagonal. If a source is common to two channels, we have off-diagonal terms. **Ignoring them changes the size of the uncertainty on mu. How much? Only a calculation can tell.**
 
 *IT: una sorgente muove più canali; Sigma = somma v v^T; fuori diagonale = correlazioni.*
 
-**\[DO\] slide 18 — Diagonalise**
+**\[DO\] slide 19 — Diagonalise**
 
 **SAY:** How do we put a covariance matrix in a likelihood? We diagonalise it. A real symmetric matrix can be written as U Lambda U transpose. Lambda is diagonal, with the eigenvalues. Then we define independent nuisance parameters, z k. Each one is a standard Gaussian. And the correlated parameters are: beta zero, plus U, times square root of Lambda, times z. \[PAUSE\] Two practical results. One: we need one nuisance parameter for each non-zero eigenvalue. This is the rank of the matrix. Four channels, three sources: three nuisance parameters, not four. Two: if the errors are fully correlated, there is only one nuisance parameter. **This is what HistFactory, pyhf, and the experiment combinations do under the hood.**
 
 *IT: Σ=UΛU^T; β=β0+U√Λ z; z indipendenti N(0,1); rango = numero di sorgenti.*
 
-**\[DO\] slide 19 — A real problem: OPERA**
+**\[DO\] slide 20 — A real problem: OPERA**
 
 **SAY:** Here is our real problem. The OPERA experiment. It looks for tau neutrinos appearing in a muon-neutrino beam. This is the final analysis, from the 2018 paper. Four channels, which are four decay modes of the tau. Ten candidate events. \[PAUSE\] Look at the table: the backgrounds by source, the expected signal, the observed events. Notice something. All the signal errors are about twenty percent. In the 2015 paper, the sources are listed: the model, ten percent. The oscillation parameters, ten percent. The tagging efficiency, fifteen percent. These are common to all channels. \[PAUSE\] **Our assumption: each source is fully correlated across the channels it affects. This is our modelling choice. It is not the published treatment of the collaboration.** Please remember this, and say it in your report.
 
@@ -182,9 +193,9 @@
 
 ---
 
-## 2:50 — Hands-on C: OPERA with a covariance matrix (slides 20–21, 40 min)
+## 3:00 — Hands-on C: OPERA with a covariance matrix (slides 21–22, 40 min)
 
-**\[DO\] slide 21 — Exercise C**
+**\[DO\] slide 22 — Exercise C**
 
 **SAY:** Exercise C is the main one today. \[PAUSE\] Step one: build the covariance matrix of the backgrounds from the three sources, and diagonalise it with numpy. What is the rank? Step two: build the RooFit model. Four Poisson terms. The expected background is beta zero plus A times z. And one Gaussian constraint for each z. Step three: fit, compute the significance and the sixty-eight percent interval on mu. Step four: add the signal uncertainty, twenty percent per channel, with correlation rho. Scan rho equal to zero, zero point five, one. Step five: by how much does the interval change? Does the significance change? \[PAUSE\] This will take about forty minutes. Please ask when you are stuck: the model building is the difficult part.
 
@@ -201,9 +212,9 @@
 
 ---
 
-## 3:30 — Open lab (slide 22, 25 min)
+## 3:40 — Open lab (slide 23, 15 min)
 
-**SAY:** Now twenty-five minutes of open lab. Finish a notebook, or start the one you have not done. The three notebooks of today are independent. \[PAUSE\] For every systematic you write, ask three questions. Is it an auxiliary measurement, or a constraint term? What is the source, and what size can you justify? And how much does the result change, with and without it? **If the answer is almost nothing, write it in your notebook. That is a result.** I walk around.
+**SAY:** Now fifteen minutes of open lab. Finish a notebook, or start the one you have not done. The three notebooks of today are independent. \[PAUSE\] For every systematic you write, ask three questions. Is it an auxiliary measurement, or a constraint term? What is the source, and what size can you justify? And how much does the result change, with and without it? **If the answer is almost nothing, write it in your notebook. That is a result.** I walk around.
 
 *IT: lab aperto; una sistematica = nome, sorgente, taglia; risultato con e senza; "quasi nulla" è un risultato.*
 
@@ -216,9 +227,9 @@
 
 ---
 
-## 3:55 — Wrap-up (slide 23, 5 min)
+## 3:55 — Wrap-up (slide 24, 5 min)
 
-**SAY:** Let's finish. Today you learned three things. First, constraint terms and auxiliary measurements, and the global observables. Second, RooStats: the ModelConfig, the hypothesis test, the profile interval, and the Asimov formula. Third, correlated systematics, covariance, diagonalisation, and rank. \[PAUSE\] For Lab 4: submit two of the three notebooks on Virtuale. The solutions of all three appear after the deadline. And read the HistFactory section in the ROOT manual. \[PAUSE\] **In Lab 4 we build a binned model with HistFactory, we use RDataFrame, and we finish with a demo of TMVA.** Thank you. See you in two weeks.
+**SAY:** Let's finish. Today you learned three things. First, constraint terms and auxiliary measurements, and the global observables. Second, RooStats: the ModelConfig, the hypothesis test, the profile interval, and the Asimov formula. Third, correlated systematics, covariance, diagonalisation, and rank. \[PAUSE\] For Lab 4: submit two of the three notebooks on Virtuale. At the beginning of Lab 4, we look together at the solutions of all three. And read the HistFactory section in the ROOT manual. \[PAUSE\] **In Lab 4 we build a binned model with HistFactory, we use RDataFrame, and we finish with a demo of TMVA.** Thank you. See you in two weeks.
 
 *IT: 3 cose, compiti (2 notebook su 3 su Virtuale, lettura HistFactory), anteprima Lab 4: HistFactory, RDataFrame, demo TMVA.*
 

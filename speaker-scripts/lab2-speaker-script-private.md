@@ -45,7 +45,7 @@
 
 ---
 
-## 0:00 — Recap (slides 1–3, 10 min)
+## 0:00 — Recap and solutions of Lab 1 (slides 1–4, 20 min)
 
 **SAY (slide 1):** Good morning, and welcome back. This is Lab 2: likelihood and fit quality. In Lab 1 we built models and we fitted them. Today we open the box. We want to understand what the fit really does, how much we can trust the errors, and how to test a fit. \[PAUSE\] Then we validate it with toys.
 
@@ -62,27 +62,38 @@
 1. Rate = Poisson term for n. Shape = product of the densities. A channel is a subset of the data defined by a selection. A component is the part of the model that describes one physics process.
 2. With fractions we lose the total yield: the rate.
 3. The binned likelihood is Poisson in each bin: exact also with few or zero counts. Chi-square assumes Gaussian errors.
-4. Collect two or three answers. Note the hardest cells on the board: they tell you what to repeat today. Remind them of the rule: two notebooks out of three.
+4. Collect two or three answers. Note the hardest cells on the board: they tell you which cells to open first in the solutions. Remind them of the rule: two notebooks out of three.
 
 *IT: 4 domande, risposte attese sopra. Segna alla lavagna le celle più difficili del Lab 1.*
 
-**\[DO\] slide 3 — Schedule**
+**\[DO\] slide 3 — Solutions of Lab 1 (15 min)**
 
-**SAY:** This is our plan. Three talks, three hands-on parts, two breaks. **Before each hands-on, we write the first hard step together, live, for five minutes.** At the end, thirty minutes of open lab, to finish a notebook with me. \[PAUSE\] Please do not skip it: it is the most useful time for you.
+**SAY:** Now the solutions of Lab 1. I do not show everything: I show the cells that were the hardest for you, the ones you named in the recap. \[PAUSE\] Open the solution notebooks in the repository, run them from the top, and go to the key cells. For each one, one minute of explanation and one question.
+
+*IT: 15 minuti: soluzioni del Lab 1, solo le celle più difficili (quelle emerse nel recap). Notebook di soluzione aperti e già eseguiti; una domanda per ciascuno.*
+
+- **Exercise A (4 min).** A1: the unbinned fit, the data and the pdf. A3: the ranges. **Ask:** in A3 (a), where did sigma stop, and what about its error? **Expected:** at the limit, close to 2: the error is not meaningful there. *(Check the exact numbers on your machine.)*
+- **Exercise B (4 min).** B1: the binned Breit–Wigner fit, Poisson in each bin. B2: the central limit theorem and its tails. **Ask:** why is the tail not Gaussian? **Expected:** the theorem describes the bulk; the tails converge slowly.
+- **Exercise C (7 min).** C1: the extended fit, nu s and nu b with their errors. C2: the shape-only fit. **Ask:** how many free parameters in C1 and in C2, besides the shapes? **Expected:** two in C1, one in C2. Link it to slides 21 and 22 of Lab 1.
+- If a student asks for another cell, show it. The solutions are in the repository from today.
+
+**\[DO\] slide 4 — Schedule**
+
+**SAY:** This is our plan. Three talks, three hands-on parts, two breaks. **Before each hands-on, we write the first hard step together, live, for five minutes.** At the end, twenty minutes of open lab, to finish a notebook with me. \[PAUSE\] Please do not skip it: it is the most useful time for you.
 
 ---
 
-## 0:10 — Talk A: What happens in fitTo (slides 4–8, 15 min)
+## 0:20 — Talk A: What happens in fitTo (slides 5–9, 15 min)
 
-*Time-box: 15 minutes, plus the 5-minute live coding. Keep a timer on the desk. No slide is removed: if you are late, say the bold line of slide 8 now, and come back to its table at the end of the hands-on.*
+*Time-box: 15 minutes, plus the 5-minute live coding. Keep a timer on the desk. No slide is removed: if you are late, say the bold line of slide 9 now, and come back to its table at the end of the hands-on.*
 
-**\[DO\] slide 5 — From pdf to number**
+**\[DO\] slide 6 — From pdf to number**
 
 **SAY:** When you write fit-to, four things happen. \[PAUSE\] First, RooFit builds the negative log-likelihood. It is a function of the parameters. Second, the minimiser finds the minimum. The minimiser is MINUIT, the minimisation library of ROOT, used in particle physics since the nineteen seventies. The algorithm is called MIGRAD. Third, HESSE computes the covariance matrix from the second derivatives. Fourth, if you ask, MINOS computes asymmetric errors. **Today we call each step ourselves, with a class called RooMinimizer.**
 
-*IT: fitTo = NLL → MIGRAD → HESSE → (MINOS), tre algoritmi di MINUIT, la libreria di minimizzazione di ROOT. Oggi li chiamiamo uno a uno. Perché MINUIT e i rischi di un altro minimizzatore: slide di backup (link in slide 5).*
+*IT: fitTo = NLL → MIGRAD → HESSE → (MINOS), tre algoritmi di MINUIT, la libreria di minimizzazione di ROOT. Oggi li chiamiamo uno a uno. Perché MINUIT e i rischi di un altro minimizzatore: slide di backup (link in slide 6).*
 
-**\[DO\] slide 6 — MIGRAD, HESSE, MINOS**
+**\[DO\] slide 7 — MIGRAD, HESSE, MINOS**
 
 **SAY:** Look at the table. These are three algorithms of MINUIT. MIGRAD follows the gradient. It stops when the estimated distance to the minimum, the EDM, is very small. HESSE computes the matrix of second derivatives, and inverts it. The inverse is the covariance matrix. This gives symmetric errors and the correlations. \[PAUSE\] MINOS is different. It scans the likelihood. For each parameter, it looks for the points where the negative log-likelihood rises by zero point five. This gives asymmetric errors. **HESSE assumes the likelihood is a parabola. MINOS does not.** If they disagree, the likelihood is not a parabola, and we trust MINOS.
 
@@ -90,13 +101,13 @@
 
 **Ask the class:** Why would the two be different? **Answer:** the likelihood is not a parabola: low statistics, a boundary, a non-linear parameter.
 
-**\[DO\] slide 7 — Is my fit healthy?**
+**\[DO\] slide 8 — Is my fit healthy?**
 
 **SAY:** Before we use a result, we check the fit. Status must be zero. The covariance quality must be three. This means a full, accurate covariance matrix. The EDM must be tiny. No parameter should sit at its limit. And no correlation should be close to one. \[PAUSE\] **A parameter at its limit is a warning. It is not a result.**
 
 *IT: checklist: status 0, covQual 3, EDM piccolo, nessun parametro al limite, nessuna correlazione ±1.*
 
-**\[DO\] slide 8 — When fits go wrong**
+**\[DO\] slide 9 — When fits go wrong**
 
 **SAY:** Fits fail. This is normal. Look at the table. If the fit does not converge, the start values are often bad. Choose start values near the data, and bound the ranges. If you see huge errors and a correlation close to one, two parameters are doing the same job. Fix one, or change the parametrisation. If a parameter is at a limit, look at the model. \[PAUSE\] A small trick: instead of tau, fit the logarithm of tau. Or use fractions between zero and one. **When a fit works on some toys only, we have a low-statistics problem. We study it at the end of the morning.**
 
@@ -104,7 +115,7 @@
 
 ---
 
-## 0:25 — Live coding A1: the NLL and MIGRAD (5 min)
+## 0:35 — Live coding A1: the NLL and MIGRAD (5 min)
 
 **\[DO\]** Open the notebook ex A, cell A1. The model, the data, and the printing lines are already there. We fill the TODO lines on the screen, one at a time. Students may follow, but it is not required.
 
@@ -116,9 +127,9 @@
 
 ---
 
-## 0:30 — Hands-on A: Anatomy of a fit (slides 9–10, 45 min)
+## 0:40 — Hands-on A: Anatomy of a fit (slides 10–11, 45 min)
 
-**\[DO\] slide 10 — Exercise A**
+**\[DO\] slide 11 — Exercise A**
 
 **SAY:** Now it is your turn. We use the same data and the same model as in Lab 1, exercise C. \[PAUSE\] Step one. Build the negative log-likelihood. Run MIGRAD and HESSE with RooMinimizer. Read the status, the EDM and the covariance quality. Step two. Run MINOS on the signal yield. Are the errors symmetric? Do they agree with HESSE? Step three. Print the correlation matrix. Which two parameters are most correlated? Step four. Plot the likelihood scan, the profile, and the HESSE parabola together. Step five. Draw the one-sigma and two-sigma contours of signal against background. \[PAUSE\] Open ex A in the lab 2 folder. You have forty-five minutes.
 
@@ -135,29 +146,29 @@
 
 ---
 
-## 1:15 — BREAK (15 min)
+## 1:25 — BREAK (15 min)
 
 **SAY:** Let's take a break. We restart at 10:30.
 
 ---
 
-## 1:30 — Talk B: Intervals and nuisance parameters (slides 11–14, 15 min)
+## 1:40 — Talk B: Intervals and nuisance parameters (slides 12–15, 15 min)
 
-*Time-box: 15 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold sentence of slide 13 now, and come back to the rest at the end of the hands-on.*
+*Time-box: 15 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold sentence of slide 14 now, and come back to the rest at the end of the hands-on.*
 
-**\[DO\] slide 12 — Likelihood-ratio intervals**
+**\[DO\] slide 13 — Likelihood-ratio intervals**
 
 **SAY:** Welcome back. Now the main idea of the day: likelihood-ratio intervals. For a single parameter, in the large-sample limit, minus two times the log of the likelihood ratio follows a chi-square distribution with one degree of freedom. This is Wilks theorem. \[PAUSE\] Practically: for a sixty-eight percent interval, we look where the negative log-likelihood rises by zero point five. For ninety-five percent, by one point nine two. **The interval is where the curve is below the minimum plus one half. It does not need to be symmetric.** This is the MINOS interval.
 
 *IT: Wilks; 0.5 per il 68%, 1.92 per il 95%; intervallo = dove la curva sta sotto min + 0.5.*
 
-**\[DO\] slide 13 — Nuisance parameters**
+**\[DO\] slide 14 — Nuisance parameters**
 
 **SAY:** A real model has parameters of interest, and nuisance parameters. A nuisance parameter is something we need in the model, but we do not care about. For example, the background rate, the resolution, or an efficiency. \[PAUSE\] There are two ways to draw the likelihood. The slice: we fix the nuisance parameters at their best-fit value. This is too optimistic, because it ignores what we do not know. The profile: for each value of the parameter of interest, we fit the nuisance parameters again. **The profile is wider than the slice. The difference is the cost of the nuisance parameter.**
 
 *IT: slice (parametri fissi, ottimista) vs profile (rifit dei nuisance). Profile più largo.*
 
-**\[DO\] slide 14 — The on/off problem**
+**\[DO\] slide 15 — The on/off problem**
 
 **SAY:** Here is a classical example. We count events in the signal region: n on. We count events in a control region: n off. The control region measures the background. The expected counts are s plus b in the signal region, and tau times b in the control region. Tau is the ratio of the sizes of the two regions. \[PAUSE\] The best fit is simple. b hat is n off divided by tau. And s hat is n on minus b hat. **The uncertainty on the background is not an input. It comes from the control region.** When you read a result like background three point eight plus or minus zero point six, this is the model behind it. In Lab 3 we add constraint terms.
 
@@ -167,7 +178,7 @@
 
 ---
 
-## 1:45 — Live coding B1: the on/off model (5 min)
+## 1:55 — Live coding B1: the on/off model (5 min)
 
 **\[DO\]** Open the notebook ex B, cell B1. The parameters, the observables and the dataset are already there. We fill the five model lines on the screen. The students write the NLL and the minimiser, which they have just seen in step A1.
 
@@ -179,9 +190,9 @@
 
 ---
 
-## 1:50 — Hands-on B: the on/off problem (slides 15–16, 45 min)
+## 2:00 — Hands-on B: the on/off problem (slides 16–17, 45 min)
 
-**\[DO\] slide 16 — Exercise B**
+**\[DO\] slide 17 — Exercise B**
 
 **SAY:** Exercise B uses the top-quark numbers. Seventeen events observed in the signal region. Forty in the control region. Tau equal to ten point five three. \[PAUSE\] Step one. Build the model with two Poisson distributions. Fit, and read s hat and b hat. Step two. Compute the sixty-eight percent interval on s in two ways: scan the profile, and use MINOS. Compare them. Step three. Compare with the slice. Step four. Repeat with a poorer control region: n off equal to four, tau equal to one point zero five three. The best-fit background is the same. What changes? \[PAUSE\] Forty-five minutes. Please start with the model.
 
@@ -198,23 +209,23 @@
 
 ---
 
-## 2:35 — BREAK (10 min)
+## 2:45 — BREAK (10 min)
 
 **SAY:** Let's take a short break. Ten minutes. We restart at 11:45.
 
 ---
 
-## 2:45 — Talk C: Validate with toys (slides 17–19, 10 min)
+## 2:55 — Talk C: Validate with toys (slides 18–20, 10 min)
 
-*Time-box: 10 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold sentence of slide 19 now, and come back to it at the end of the hands-on.*
+*Time-box: 10 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold sentence of slide 20 now, and come back to it at the end of the hands-on.*
 
-**\[DO\] slide 18 — Why toys?**
+**\[DO\] slide 19 — Why toys?**
 
 **SAY:** One last question. How do we know that the errors are correct? HESSE and MINOS are approximations. We can test them with toys. \[PAUSE\] The recipe has three steps. One: generate a dataset with known true parameters. Two: fit it. Three: save the result. Repeat three hundred times, or more. \[PAUSE\] We define the pull. It is the fitted value, minus the true value, divided by the estimated error. **If everything is fine, the pull has mean zero and RMS one.** The mean tells us about bias. The RMS tells us if the errors have the right size. And about sixty-eight percent of the toys should have a pull between minus one and plus one. This is the coverage.
 
 *IT: toy → fit → pull. Media 0 = nessun bias, RMS 1 = errori giusti, copertura \~68%.*
 
-**\[DO\] slide 19 — Low statistics**
+**\[DO\] slide 20 — Low statistics**
 
 **SAY:** What happens with few events? The likelihood is no longer a parabola. Parameters hit boundaries, for example the signal yield cannot be negative. The pulls are not Gaussian. \[PAUSE\] The remedy: report profile or MINOS intervals. Or use a full toy construction, which we see in Lab 3. And please count the failed fits. **A toy that fails is not a missing result. It is information about your model.**
 
@@ -222,7 +233,7 @@
 
 ---
 
-## 2:55 — Live coding C1: the toy loop (5 min)
+## 3:05 — Live coding C1: the toy loop (5 min)
 
 **\[DO\]** Open the notebook ex C, cell C1. The loop is already written, with two TODO lines. We read it from the top, and we fill the two lines on the screen. Run it with three toys, not three hundred (change ntoys for the first run).
 
@@ -232,9 +243,9 @@
 
 ---
 
-## 3:00 — Hands-on C: pulls, bias, coverage (slides 20–21, 25 min)
+## 3:10 — Hands-on C: pulls, bias, coverage (slides 21–22, 25 min)
 
-**\[DO\] slide 21 — Exercise C**
+**\[DO\] slide 22 — Exercise C**
 
 **SAY:** Exercise C is short. We use the LHCb model again. \[PAUSE\] Step one. Write the toy loop: generate, fit, compute the pull. Use thirty-three signal events. Fill a histogram. Compute the mean, the RMS and the coverage. Step two. Repeat with five signal events. What happens to the pulls? How many fits sit at the boundary? \[PAUSE\] The loop takes about a minute. While it runs, please read the questions in the notebook. If you finish early, step C3 is optional: the same loop written in C++. Compare the time.
 
@@ -251,9 +262,9 @@
 
 ---
 
-## 3:25 — Open lab (slide 22, 30 min)
+## 3:35 — Open lab (slide 23, 20 min)
 
-**SAY:** Now thirty minutes of open lab. \[PAUSE\] Work on the notebook you have not finished. If you have finished, look at the third one: the solutions come later. All the notebooks of today are independent, so you can start from any. Run it from the top, and check that every check says PASS. \[PAUSE\] I walk around. Please call me early.
+**SAY:** Now twenty minutes of open lab. \[PAUSE\] Work on the notebook you have not finished. If you have finished, look at the third one: we see the solutions at the next lab. All the notebooks of today are independent, so you can start from any. Run it from the top, and check that every check says PASS. \[PAUSE\] I walk around. Please call me early.
 
 *IT: 30 minuti di lab aperto. Gira tra i banchi. Chiedi: su quale notebook sei? Converge? HESSE e MINOS cosa dicono?*
 
@@ -266,9 +277,9 @@
 
 ---
 
-## 3:55 — Wrap-up (slide 23, 5 min)
+## 3:55 — Wrap-up (slide 24, 5 min)
 
-**SAY:** Let's finish. \[PAUSE\] Today you learned three things. First, what the fit does: the likelihood, MIGRAD, HESSE, MINOS. Second, the profile likelihood, and why nuisance parameters make intervals wider. Third, toys: pulls, bias and coverage. \[PAUSE\] For the next lab, in two weeks: submit two of the three notebooks, the ones you prefer, on Virtuale. The solutions of all three appear after the deadline. And please read the first two sections of the paper by Cowan, Cranmer, Gross and Vitells. The reference is on the slide. \[PAUSE\] **In Lab 3 we model systematic uncertainties, we use RooStats, and we study a real problem with correlated uncertainties.** Thank you very much. See you in two weeks.
+**SAY:** Let's finish. \[PAUSE\] Today you learned three things. First, what the fit does: the likelihood, MIGRAD, HESSE, MINOS. Second, the profile likelihood, and why nuisance parameters make intervals wider. Third, toys: pulls, bias and coverage. \[PAUSE\] For the next lab, in two weeks: submit two of the three notebooks, the ones you prefer, on Virtuale. At the beginning of Lab 3, we look together at the solutions of all three. And please read the first two sections of the paper by Cowan, Cranmer, Gross and Vitells. The reference is on the slide. \[PAUSE\] **In Lab 3 we model systematic uncertainties, we use RooStats, and we study a real problem with correlated uncertainties.** Thank you very much. See you in two weeks.
 
 *IT: 3 cose imparate; compiti: consegnare 2 notebook su 3 su Virtuale, leggere Cowan et al. (sez. 1-2). Anteprima Lab 3.*
 
@@ -277,7 +288,7 @@
 ## Emergency notes
 
 - **Talk time-boxes:** A 15 min, B 15 min, C 10 min. Keep a timer on the desk: in Lab 1 the talks were too long for some students.
-- **Running late?** Shorten slide 8 (when fits go wrong) and skip the contour in A5. Do not skip the toys: it is the bridge to Lab 3.
+- **Running late?** Shorten slide 9 (when fits go wrong) and skip the contour in A5. Do not skip the toys: it is the bridge to Lab 3.
 - **Toy loop too slow?** Say: Please use two hundred toys instead of three hundred.
 - **A student asks about RDataFrame?** Say: Good question. There is a short backup slide in lab1 backup, and we use it again in Lab 4. Come to me at the break.
 - **A student asks about Bayesian intervals?** Say: Good question. We see the frequentist and Bayesian tools in Lab 3, with RooStats.

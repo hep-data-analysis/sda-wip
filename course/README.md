@@ -29,11 +29,11 @@ The outcome of the lab module is **work done** or **work not yet submitted**. *W
 | 3 | A, B, C | **2 of 3**, your choice |
 | 4 | A, B | **both** A and B |
 
-Total: **8 notebooks**. We work on all of them in class and the solutions of all are published after the deadline.
+Total: **8 notebooks**. We work on all of them in class. At the start of each lab we look at the solutions of the previous one, and then they are published.
 Each notebook must run top to bottom with every check at `PASS`. Upload them on **Virtuale**, one file per notebook. Notebooks of the same lab are independent: you can choose any two.
 
 ## Conventions
 - Notebooks have `TODO` cells and **check cells** (`PASS`/`FAIL`). A FAIL stops the notebook.
 - Set `MATRICOLA` (your student ID) in the first cell: it seeds your toy data.
 - Slides are Markdown (Marp): view with the *Marp for VS Code* extension or `marp file.md --pdf`.
-- Solutions are published after the deadline (branch `solutions`).
+- Solutions: we look at them at the start of the next lab, then they are published (branch `solutions`).

@@ -19,7 +19,7 @@ G. Sirri · Hands-on sessions, 9:00–13:00
 
 ---
 
-# Recap (10 minutes)
+# Recap (5 minutes)
 
 Discuss in pairs, then we compare:
 
@@ -30,20 +30,30 @@ Discuss in pairs, then we compare:
 
 ---
 
+# Solutions of Lab 1 (15 minutes)
+
+The solutions are in [`solutions/lab1/`](https://github.com/gabriele-sirri/statistical-data-analysis/tree/main/solutions/lab1), from today.
+
+- **[A](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab1/ex_A_solution.ipynb)**: the Gaussian fit and the **ranges** of a parameter and of an observable (A1, A3)
+- **[B](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab1/ex_B_solution.ipynb)**: the **binned** Breit–Wigner fit and the central limit theorem (B1, B2)
+- **[C](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab1/ex_C_solution.ipynb)**: **extended** and **shape-only** fits, and the number of free parameters (C1, C2)
+
+---
+
 # Today's schedule
 
 | Time | |
 |---|---|
 | 9:00 | Recap and Lab 1 questions |
-| 9:10 | Talk A: what happens in `fitTo` |
-| 9:30 | Hands-on A: anatomy of a fit |
-| 10:15 | **Break (15 min)** |
-| 10:30 | Talk B: likelihood intervals, nuisance parameters |
-| 10:50 | Hands-on B: the on/off problem |
-| 11:35 | **Break (10 min)** |
-| 11:45 | Talk C: validate with toys |
-| 12:00 | Hands-on C: pulls, bias, coverage |
-| 12:25 | Open lab: finish a notebook, ask questions |
+| 9:20 | Talk A: what happens in `fitTo` |
+| 9:40 | Hands-on A: anatomy of a fit |
+| 10:25 | **Break (15 min)** |
+| 10:40 | Talk B: likelihood intervals, nuisance parameters |
+| 11:00 | Hands-on B: the on/off problem |
+| 11:45 | **Break (10 min)** |
+| 11:55 | Talk C: validate with toys |
+| 12:10 | Hands-on C: pulls, bias, coverage |
+| 12:35 | Open lab: finish a notebook, ask questions |
 | 12:55 | Wrap-up |
 
 ---
@@ -259,11 +269,11 @@ Model: LHCb signal + background, extended.
 4. *(optional)* The same loop **in C++** (`gInterpreter.Declare`): compare the time
 
 We write the toy loop of step 1 **together**, live (5 min), then you continue.
-Notebook: [`course/lab2/ex_C.ipynb`](../lab2/ex_C.ipynb)
+Notebook: [`course/lab2/ex_C.ipynb`](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/course/lab2/ex_C.ipynb)
 
 ---
 
-# Open lab (30 min)
+# Open lab (20 min)
 
 Work on the notebook you have not finished, or on the third one if you want to see it before the solutions.
 
@@ -284,7 +294,7 @@ Ask for help early. I walk around.
 
 **By Lab 3**
 1. Submit **2 of the 3** notebooks of [`lab2/`](../lab2/) (A, B, C: your choice) on **Virtuale**, every check `PASS`
-2. Solutions of all three appear after the deadline
+2. We look at the solutions of all three at the beginning of Lab 3
 3. Read Cowan, Cranmer, Gross, Vitells, *Asymptotic formulae for likelihood-based tests of new physics* ([arXiv:1007.1727](https://arxiv.org/abs/1007.1727)), Sections 1–2
 
 **Next time:** constraints and auxiliary measurements, RooStats, correlated systematics (a real problem: OPERA).

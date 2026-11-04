@@ -399,6 +399,6 @@ What happened to the information on the total yield?
 3. Read *Practical Statistics for the LHC*, sections on likelihood and nuisance parameters
 4. Open your Codespace once, to confirm it still works
 
-Solutions of all three notebooks appear after the deadline.
+We look at the solutions of all three notebooks at the beginning of Lab 2.
 
 **Next time:** MINUIT, $-\ln L$ scans, profile likelihood, nuisance parameters.

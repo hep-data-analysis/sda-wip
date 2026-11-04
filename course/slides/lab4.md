@@ -29,20 +29,30 @@ Today closes the chain: **binned models**, and a first look at **event selection
 
 ---
 
+# Solutions of Lab 3 (15 minutes)
+
+The solutions are in [`solutions/lab3/`](https://github.com/gabriele-sirri/statistical-data-analysis/tree/main/solutions/lab3), from today.
+
+- **[A](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab3/ex_A_solution.ipynb)**: on/off with a Gaussian constraint, and the significance (A1, A2)
+- **[B](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab3/ex_B_solution.ipynb)**: `ModelConfig`, intervals, and the significance of the background-only hypothesis (B1–B3)
+- **[C](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab3/ex_C_solution.ipynb)**: OPERA: covariance and diagonalisation (C1–C3)
+
+---
+
 # Today's schedule
 
 | Time | |
 |---|---|
-| 9:00 | Recap |
-| 9:05 | Talk A: from histograms to a likelihood (HistFactory) |
-| 9:25 | Hands-on A: one toy, three ways (ROOT Team course) |
-| 10:05 | **Break (10 min)** |
-| 10:15 | Talk B: RDataFrame `Vary` and modern C++ |
-| 10:30 | Hands-on B: HistFactory on CMS $H\to4\ell$ |
-| 11:05 | **Break (10 min)** |
-| 11:15 | Talk C: selecting events with TMVA (slides [`lab4_tmva.md`](./lab4_tmva.md)) |
-| 11:35 | Guided demo C: BDT, efficiency, Asimov significance |
-| 12:10 | Open lab: finish A and B, ask questions |
+| 9:00 | Recap and Lab 3 questions |
+| 9:20 | Talk A: from histograms to a likelihood (HistFactory) |
+| 9:40 | Hands-on A: one toy, three ways ([ROOT Team course](../../third_party/root-cpp-course-roofit)) |
+| 10:20 | **Break (10 min)** |
+| 10:30 | Talk B: RDataFrame `Vary` and modern C++ |
+| 10:45 | Hands-on B: HistFactory on CMS $H\to4\ell$ |
+| 11:20 | **Break (10 min)** |
+| 11:30 | Talk C: selecting events with TMVA (slides [`lab4_tmva.md`](./lab4_tmva.md)) |
+| 11:50 | Guided demo C: BDT, efficiency, Asimov significance |
+| 12:25 | Open lab: finish A and B, ask questions |
 | 12:45 | Wrap-up and feedback |
 
 ---
@@ -209,7 +219,7 @@ Notebook: [`course/lab4/ex_B.ipynb`](../lab4/ex_B.ipynb)
 **Submission**
 - Lab 4: **both** notebooks (A and B), on **Virtuale**
 - In total: 2 of 3 notebooks in each of Labs 1–3, plus A and B of Lab 4
-- Solutions of all labs appear after the deadline
+- The solutions of Lab 4 are published after the lab
 
 **Before you leave**
 - Optional material: [`course/optional/`](../optional/)

@@ -14,7 +14,7 @@
 
 **\[DO\] slide 2 — Roadmap**
 
-**SAY:** Here is the plan. We have four labs, one every two weeks. Between the labs you finish your notebooks at home, and you submit them. \[PAUSE\] The rule is simple: in each of Labs 1, 2 and 3 there are three notebooks, A, B and C. You submit two of them, the ones you prefer. In Lab 4 there are two notebooks, and you hand in both. We work on all of them in class, and I publish all the solutions. So you will not miss anything. In Lab 1 we learn to build a model. In Lab 2 we study the likelihood and the MINUIT minimiser. In Lab 3 we study systematic uncertainties, RooStats, and a real problem with correlated uncertainties. In Lab 4 we use HistFactory and RDataFrame, and we finish with a demo of TMVA. **Every lab has the same rhythm: a short talk, then hands-on work. Three times, with two breaks.**
+**SAY:** Here is the plan. We have four labs, one every two weeks. Between the labs you finish your notebooks at home, and you submit them. \[PAUSE\] The rule is simple: in each of Labs 1, 2 and 3 there are three notebooks, A, B and C. You submit two of them, the ones you prefer. In Lab 4 there are two notebooks, and you hand in both. We work on all of them in class. At the beginning of the next lab, we look together at the solutions of all of them. So you will not miss anything. In Lab 1 we learn to build a model. In Lab 2 we study the likelihood and the MINUIT minimiser. In Lab 3 we study systematic uncertainties, RooStats, and a real problem with correlated uncertainties. In Lab 4 we use HistFactory and RDataFrame, and we finish with a demo of TMVA. **Every lab has the same rhythm: a short talk, then hands-on work. Three times, with two breaks.**
 
 *IT: 4 lab, uno ogni 2 settimane; consegna di 2 notebook su 3 nei Lab 1-3 e di entrambi nel Lab 4; si lavora su tutti in aula, soluzioni per tutti; contenuti dei 4 lab, ritmo talk + hands-on.*
 
@@ -227,13 +227,13 @@
 - Which two notebooks should I choose? — Your choice. I suggest the ones where you felt less sure, because that is where you learn most. The solutions of the third one are there too.
 - Can I submit all three? — Yes, I read them with pleasure, but two are enough.
 - Is it graded? — No grade: the outcome is "work done", and it gives access to the written exam.
-- A check says FAIL. What do I do? — A FAIL means the notebook stops. Fix the cell, or come to my office hours before the deadline.
+- A check says FAIL. What do I do? — A FAIL means the notebook stops. Fix the cell, or come to my office hours.
 
 ---
 
 ## 3:50 — Wrap-up (slide 27, 10 min)
 
-**SAY:** Let's finish. \[PAUSE\] Today you learned three things. First, the marked Poisson model: rate times shape. Second, the RooFit objects: variable, pdf, dataset, frame. Third, unbinned and binned likelihoods, and extended fits. \[PAUSE\] For the next lab, in two weeks, please do four things. One: finish your two notebooks, the ones you choose, and check that every check says PASS. Two: upload them on Virtuale before the deadline. The solutions of all three notebooks will appear after the deadline. Three: read the sections on likelihood and nuisance parameters in Cranmer's paper. Four: open your Codespace once, to check that it still works. \[PAUSE\] **In Lab 2 we open the box: what really happens when we call fitTo.** We will study MINUIT, the likelihood scan, and the nuisance parameters. Thank you very much. See you in two weeks.
+**SAY:** Let's finish. \[PAUSE\] Today you learned three things. First, the marked Poisson model: rate times shape. Second, the RooFit objects: variable, pdf, dataset, frame. Third, unbinned and binned likelihoods, and extended fits. \[PAUSE\] For the next lab, in two weeks, please do four things. One: finish your two notebooks, the ones you choose, and check that every check says PASS. Two: upload them on Virtuale. At the beginning of Lab 2, we look together at the solutions of all three notebooks. Three: read the sections on likelihood and nuisance parameters in Cranmer's paper. Four: open your Codespace once, to check that it still works. \[PAUSE\] **In Lab 2 we open the box: what really happens when we call fitTo.** We will study MINUIT, the likelihood scan, and the nuisance parameters. Thank you very much. See you in two weeks.
 
 *IT: 3 cose imparate, 4 compiti (finire 2 notebook, caricarli su Virtuale, lettura, aprire il Codespace), anteprima Lab 2. Saluti.*
 

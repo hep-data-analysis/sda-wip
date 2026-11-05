@@ -113,38 +113,25 @@ A parameter stuck at its **limit** is a warning, not a result.
 
 ---
 
-# When fits go wrong
-
-| Symptom | Likely cause | Remedy |
-|---|---|---|
-| does not converge | bad start values, ranges too wide | start near the expected value, bound the ranges |
-| parameter at its limit, errors not reliable | range too narrow, or wrong model | check the model, widen the range if the limit is not physical |
-| unphysical values ($\sigma\le0$, negative numbers of events) | range too wide | bound the range |
-| huge errors, $|\rho|\to 1$ | two parameters do the same job | fix one, or reparametrise |
-| works on some toys only | low statistics | toy study (Talk C) |
-
-- **Physical or numerical limit?** $\mu \ge 0$ is physics: it can change the result (Lab 3). A limit only to avoid silly values ($\sigma>0$) is numerics: it must not touch the best value. **Say which one it is**
-- Keep a parameter out of the fit: `par.setConstant(True)`. RooFit warns about parameters without bounds: read the warnings
-- Reparametrise: fit $\ln\tau$ instead of $\tau$, or use fractions between 0 and 1
-
----
-
-### When fits go wrong — Debug Flowchart
+# When fits go wrong — Debug Flowchart (1/2)
 
 When a fit fails, follow this checklist in order:
 
 1. **Does not converge** (MIGRAD does not find the minimum)
-   - Initial values too far from the data?
-   - Parameter ranges too wide?
-   - *Fix*: `setVal()` near the data peak, `setRange()` narrower.
+   - Parameter ranges too wide? Initial values too far from the likelihood minimum? 
+   - *Fix*: `setRange()` narrower, `setVal()` to reasonable value.
 
 2. **Converges but huge errors or correlation |ρ| ≈ 1**
    - Parameters are degenerate (the fit cannot distinguish them).
    - *Fix*: fix one of the two parameters, or reformulate the model.
 
+---
+
+# When fits go wrong — Debug Flowchart (2/2)
+
 3. **Converges but a parameter is at the limit** (e.g., fraction = 0 or 1)
    - Physical limit is too tight, or the model is wrong.
-   - *Fix*: widen the range if it makes physical sense, otherwise reparametrize (e.g., fit `ln(τ)` instead of `τ`).
+   - *Fix*: widen the range if it makes sense, or reparametrize (e.g., fit `ln(τ)` instead of `τ`).
 
 4. **Works only on some toys**
    - Low statistics → likelihood is not parabolic.

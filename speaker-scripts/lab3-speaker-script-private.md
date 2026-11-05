@@ -1,11 +1,11 @@
 # Lab 3 — Speaker Script
 
-*Companion of lab3.md (23 slides).*
+*Companion of lab3.md (24 slides).*
 
-## How to use this script
+## Notes for today
 
-- **SAY** = read aloud. **IT** = riassunto per te. **\[PAUSE\]** = respira. **\[DO\]** = azione. In grassetto il messaggio chiave.
-- Numeri di slide = quelli di lab3.md, divisori inclusi.
+*How to use the scripts, survival phrases and pronunciation help: see `how-to-use-and-pronunciation-private.md`.*
+
 - Oggi è il lab più concettuale: tre idee (vincoli, RooStats, correlazioni). Rallenta nelle formule, accelera negli esercizi.
 - Il caso OPERA è reale ma la correlazione tra canali è un'ipotesi nostra: dillo chiaramente, non attribuirla alla collaborazione.
 
@@ -19,25 +19,6 @@
 | Numbers | Please compare your number with the one in the check cell. | Confrontate col numero della cella check |
 | Assumption | This is our assumption, not the paper's. | Ipotesi nostra, non del paper |
 | Warn | This step takes a minute. Please be patient. | Ci vuole un minuto |
-
-## Pronunciation help
-
-| Word | Say it like |
-| --- | --- |
-| constraint | con-STRAYNT |
-| auxiliary | awg-ZIL-yuh-ree |
-| hypothesis | hy-POTH-uh-sis |
-| significance | sig-NIF-i-kans |
-| Asimov | AZ-i-mov |
-| eigenvalue | EYE-gen-val-yoo |
-| diagonalise | dy-AG-uh-nuh-lyze |
-| covariance | co-VAIR-ee-ans |
-| OPERA | OH-pe-ra |
-| tau (neutrino) | TOW (as in cow) |
-| log-normal | LOG-NOR-mul |
-| systematic | sis-tuh-MAT-ik |
-| Cowan | KOW-en |
-| Cranmer | KRAN-mer |
 
 ---
 
@@ -71,11 +52,13 @@
 
 **\[DO\] slide 4 — Schedule**
 
-**SAY:** Here is today's plan. Three talks, three hands-on parts, two breaks. The last fifteen minutes are an open lab: you finish a notebook, and I help you. Every systematic you will write today has a name, a source and a size. Please listen with these three words in mind.
+**SAY:** Here is today's plan. Three talks, three hands-on parts, two breaks. **Before each hands-on, we write the first step together, live, for five minutes.** The last fifteen minutes are an open lab: you finish a notebook, and I help you. Every systematic you will write today has a name, a source and a size. Please listen with these three words in mind.
 
 ---
 
-## 0:20 — Talk A: Constraints vs auxiliary measurements (slides 5–8, 20 min)
+## 0:20 — Talk A: Constraints vs auxiliary measurements (slides 5–8, 15 min)
+
+*Time-box: 15 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold line of each slide and come back to the rest at the end of the hands-on.*
 
 **\[DO\] slide 6 — Two ways to model a systematic**
 
@@ -96,6 +79,18 @@
 **SAY:** Now the full model. It is the one from Lab 1: the extended marked Poisson. A Poisson for the number of events, times the product of the densities. And now, a new factor: the product of all the constraint terms. \[PAUSE\] In a constraint term, a j is the result of the auxiliary measurement. We call it a global observable. Remember this rule. **In the fit, the global observables are constants. In toy experiments, they are thrown again, together with the data.** In RooFit, you tell this to createNLL with the option GlobalObservables. In RooStats, with ModelConfig.
 
 *IT: modello completo = marked Poisson × vincoli. Global observables: costanti nel fit, rigenerate nei toy.*
+
+---
+
+## 0:35 — Live coding A1: the Gaussian constraint (5 min)
+
+**\[DO\]** Open the notebook ex A, cell A1. `build_gauss` is already there, with four TODO lines. We fill them on the screen, one at a time.
+
+**SAY:** Now we write step one together. \[PAUSE\] Look at the top of the function: s and b are the parameters, n on is the observable, and **b zero is a global observable**: the result of the auxiliary measurement. It is a number, it is constant, and it is not in the dataset. \[PAUSE\] First line: the expected count in the signal region, mu on, a RooFormulaVar, at zero plus at one, with s and b. Second line: the Poisson for n on. Third line: **the constraint term**, a RooGaussian of b zero, with mean b and width sigma b. \[PAUSE\] Fourth line: the model is the product of the Poisson and the constraint, a RooProdPdf. \[PAUSE\] And look at the last line, which is already written: createNLL with GlobalObservables. **That is how the fit knows that b zero is not a free variable.**
+
+*IT: riempi dal vivo i 4 TODO di build_gauss (circa 5 min): RooFormulaVar s+b; RooPoisson; RooGaussian(b0, b, sb) = termine di vincolo; RooProdPdf. b0 è un osservabile globale: costante, non nel dataset; createNLL con GlobalObservables lo dice al fit.*
+
+**Ask:** Why is b zero not in the dataset? **Expected:** it is the result of the auxiliary measurement: a number that we treat as fixed (a global observable), not a measured event.
 
 ---
 
@@ -124,7 +119,9 @@
 
 ---
 
-## 1:35 — Talk B: RooStats (slides 11–14, 20 min)
+## 1:35 — Talk B: RooStats (slides 11–14, 15 min)
+
+*Time-box: 15 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold line of each slide and come back to the rest at the end of the hands-on.*
 
 **\[DO\] slide 12 — Roles in RooStats**
 
@@ -143,6 +140,18 @@
 **SAY:** Three questions, three tools. How significant is the excess? The hypothesis test. What is mu, with its uncertainty? The profile likelihood interval, as in Lab 2. Nothing is seen: how large can mu be? The upper limit, with the CLs method. \[PAUSE\] Asymptotic formulae are fast, and good for large samples. With few counts you need toys. **Choose the calculator from the question, not from habit.**
 
 *IT: tre domande, tre strumenti; asintotico vs toy. CLs nel notebook opzionale.*
+
+---
+
+## 1:50 — Live coding B1: the ModelConfig (5 min)
+
+**\[DO\]** Open the notebook ex B, cell B1. The workspace is already built. We fill the ModelConfig lines on the screen.
+
+**SAY:** Now the ModelConfig. \[PAUSE\] RooStats needs to know the **role** of each variable. We say it five times. The pdf: mc dot SetPdf, with the pdf of the workspace. The parameter of interest: SetParametersOfInterest, a RooArgSet with s. The nuisance parameters: SetNuisanceParameters, with b. The observables: SetObservables, with n on. And the global observables: SetGlobalObservables, with b zero. \[PAUSE\] **Five roles: the parameter we want, the parameter we do not care about, the data, and the result of the auxiliary measurement.** Then mc dot Print, to check.
+
+*IT: riempi dal vivo i TODO del ModelConfig (circa 5 min): SetPdf, SetParametersOfInterest(s), SetNuisanceParameters(b), SetObservables(n_on), SetGlobalObservables(b0); poi Print.*
+
+**Ask:** Which variable is the parameter of interest, which one is nuisance, which one is a global observable? **Expected:** s, b, b zero.
 
 ---
 
@@ -171,7 +180,9 @@
 
 ---
 
-## 2:45 — Talk C: Correlated systematics (slides 17–20, 15 min)
+## 2:45 — Talk C: Correlated systematics (slides 17–20, 10 min)
+
+*Time-box: 10 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold line of each slide and come back to the rest at the end of the hands-on.*
 
 **\[DO\] slide 18 — Systematics are correlated**
 
@@ -190,6 +201,18 @@
 **SAY:** Here is our real problem. The OPERA experiment. It looks for tau neutrinos appearing in a muon-neutrino beam. This is the final analysis, from the 2018 paper. Four channels, which are four decay modes of the tau. Ten candidate events. \[PAUSE\] Look at the table: the backgrounds by source, the expected signal, the observed events. Notice something. All the signal errors are about twenty percent. In the 2015 paper, the sources are listed: the model, ten percent. The oscillation parameters, ten percent. The tagging efficiency, fifteen percent. These are common to all channels. \[PAUSE\] **Our assumption: each source is fully correlated across the channels it affects. This is our modelling choice. It is not the published treatment of the collaboration.** Please remember this, and say it in your report.
 
 *IT: OPERA reale (Tab. III, arXiv:1804.04912). L'ipotesi di correlazione piena è NOSTRA, non della collaborazione: ribadiscilo.*
+
+---
+
+## 2:55 — Live coding C1: covariance and diagonalisation (5 min)
+
+**\[DO\]** Open the notebook ex C, cell C1. The function `factor` has a TODO with the hint in a comment. We write the three lines on the screen.
+
+**SAY:** Now the factorisation of the covariance matrix. \[PAUSE\] We want a matrix A such that A times A transposed is Sigma. First line: eigh of Sigma, which gives the eigenvalues, w, and the eigenvectors, U. \[PAUSE\] Second line: **we keep only the non-zero eigenvalues**. Third line: A is U times the square root of the eigenvalues, one column for each non-zero eigenvalue. \[PAUSE\] **The number of columns is the rank of Sigma: the number of independent sources.** Four channels with three sources give three columns, so three nuisance parameters, not four.
+
+*IT: riempi dal vivo factor (circa 5 min): eigh(Sigma) → tieni solo gli autovalori > tol → A = U·sqrt(w). Le colonne = rango = fonti indipendenti: 4 canali e 3 fonti → 3 nuisance.*
+
+**Ask:** Four channels, three independent sources. How many columns does A have? **Expected:** three.
 
 ---
 

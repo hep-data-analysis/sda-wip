@@ -1,8 +1,8 @@
 # Lab 1 — Speaker Script
 
-*Companion of lab1.md (the slides).*
+*Companion of lab1.md (27 slides).*
 
-*How to use this script, survival phrases and pronunciation help are in `lab1-guide-and-phrases-private.md` and `lab1-pronunciation-private.md`.*
+*How to use the scripts, survival phrases and pronunciation help: see `how-to-use-and-pronunciation-private.md`.*
 
 ---
 
@@ -84,9 +84,9 @@
 
 **\[DO\] slide 11 — Channels, processes and components**
 
-**SAY:** Three words, and I want you to use them in the right way. \[PAUSE\] **A channel is a subset of the data, defined by a selection criterion. A physics process is physics, not data.** Data on one side, physics on the other. In a channel we count n events, and we measure a quantity x, for example a mass. \[PAUSE\] Be careful: in particle physics, decay channel means something else. It means the decay mode, for example H to four leptons. Here, channel means the selected events. A channel is often named after the physics process that we want to select, but what defines it is the selection. \[PAUSE\] In a channel, several physics processes contribute: signal and backgrounds. **Each physics process gives a component of the model of the channel.** The total expected number of events is the sum of the components. And the total shape is the sum of the shapes, weighted by the number of events. In Lab 4, HistFactory will call a component a sample. It is the same object. \[PAUSE\] Look at the table, and look at the physics. In LHCb, the signal is the decay of the B zero into a proton and an antiproton. The background is random proton–antiproton pairs. In CUORE, the signal is the neutrinoless double-beta decay of tellurium one-thirty, and the background is the natural radioactivity of the materials. In IceCube, the signal is the oscillation of the muon neutrinos, and the background is atmospheric muons and other neutrino flavours. In MAGIC, the signal is gamma rays, and the background is hadrons, from cosmic-ray showers. \[PAUSE\] Different fields, different detectors. **But the mathematical structure is the same: signal plus background, in a mass, an energy, or an angle.** This is why one toolkit is enough for all of us.
+**SAY:** Three words, and I want you to use them in the right way. \[PAUSE\] **A channel is a subset of the data, defined by a selection criterion. A physics process is physics, not data.** Data on one side, physics on the other. In a channel we count n events, and we measure a quantity x, for example a mass. \[PAUSE\] Be careful: in particle physics, decay channel means something else. It means the decay mode, for example H to four leptons. Here, channel means the selected events. A channel is often named after the physics process that we want to select, but what defines it is the selection. \[PAUSE\] In a channel, several physics processes contribute: signal and backgrounds. **Each physics process gives a component of the model of the channel.** The total expected number of events is the sum of the components. And the total shape is the sum of the shapes, weighted by the number of events. In Lab 4, HistFactory will call a component a sample. It is the same object. \[PAUSE\] Look at the table, and look at the physics. In LHCb, the signal is the decay of the B zero into a proton and an antiproton. The background is random proton–antiproton pairs. In CUORE, the signal is the neutrinoless double-beta decay of tellurium one-thirty, and the background is the natural radioactivity of the materials. In MAGIC, the signal is gamma rays, and the background is hadrons, from cosmic-ray showers. \[PAUSE\] Different fields, different detectors. **But the mathematical structure is the same: signal plus background, in a mass, an energy, or an angle.** This is why one toolkit is enough for all of us.
 
-*IT: canale = sottoinsieme di dati definito da un criterio di selezione, non un processo fisico (definizione di Cranmer, non citata in slide); contrapporre dati (canale) e fisica (physics process); attenzione: "decay channel" ha un altro significato; ogni processo dà una componente del modello del canale; in HistFactory (Lab 4) la componente si chiama sample; per ogni esempio nomina il processo fisico (segnale e fondo); stessa struttura in ogni campo. Per IceCube il fondo è da confermare.*
+*IT: canale = sottoinsieme di dati definito da un criterio di selezione, non un processo fisico (definizione di Cranmer, non citata in slide); contrapporre dati (canale) e fisica (physics process); attenzione: "decay channel" ha un altro significato; ogni processo dà una componente del modello del canale; in HistFactory (Lab 4) la componente si chiama sample; per ogni esempio nomina il processo fisico (segnale e fondo); stessa struttura in ogni campo.*
 
 **\[DO\] slide 12 — Why RooFit?**
 
@@ -196,7 +196,7 @@
 
 **SAY:** Look at the table. **In the extended model there is one more free parameter: the total number of events.** Shape-only has one parameter, phi. Extended has two, nu s and nu b. If we write phi as nu s over nu s plus nu b, the two models have the same fraction, but the extended model also has the total. \[PAUSE\] The signal events are derived in the first case, as phi times n, and fitted in the second case. \[PAUSE\] And a general rule: a mixture of k normalised pdfs needs only k minus one independent coefficients, because the sum must be one. In an extended fit, each component has its own yield, so we need k parameters.
 
-*IT: tabella: parametri liberi 1 contro 2, n fisso contro Poisson, N_s derivato contro fittato; regola generale k−1 contro k.*
+*IT: tabella: parametri liberi 1 contro 2, n fisso contro Poisson, ν_s derivato contro fittato; regola generale k−1 contro k.*
 
 **Ask the class:** How many free parameters do the two models have, besides the shapes? **Expected answer:** one for shape-only, two for extended. **If nobody answers, SAY:** Phi for the first. Nu s and nu b for the second.
 

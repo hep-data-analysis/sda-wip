@@ -155,12 +155,11 @@ A **physics process** (signal, backgrounds) is not a channel: each physics proce
 
 $$\nu = \sum_c \nu_c, \qquad f(x) = \sum_c \frac{\nu_c}{\nu}\, f_c(x)$$
 
-| Example (channel) | Observable $x$ | Signal | Background |
-|---|---|---|---|
-| LHCb | $m(p\bar p)$ | $B^0 \to p\bar p$ decay | random $p\bar p$ pairs (combinatorial) |
-| CUORE-0 | energy | $0\nu\beta\beta$ decay of $^{130}$Te | natural radioactivity of the materials |
-| IceCube | zenith / energy | $\nu_\mu$ oscillation (disappearance) | atmospheric muons, other neutrino flavours |
-| MAGIC | image parameter | $\gamma$ rays | hadrons (cosmic-ray showers) |
+| Channel (observable $x$) | Signal (physics process) | Background (physics process) |
+|---|---|---|
+| LHCb ($m_{p\bar p}$) | $B^0 \to p\bar p$ decay | random $p\bar p$ pairs |
+| CUORE-0 (energy) | $0\nu\beta\beta$ decay | radioactivity of the materials |
+| MAGIC (image parameter) | $\gamma$ rays | hadrons from cosmic rays |
 
 Different fields, **same structure**.
 *Careful: in particle physics, "decay channel" means something else. In Lab 4, HistFactory calls a component a **sample**.*
@@ -194,7 +193,8 @@ Links: [RooFit](https://root.cern/manual/roofit/) · [RooStats](https://root.cer
 
 ```python
 import ROOT
-%jsroot on      # notebook only (Binder, SWAN): draws the canvas in the page
+# notebook only (Binder, SWAN): draws the canvas in the page
+%jsroot on
 
 x     = ROOT.RooRealVar("x", "x", -10, 10)
 mean  = ROOT.RooRealVar("mean", "mean", 0, -10, 10)
@@ -229,7 +229,7 @@ Generate 10 000 **unbinned** events, fit with ML, plot the result.
 2. Repeat A1 with 100 events instead of 10 000. What changes?
 3. Why is the error on $\sigma$ different from the error on the mean?
 
-Notebook: [`course/lab1/ex_A.ipynb`](../lab1/ex_A.ipynb)  ·  Reference: ROOT [RooFit tutorials](https://root.cern/doc/master/group__tutorial__roofit__main.html), in C++ and Python: `rf101_basics`, `rf201_composite`, `rf202_extendedmlfit`
+Notebook: [`course/lab1/ex_A.ipynb`](../lab1/ex_A.ipynb)  ·  Reference: ROOT [RooFit tutorials](https://root.cern/doc/master/group__tutorial__roofit__main.html), in C++ and Python (start from `rf101_basics`)
 
 ---
 

@@ -1,13 +1,12 @@
 # Lab 2 — Speaker Script
 
-*Companion of lab2.md (23 slides).*
+*Companion of lab2.md (24 slides).*
 
-## How to use this script
+## Notes for today
 
-- Read the lines after **SAY**. **IT** = riassunto in italiano, solo per te. **\[PAUSE\]** = respira. **\[DO\]** = azione.
-- Se ti perdi, riparti dalla frase in **grassetto** della slide.
+*How to use the scripts, survival phrases and pronunciation help: see `how-to-use-and-pronunciation-private.md`.*
+
 - Il Lab 2 è il più “teorico” dei primi due: tieni il ritmo con le domande alla classe.
-- Numeri di slide = quelli di lab2.md, divisori inclusi.
 
 ## New phrases for today
 
@@ -22,26 +21,6 @@
 | Stuck | Which cell fails? Please read me the error. | Quale cella fallisce? Leggetemi l'errore |
 | Time left | You have five more minutes. | Cinque minuti ancora |
 | Open lab | Tell me which notebook you are working on. | Dite su quale notebook state lavorando |
-
-## Pronunciation help
-
-| Word | Say it like |
-| --- | --- |
-| MIGRAD | MY-grad |
-| HESSE | HESS-eh |
-| MINOS | MY-nos |
-| Wilks | VILKS |
-| covariance | co-VAIR-ee-ans |
-| correlation | co-re-LAY-shun |
-| profile | PRO-file |
-| coverage | KUV-er-ij |
-| pull | pool |
-| toy | TOY |
-| boundary | BOWN-da-ree |
-| nuisance | NYOO-sans |
-| parabola | pa-RAB-o-la |
-| asymmetric | ay-si-MET-rik |
-| converge | con-VERJ |
 
 ---
 

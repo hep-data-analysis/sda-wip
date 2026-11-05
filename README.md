@@ -42,7 +42,7 @@ Submit 2 of 3 notebooks in each of Labs 1–3, both notebooks of Lab 4 (see [`co
 
 ## Before the course: set up ROOT
 
-Students are encouraged to **bring a laptop with a working ROOT environment, preferably iwth Python and Jupyter support** (Windows, Linux or macOS).
+Students are encouraged to **bring a laptop with a working ROOT environment, preferably with Python and Jupyter support** (Windows, Linux or macOS).
 
  If this is not possible, or if you cannot run ROOT, you can use  **GitHub Codespaces in a browser on the lab computers** (a free GitHub account is required: create it before the first lab).
 

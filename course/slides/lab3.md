@@ -208,7 +208,7 @@ Notebook: [`course/lab3/ex_B.ipynb`](../lab3/ex_B.ipynb)
 
 # Systematics are correlated
 
-A systematic rarely affects one number. A **source** (charm cross section, tagging efficiency, luminosity) moves several yields at once.
+A systematic rarely affects one number. A **source** (charm cross section, tagging efficiency, luminosity) moves several expected numbers of events (yields) at once.
 
 For $N$ channels, with a source $k$ moving channel $i$ by $v_{ik}$:
 

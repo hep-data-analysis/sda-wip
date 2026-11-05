@@ -81,7 +81,7 @@ It is the **extended marked Poisson model** of Lab 1, with a histogram as the sh
 |---|---|---|
 | **Measurement** | the whole analysis, POI, luminosity | `Measurement` |
 | **Channel** | a subset of the data defined by a selection, with its own data (signal region, control region) | `Channel` |
-| **Sample** | one process: a template histogram. The **component** of Lab 1 | `Sample` |
+| **Sample** | one **physics process**: a template histogram. The **component** of Lab 1 | `Sample` |
 | **Modifier** | how a parameter changes a sample | see next slide |
 
 Output: a **workspace** with a `ModelConfig`: the same objects you used in Lab 3.
@@ -123,7 +123,7 @@ ROOT Team course `02-roofit`, in [`third_party/root-cpp-course-roofit/`](../../t
 
 1. Run the pipeline (`make_toys`, `unbinned`, `analysis`, `histfactory`, `likelihood`)
 2. **Where do $\mu$ and $\theta$ act in the simulation?** (look at `physics.h`)
-3. Compare the three fits of the same data: yields, $\hat\mu$, uncertainties
+3. Compare the three fits of the same data: numbers of events, $\hat\mu$, uncertainties
 4. Read $\hat\theta=\theta_{\rm nom}+\hat\alpha\,\Delta\theta$ and compare with $\theta_{\rm true}=1.3$
 5. Compare the slice and the profile of $\mu$ with Lab 2
 

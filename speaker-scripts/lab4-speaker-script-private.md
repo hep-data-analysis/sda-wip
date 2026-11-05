@@ -1,12 +1,12 @@
 # Lab 4 — Speaker Script
 
-*Companion of lab4.md (17 slides) and lab4_tmva.md (Talk C).*
+*Companion of lab4.md (18 slides) and lab4_tmva.md (Talk C).*
 
-## How to use this script
+## Notes for today
 
-- **SAY** = read aloud. **IT** = riassunto per te. **\[PAUSE\]** = respira. **\[DO\]** = azione. In grassetto il messaggio chiave.
-- Numeri di slide = quelli di lab4.md, divisori inclusi.
-- Oggi: HistFactory (Talk A, B e hands-on A, B), poi **Talk C + demo guidata TMVA** e **35 minuti di lab aperto**.
+*How to use the scripts, survival phrases and pronunciation help: see `how-to-use-and-pronunciation-private.md`.*
+
+- Oggi: HistFactory (Talk A, B e hands-on A, B), poi **Talk C + demo guidata TMVA** e **20 minuti di lab aperto**.
 - Consegna: nel Lab 4 si consegnano **entrambi** i notebook (A e B) su Virtuale. In totale: 2 su 3 nei Lab 1–3, più A e B del Lab 4.
 - Prima del lab: prova che la demo TMVA giri (serve ROOT con TMVA, e il compilatore per gli esempi del ROOT Team); controlla che il tuo portatile mostri un notebook da Codespaces.
 
@@ -20,25 +20,6 @@
 | Move | Change the yields. Does the optimal cut move? | Cambiate le rese: il taglio ottimale si sposta? |
 | Upload | Please upload both notebooks on Virtuale. | Caricate i due notebook su Virtuale |
 | Feedback | Please fill the short form before you leave. | Compilate il modulo prima di uscire |
-
-## Pronunciation help
-
-| Word | Say it like |
-| --- | --- |
-| HistFactory | HIS-to-FAK-tuh-ree |
-| modifier | MOD-i-fy-er |
-| template | TEM-plet |
-| interpolation | in-TUR-puh-LAY-shun |
-| overall | OH-ver-all |
-| luminosity | loo-mi-NOS-i-tee |
-| efficiency | ih-FISH-un-see |
-| purity | PYOOR-ih-tee |
-| Asimov | AZ-ih-mov |
-| boosted | BOO-stid |
-| lambda | LAM-duh |
-| just-in-time | just in TIME (JIT = jit) |
-| multithreaded | MUL-ti-THRED-id |
-| anonymous | uh-NON-i-mus |
 
 ---
 
@@ -71,7 +52,7 @@
 
 **\[DO\] slide 4 — Schedule**
 
-**SAY:** This is our plan. Two talks and two hands-on parts on HistFactory. At half past eleven, a third talk, on TMVA, and a guided demo. At twenty-five past twelve, the open lab: you finish the notebooks, and you ask me everything. At a quarter to one, the wrap-up and the feedback form.
+**SAY:** This is our plan. Two talks and two hands-on parts on HistFactory. **Before hands-on B, we write the first step together, live, for five minutes.** At half past eleven, a third talk, on TMVA, and a guided demo. At twenty-five past twelve, the open lab: you finish the notebooks, and you ask me everything. At a quarter to one, the wrap-up and the feedback form.
 
 ---
 
@@ -85,7 +66,7 @@
 
 **\[DO\] slide 7 — Building blocks**
 
-**SAY:** Four levels. The measurement: the whole analysis. The channel: a subset of the data defined by a selection, with its own data, for example a signal region and a control region. You know it from Lab 1. The sample: one process, with a template. It is the component of Lab 1: same object, new name. And the modifiers. \[PAUSE\] The output is a workspace with a ModelConfig. **It is exactly the same object that you used in Lab 3.** So everything you know from RooStats works now.
+**SAY:** Four levels. The measurement: the whole analysis. The channel: a subset of the data defined by a selection, with its own data, for example a signal region and a control region. You know it from Lab 1. The sample: one physics process, with a template. It is the component of Lab 1: same object, new name. And the modifiers. \[PAUSE\] The output is a workspace with a ModelConfig. **It is exactly the same object that you used in Lab 3.** So everything you know from RooStats works now.
 
 *IT: Measurement > Channel > Sample > modifiers. Output = workspace + ModelConfig.*
 
@@ -126,7 +107,9 @@
 
 ---
 
-## 1:30 — Talk B: RDataFrame Vary and modern C++ (slides 12–14, 15 min)
+## 1:30 — Talk B: RDataFrame Vary and modern C++ (slides 12–14, 10 min)
+
+*Time-box: 10 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold line of each slide and come back to the rest at the end of the hands-on.*
 
 **\[DO\] slide 13 — Systematic variations in one event loop**
 
@@ -139,6 +122,18 @@
 **SAY:** Why do I insist on modern C++? \[PAUSE\] Look at this code. We declare a C++ function from Python. The interpreter compiles it just in time. Then we use it in a Define. We have the speed of C++, from the comfort of Python. And a Python loop over events does not scale. RDataFrame does. \[PAUSE\] Also: the code of the experiments is C++. If you want to work in a collaboration, you must be able to read it. **Python is the glue. C++ is the engine.** There is an optional notebook that measures the speed: Python loop, RDataFrame, and multithreaded RDataFrame.
 
 *IT: JIT, lambda, RVec; un loop Python non scala; il codice degli esperimenti è C++. Notebook opzionale per i tempi.*
+
+---
+
+## 1:40 — Live coding B1: the NormFactors (5 min)
+
+**\[DO\]** Open the notebook ex B, cell B1. `build_meas` is already there, with two TODO lines. We fill them on the screen.
+
+**SAY:** Now the heart of the model. \[PAUSE\] In each channel we loop over the samples. **For the signal sample: AddNormFactor, mu, start value one, range from zero to five. This is the parameter of interest.** \[PAUSE\] For the ZZ sample: AddNormFactor, kZZ, start value one, range from zero point one to three. **We add it in both channels, with the same name. Because the name is the same, the parameter is shared.** \[PAUSE\] This is the control region of Lab 2, written in HistFactory: the control region measures kZZ, and the signal region uses it.
+
+*IT: riempi dal vivo i 2 TODO di build_meas (circa 5 min): AddNormFactor("mu",1,0,5) sul segnale; AddNormFactor("kZZ",1,0.1,3) su ZZ (solo se free_zz). Stesso nome nei due canali = parametro condiviso = regione di controllo del Lab 2.*
+
+**Ask:** Why does the same name in two channels matter? **Expected:** it is the same parameter: the control region constrains it for the signal region.
 
 ---
 

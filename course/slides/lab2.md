@@ -107,7 +107,7 @@ Always check:
 | `covQual()` | 3 (full, accurate covariance) |
 | EDM (estimated distance to minimum) | tiny |
 | parameters at a limit? | none |
-| correlation coefficients | no $|\rho|\approx 1$ |
+| correlation coefficients | no $\|\rho\|\approx 1$ |
 
 A parameter stuck at its **limit** is a warning, not a result.
 

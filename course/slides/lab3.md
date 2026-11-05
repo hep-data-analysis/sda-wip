@@ -32,11 +32,11 @@ Discuss in pairs, then we compare:
 
 # Solutions of Lab 2 (15 minutes)
 
-The solutions are in [`solutions/lab2/`](https://github.com/gabriele-sirri/statistical-data-analysis/tree/main/solutions/lab2), from today.
+The solutions are in the `solutions` branch: [`solutions/lab2/`](https://github.com/gabriele-sirri/statistical-data-analysis/tree/solutions/solutions/lab2), from today.
 
-- **[A](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab2/ex_A_solution.ipynb)**: `HESSE`, `MINOS` and the contour (A1, A2, A5)
-- **[B](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab2/ex_B_solution.ipynb)**: the on/off model, and the profile interval versus `MINOS` (B1, B2)
-- **[C](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab2/ex_C_solution.ipynb)**: the toy loop, the pulls and the failed fits (C1, C2)
+- **[A](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab2/ex_A_solution.ipynb)**: `HESSE`, `MINOS` and the contour (A1, A2, A5)
+- **[B](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab2/ex_B_solution.ipynb)**: the on/off model, and the profile interval versus `MINOS` (B1, B2)
+- **[C](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab2/ex_C_solution.ipynb)**: the toy loop, the pulls and the failed fits (C1, C2)
 
 ---
 

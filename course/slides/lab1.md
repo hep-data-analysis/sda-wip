@@ -92,7 +92,7 @@ An experiment records $n$ events, each with measured features $\vec{x}_i$ (the "
 
 $$P(n,\{\vec{x}_i\}\,|\,\theta) \;=\; \text{Pois}(n\,|\,\nu(\theta)) \;\prod_{i=1}^{n} f(\vec{x}_i\,|\,\theta)$$
 
-$\nu(\theta)$: expected number of events → **rate** (also called **yield**)
+$\nu(\theta)$: expected number of events (**yield**) → **rate**  
 $f(\vec{x}\,|\,\theta)$: normalised pdf of the marks → **shape**
 - **Rate-only** = counting experiment
 - **Shape-only**: $\nu$ is not interesting. The Poisson term is dropped and $n$ is fixed: $\prod_i f(\vec{x}_i\,|\,\theta)$
@@ -131,36 +131,22 @@ Example, a Gaussian: $\text{Gauss}(x;\mu,\sigma)=\dfrac{1}{\sqrt{2\pi}\,\sigma}\
 | Events outside | **not in the fit** | not applicable |
 | The fit depends on it | **yes**: shape, normalisation, and the rates $\nu_s$, $\nu_b$ (number of events in the range) | **yes**: if the minimum is near a limit, or the interval is badly chosen |
 
-The range of an observable **defines the model**. The range of a parameter **steers the search**.
-
----
-
-# Parameter limits: what can go wrong
-
-`fitTo` calls **MINUIT**, the minimisation library of ROOT, standard in particle physics since the 1970s ([Minuit2](https://root.cern/doc/master/Minuit2Page.html)). It moves the parameters inside their allowed interval and returns the best values and their errors (details in Lab 2).
-
-- **Too narrow**: the best fit sits on the boundary. The printout shows it, and the **errors are not reliable** there
-- **Too wide**: slow or failed convergence, and unphysical regions ($\sigma \le 0$, negative numbers of events)
-- **Unbounded**: RooFit warns you (for example for a width). Read the warnings
-- **Start near the expected value**: the starting value is not the range
-- **Physical or numerical?** A limit like $\mu \ge 0$ is physics: it can change the result (Lab 3). A limit only to avoid silly values (like $\sigma > 0$) is numerics: it must not touch the best value. **Say which one it is**
-- To keep a parameter out of the fit: `par.setConstant(True)`
+The range of an observable **defines the model**. The range of a parameter **steers the search** (more on parameter limits in Lab 2).
 
 ---
 
 # Channels, physics processes and components
 
-A **channel** is a subset of the **data**, selected with a **criterion**, for example "$B^0$ candidates". It is not the experiment, and it is not a physics process.
+A **channel** is a subset of the **data**, selected with a **criterion**, for example "$B^0$ candidates". It is not a physics process.
 
 Each **physics process** (signal, backgrounds) contributes a **component** to the model of the channel:
 
 $$\nu = \sum_c \nu_c, \qquad f(x) = \sum_c \frac{\nu_c}{\nu}\, f_c(x)$$
 
-| Channel: selected events (observable $x$) | Signal (physics process) | Background (physics process) |
-|---|---|---|
-| $B^0$ candidates, LHCb ($m_{p\bar p}$) | $B^0 \to p\bar p$ decay | random $p\bar p$ pairs |
-| $0\nu\beta\beta$-like events, CUORE-0 (energy) | $0\nu\beta\beta$ decay | radioactivity of the materials |
-| $\gamma$-like events, MAGIC (image parameter) | $\gamma$ rays | hadrons from cosmic rays |
+| Experiment | Channel | Observable | Signal (physics process) | Background (physics process) |
+|---|---|---|---|---|
+| LHCb | $B^0$ candidates | $m_{p\bar p}$ | $B^0 \to p\bar p$ decay | random $p\bar p$ pairs |
+| CUORE-0 | $0\nu\beta\beta$-like events | energy | $0\nu\beta\beta$ decay | radioactivity of the materials |
 
 *Careful: "decay channel" in particle physics means something else. In Lab 4, HistFactory calls a component a **sample**.*
 
@@ -193,7 +179,6 @@ Links: [RooFit](https://root.cern/manual/roofit/) · [RooStats](https://root.cer
 
 ```python
 import ROOT
-# notebook only (Binder, SWAN): draws the canvas in the page
 %jsroot on
 
 x     = ROOT.RooRealVar("x", "x", -10, 10)
@@ -269,7 +254,7 @@ $$-\ln L = \sum_j \big[\nu_j(\theta) - n_j \ln \nu_j(\theta)\big]$$
 - Binned loses information if bins are wide; unbinned is slower with many events
 - **In RooFit** the pdf and the code are the same: only the dataset changes (`RooDataSet` unbinned, `RooDataHist` binned)
 
-*More: [binned likelihood and $\chi^2$ (backup)](./lab1_backup.md)*
+*More: [binned likelihood and $\chi^2$](./lab1_backup.md)*
 
 ---
 
@@ -283,7 +268,7 @@ resolution and compare the result with the PDG mass.
 Generate the sum of $N$ uniform variables, fit a Gaussian, check the **tails**
 for $N$ = 2, 5, 10, 20. Where does the Gaussian stop being a good model?
 
-*Inspired by LHCb, “First observation of the rare purely baryonic decay $B^0 \to p\bar p$”.*
+*Inspired by LHCb, [“First observation of the rare purely baryonic decay $B^0 \to p\bar p$”](https://arxiv.org/abs/1709.01156).*
 
 Notebook: [`course/lab1/ex_B.ipynb`](../lab1/ex_B.ipynb)
 
@@ -295,7 +280,7 @@ Notebook: [`course/lab1/ex_B.ipynb`](../lab1/ex_B.ipynb)
 
 ---
 
-# Adding pdfs: signal + background
+# Adding components: signal + background (1)
 
 Two components of the model of a channel: the signal pdf $f_s(x)$ and the background pdf $f_b(x)$.
 
@@ -307,7 +292,7 @@ $$\text{Pois}(n\,|\,\nu_s+\nu_b)\;\prod_{i=1}^{n}\frac{\nu_s\,f_s(x_i)+\nu_b\,f_
 
 ---
 
-# Shape-only or extended: free parameters
+# Adding components: signal + background (2)
 
 | | **Shape-only** | **Extended** |
 |---|---|---|
@@ -356,12 +341,12 @@ h  = df.Histo1D(("h", ";m;events", 100, 100, 150), "m")
 ```
 
 - Lazy: nothing runs until you ask for a result; **one event loop** for all results
-- The expression is **C++ compiled just in time**: Python convenience, C++ speed (try it in exercise C4)
+- The expression is **C++ compiled just in time**: Python convenience, C++ speed (try it in [Ex C4](../lab1/ex_C.ipynb))
 - Multi-threading with `ROOT.EnableImplicitMT()`
-- Full RDataFrame treatment: Lab 4 (systematic variations with `Vary`)
-- Fill a `RooDataSet` from RDataFrame: see [`unbinned.cpp`](../../third_party/root-cpp-course-roofit/unbinned.cpp) in the ROOT Team course
+- Full `RDataFrame` treatment: Lab 4 (systematic variations with `Vary`)
+- To fill a `RooDataSet`: see [`unbinned.cpp`](../../third_party/root-cpp-course-roofit/unbinned.cpp) (ROOT Team course)
 
-*More: [RDataFrame in three lines (backup)](./lab1_backup.md)*
+*More: [RDataFrame in three lines](./lab1_backup.md)*
 
 ---
 
@@ -380,7 +365,7 @@ Report $\nu_s$, $\nu_b$ with errors. Plot with the components and the pulls.
 **C2. Same exercise, shape-only (fractions)**
 What happened to the information on the total yield?
 
-**Questions C.** Which error is larger, and why? When would you *need* the rate? Is the signal significant? (Compare $\nu_s$ with its error: no p-value yet, we do it in Lab 3.)
+**C3. Questions.** Which error is larger, and why? When would you *need* the rate? Is the signal significant? (Compare $\nu_s$ with its error: no p-value yet, we do it in Lab 3.)
 
 **C4. (optional, 10 min)** Count the events in a mass window with `RDataFrame` and a **C++ function** (JIT).
 
@@ -394,7 +379,7 @@ What happened to the information on the total yield?
 - unbinned vs binned likelihood, extended fits
 
 **By Lab 2**
-1. Submit **2 of the 3** notebooks of [`lab1/`](../lab1/) (A, B, C: your choice), run top to bottom with every check `PASS`
+1. Submit **2 of 3** notebooks of [`lab1/`](../lab1/) (your choice), every check `PASS`
 2. Upload them on **Virtuale**
 3. Read *Practical Statistics for the LHC*, sections on likelihood and nuisance parameters
 4. Open your Codespace once, to confirm it still works

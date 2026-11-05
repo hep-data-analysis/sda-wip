@@ -53,8 +53,8 @@
 
 - **Exercise A (4 min).** A1: the unbinned fit, the data and the pdf. A3: the ranges. **Ask:** in A3 (a), where did sigma stop, and what about its error? **Expected:** at the limit, close to 2: the error is not meaningful there. *(Check the exact numbers on your machine.)*
 - **Exercise B (4 min).** B1: the binned Breit–Wigner fit, Poisson in each bin. B2: the central limit theorem and its tails. **Ask:** why is the tail not Gaussian? **Expected:** the theorem describes the bulk; the tails converge slowly.
-- **Exercise C (7 min).** C1: the extended fit, nu s and nu b with their errors. C2: the shape-only fit. **Ask:** how many free parameters in C1 and in C2, besides the shapes? **Expected:** two in C1, one in C2. Link it to slides 21 and 22 of Lab 1.
-- If a student asks for another cell, show it. The solutions are in the repository from today.
+- **Exercise C (7 min).** C1: the extended fit, nu s and nu b with their errors. C2: the shape-only fit. **Ask:** how many free parameters in C1 and in C2, besides the shapes? **Expected:** two in C1, one in C2. Link it to slides 20 and 21 of Lab 1.
+- If a student asks for another cell, show it. The solutions are in the solutions branch, from today.
 
 **\[DO\] slide 4 — Schedule**
 
@@ -88,9 +88,9 @@
 
 **\[DO\] slide 9 — When fits go wrong**
 
-**SAY:** Fits fail. This is normal. Look at the table. If the fit does not converge, the start values are often bad. Choose start values near the data, and bound the ranges. If you see huge errors and a correlation close to one, two parameters are doing the same job. Fix one, or change the parametrisation. If a parameter is at a limit, look at the model. \[PAUSE\] A small trick: instead of tau, fit the logarithm of tau. Or use fractions between zero and one. **When a fit works on some toys only, we have a low-statistics problem. We study it at the end of the morning.**
+**SAY:** Fits fail. This is normal. Look at the table. If the fit does not converge, the start values are often bad. Choose start values near the data, and bound the ranges. If you see huge errors and a correlation close to one, two parameters are doing the same job. Fix one, or change the parametrisation. If a parameter is at a limit, look at the model. \[PAUSE\] **A limit that is too narrow puts the best value on the boundary, and the errors there are not reliable. A limit that is too wide gives slow fits, or unphysical regions, like a negative sigma, or a negative number of events.** Start near the value you expect: the starting value is not the range. RooFit also warns you when a parameter has no bounds: please read the warnings. \[PAUSE\] And one question: is your limit physical or numerical? A limit like mu greater than zero is physics: in Lab 3 you will see that it can change the result. A limit only to avoid silly values, like sigma greater than zero, is numerics: it must not touch the best value. **Say which one it is.** If you do not want to fit a parameter, fix it with set constant. \[PAUSE\] A small trick: instead of tau, fit the logarithm of tau. Or use fractions between zero and one. **When a fit works on some toys only, we have a low-statistics problem. We study it at the end of the morning.**
 
-*IT: tabella dei sintomi. Riparametrizzare aiuta.*
+*IT: tabella dei sintomi; limiti dei parametri (troppo stretti: best fit sul bordo, errori non affidabili; troppo larghi: convergenza lenta, regioni non fisiche); fisico o numerico; setConstant; RooFit avvisa se non ci sono limiti. Riparametrizzare aiuta.*
 
 ---
 

@@ -38,9 +38,9 @@
 
 ---
 
-## 0:10 — Talk A: From data to a model (slides 5–12, 20 min)
+## 0:10 — Talk A: From data to a model (slides 5–11, 20 min)
 
-*Timing: the three notation slides (8–10) take about 6 minutes. Keep slides 11 and 12 short (about 2 minutes each).*
+*Timing: the two notation slides (8–9) take about 4 minutes. Keep slides 10 and 11 short (about 2 minutes each).*
 
 **\[DO\] slide 6 — The inference chain**
 
@@ -54,7 +54,7 @@
 
 **SAY:** Now the main formula of the morning. An experiment records n events. Each event has some measured features, for example a mass or an energy. We call these features the marks. \[PAUSE\] The probability of the whole experiment has two parts. The first part is a Poisson distribution for the number of events n. The second part is a product, over all events, of the density of the marks. **The first part is the rate, also called the yield. The second part is the shape.**
 
-*IT: questo è il modello di un canale (vedi slide 11). Poisson per il numero di eventi (rate, detto anche yield) × prodotto delle densità (shape). Se rate-only è un conteggio. Dire "yield" qui: la parola ricorre dopo.*
+*IT: questo è il modello di un canale (vedi slide 10). Poisson per il numero di eventi (rate, detto anche yield) × prodotto delle densità (shape). Se rate-only è un conteggio. Dire "yield" qui: la parola ricorre dopo.*
 
 **SAY (to close):** Three cases. If we only have the rate, we have a counting experiment. If we only care about the shape, we drop the Poisson term: the number of events n is fixed, and we keep only the product. And if the rate depends on the parameters, so the data constrain both the shape and the rate, the model is called extended. **Choose the extended model when the rate is the result: a cross-section, a branching fraction, a discovery. Choose shape-only when only the shape matters, for example a mass or a lifetime.** For the details, please read Kyle Cranmer, Practical Statistics for the LHC. The link is on the slide.
 
@@ -70,25 +70,19 @@
 
 **\[DO\] slide 9 — A range for every variable, but not the same range**
 
-**SAY:** Now an important point, and RooFit forces us to think about it. Every variable needs a range. But the range does not mean the same thing. \[PAUSE\] For an observable, the range is the domain of the pdf. The pdf is normalised on this range: the integral is one. Events outside the range are not in the fit. So the range is part of the model. **If you change the range of an observable, you change the model.** In a counting experiment, the rate changes too, because the expected number of events is the number of events inside the range. \[PAUSE\] For a parameter, we give a starting value and an allowed interval. The interval is only a bound for the minimiser. It does not change the function. But the fit still depends on it, especially if the best value is near a limit. **The range of an observable defines the model. The range of a parameter steers the search.**
+**SAY:** Now an important point, and RooFit forces us to think about it. Every variable needs a range. But the range does not mean the same thing. \[PAUSE\] For an observable, the range is the domain of the pdf. The pdf is normalised on this range: the integral is one. Events outside the range are not in the fit. So the range is part of the model. **If you change the range of an observable, you change the model.** In a counting experiment, the rate changes too, because the expected number of events is the number of events inside the range. \[PAUSE\] For a parameter, we give a starting value and an allowed interval. The interval is only a bound for the minimiser. It does not change the function. But the fit still depends on it, especially if the best value is near a limit. **The range of an observable defines the model. The range of a parameter steers the search.** We come back to the limits of the parameters in Lab 2, with the common fitting errors.
 
 *IT: osservabile: range = dominio dove la pdf è normalizzata; eventi fuori non entrano; in un esperimento di conteggio cambia il rate. Parametro: valore iniziale + intervallo = limiti per il minimizzatore; non cambia la funzione ma il fit ne dipende.*
 
 **Ask the class:** I make the mass range smaller. Does the expected number of signal events change? Why? **Expected answer:** yes, N is the number of events inside the range. **If nobody answers, SAY:** The rate is defined inside the range of the observable. A smaller range, fewer events.
 
-**\[DO\] slide 10 — Parameter limits: what can go wrong**
+**\[DO\] slide 10 — Channels, physics processes and components**
 
-**SAY:** What happens inside fit to? It calls MINUIT, the minimisation library of ROOT, used in particle physics since the nineteen seventies. It moves the parameters inside the intervals that you gave, and it returns the best values and the errors. We study MINUIT in detail in Lab 2. \[PAUSE\] Now the typical problems. If the interval is too narrow, the best value sits on the boundary. You see it in the printout. And the errors are not reliable there. If the interval is too wide, the fit is slow, or it fails. Or it goes to a region without physics, for example a negative sigma, or a negative number of events. RooFit also warns you when a parameter has no bounds, for example a width. Please read the warnings. \[PAUSE\] Start near the value you expect. The starting value is not the range. \[PAUSE\] And one more question: is your limit physical or numerical? A limit like mu greater than zero is physics. In Lab 3 you will see that it can change the result. A limit only to avoid silly values, like sigma greater than zero, is numerics. It must not touch the best value. **Say which one it is.** If you do not want to fit a parameter, fix it with set constant.
-
-*IT: fitTo chiama MINUIT (dettagli nel Lab 2); troppo stretto = best fit sul bordo, errori non affidabili; troppo largo = convergenza lenta o regioni non fisiche; RooFit avvisa se un parametro non ha limiti; partire vicino al valore atteso; limite fisico (mu ≥ 0) vs numerico; setConstant per fissare. Non nominare HESSE/MINOS/MIGRAD qui.*
-
-**\[DO\] slide 11 — Channels, processes and components**
-
-**SAY:** Three words, and I want you to use them in the right way. \[PAUSE\] **A channel is a subset of the data, defined by a selection criterion. A physics process is physics, not data.** Data on one side, physics on the other. In a channel we count n events, and we measure a quantity x, for example a mass. \[PAUSE\] Be careful: in particle physics, decay channel means something else. It means the decay mode, for example H to four leptons. Here, channel means the selected events. A channel is often called, for example, B zero candidates, or double-beta-like events: it is named after the physics process that we look for, but what defines it is the selection. **The channel is not the experiment, and it is not the physics process.** \[PAUSE\] In a channel, several physics processes contribute: signal and backgrounds. **Each physics process gives a component of the model of the channel.** The total expected number of events is the sum of the components. And the total shape is the sum of the shapes, weighted by the number of events. In Lab 4, HistFactory will call a component a sample. It is the same object. \[PAUSE\] Look at the table. The first column is the channel: the selected events. In LHCb, the B zero candidates. The signal is the decay of the B zero into a proton and an antiproton. The background is random proton–antiproton pairs. In CUORE, the events that look like a neutrinoless double-beta decay. The signal is the decay itself, and the background is the natural radioactivity of the materials. In MAGIC, the events that look like gamma rays. The signal is gamma rays, and the background is hadrons, from cosmic-ray showers. \[PAUSE\] Different fields, different detectors. **But the mathematical structure is the same: signal plus background, in a mass, an energy, or an angle.** This is why one toolkit is enough for all of us.
+**SAY:** Three words, and I want you to use them in the right way. \[PAUSE\] **A channel is a subset of the data, defined by a selection criterion. A physics process is physics, not data.** Data on one side, physics on the other. In a channel we count n events, and we measure a quantity x, for example a mass. \[PAUSE\] Be careful: in particle physics, decay channel means something else. It means the decay mode, for example H to four leptons. Here, channel means the selected events. A channel is often called, for example, B zero candidates, or double-beta-like events: it is named after the physics process that we look for, but what defines it is the selection. **The channel is not the physics process.** \[PAUSE\] In a channel, several physics processes contribute: signal and backgrounds. **Each physics process gives a component of the model of the channel.** The total expected number of events is the sum of the components. And the total shape is the sum of the shapes, weighted by the number of events. In Lab 4, HistFactory will call a component a sample. It is the same object. \[PAUSE\] Look at the table. Experiment, channel, observable. In LHCb, the channel is the B zero candidates, and the observable is the proton–antiproton mass. The signal is the decay of the B zero into a proton and an antiproton. The background is random proton–antiproton pairs. In CUORE, the channel is the events that look like a neutrinoless double-beta decay, and the observable is the energy. The signal is the decay itself, and the background is the natural radioactivity of the materials. \[PAUSE\] Different fields, different detectors. **But the mathematical structure is the same: signal plus background, in a mass, an energy, or an angle.** This is why one toolkit is enough for all of us.
 
 *IT: il canale NON è l'esperimento né il processo fisico: sono gli eventi selezionati ("B0 candidates", "eventi 0νββ-like", "eventi γ-like"); canale = sottoinsieme di dati definito da un criterio di selezione, non un processo fisico (definizione di Cranmer, non citata in slide); contrapporre dati (canale) e fisica (physics process); attenzione: "decay channel" ha un altro significato; ogni processo dà una componente del modello del canale; in HistFactory (Lab 4) la componente si chiama sample; per ogni esempio nomina il processo fisico (segnale e fondo); stessa struttura in ogni campo.*
 
-**\[DO\] slide 12 — Why RooFit?**
+**\[DO\] slide 11 — Why RooFit?**
 
 **SAY:** Why do we use RooFit? First, what it is. RooFit is a part of ROOT, the same ROOT that you know for histograms and trees. Together with RooStats and HistFactory, it is the statistical toolkit of ROOT. The links are on the slide. \[PAUSE\] RooFit builds, combines, fits and shares probability models. The models are objects. You can combine them, and you do not need to rewrite the likelihood by hand. **And there is one very important thing: the normalisation comes for free. RooFit normalises the pdf for you, and it takes everything into account: the limits of the range, the projections, the composite models. This saves a lot of work, and a lot of mistakes.** \[PAUSE\] The model is stored in a workspace, and the workspace goes directly into RooStats and HistFactory. The major LHC collaborations use RooFit. Mostly in an indirect way, inside bigger frameworks. \[PAUSE\] I want to be honest. There are alternatives. iminuit and scipy are good for simple fits. zfit and pyhf are modern Python tools. **We use RooFit because it is the tool behind the experiments, and it covers the full chain, from the model to the final statistical result.**
 
@@ -96,9 +90,9 @@
 
 ---
 
-## 0:30 — Hands-on A: Gaussian, toys, fit (slides 13–15, 50 min)
+## 0:30 — Hands-on A: Gaussian, toys, fit (slides 12–14, 50 min)
 
-**\[DO\] slide 14 — The minimal RooFit program (live coding)**
+**\[DO\] slide 13 — The minimal RooFit program (live coding)**
 
 **SAY while typing:** Now we write a complete RooFit program. It is short. \[PAUSE\]
 
@@ -115,9 +109,9 @@
 
 **SAY (after the plot):** The fit gives a mean close to zero and a sigma close to three. \[PAUSE\] Is this a surprise? No, because we generated the data with these values. This is a toy: **we know the truth, so we can test our method.**
 
-**\[DO\] Try it (3–5 min), the last bullet of slide 14: ranges in practice.** Ask the students to refit twice, as on the slide: first with sigma range 0.1 to 2, then with the sub-range of x, minus 5 to 5, and fit with Range equal to "fit". They compare the best values and the errors with the first fit. Then show it on the screen. **Expected (to verify on your machine before the lab):** with the narrow limit, sigma stops at the boundary, very close to 2, and its error is meaningless: it can be tiny or zero. The fit does not complain loudly. With the sub-range, the values stay compatible with the first fit, but the errors are larger, because there are fewer events. Ask: why? **Note:** I tested the idea with iminuit, not with RooFit: sigma stopped at 2.000 with error 0.000, and the errors with the sub-range were larger.
+**\[DO\] Try it (3–5 min), the last bullet of slide 13: ranges in practice.** Ask the students to refit twice, as on the slide: first with sigma range 0.1 to 2, then with the sub-range of x, minus 5 to 5, and fit with Range equal to "fit". They compare the best values and the errors with the first fit. Then show it on the screen. **Expected (to verify on your machine before the lab):** with the narrow limit, sigma stops at the boundary, very close to 2, and its error is meaningless: it can be tiny or zero. The fit does not complain loudly. With the sub-range, the values stay compatible with the first fit, but the errors are larger, because there are fewer events. Ask: why? **Note:** I tested the idea with iminuit, not with RooFit: sigma stopped at 2.000 with error 0.000, and the errors with the sub-range were larger.
 
-**\[DO\] slide 15 — Exercise A**
+**\[DO\] slide 14 — Exercise A**
 
 **SAY:** Now it is your turn. You have about fifty minutes. Exercise A1: create a Gaussian with mean zero and sigma one. Plot it. Then change sigma to three. Generate ten thousand unbinned events, fit, and plot. Exercise A2: create an exponential, with tau equal to four point five. Generate binned data, one thousand events, bin width zero point five. Fit and plot. \[PAUSE\] Please also answer the three questions in your notebook. First: are the fitted values compatible with the true ones? Second: what changes if you use only one hundred events? Third: why is the error on sigma different from the error on the mean? Work in pairs if you like. Raise your hand if you are stuck. The reference is on the slide: the ROOT RooFit tutorials, in C++ and in Python. If you finish early, there is an optional step A3, on the ranges.
 
@@ -140,15 +134,15 @@
 
 ---
 
-## 1:30 — Talk B: RooFit building blocks (slides 16–18, 20 min)
+## 1:30 — Talk B: RooFit building blocks (slides 15–17, 20 min)
 
-**\[DO\] slide 17 — Four objects to know**
+**\[DO\] slide 16 — Four objects to know**
 
 **SAY:** Welcome back. Now let me organise what you have just used. In RooFit there are four objects to know. \[PAUSE\] The first is RooRealVar. It is a variable or a parameter, with a range. The second is the pdf, the normalised density. In practice we use concrete classes, for example RooGaussian and RooExponential. They all derive from one abstract class, RooAbsPdf, and this is why they all behave in the same way: you can fit them, generate from them, and plot them. There is a page in the repository with the list of the pdfs: the link is in the table. We will use other classes in the notebooks, when we need them. The third is the dataset. It can be unbinned, a RooDataSet, or binned, a RooDataHist. The fourth is RooPlot, the frame where we draw data and model. \[PAUSE\] Three rules of thumb. Observables have a range. Parameters have a range and a start value. **And the pdf is normalised over the observable automatically.**
 
 *IT: 4 oggetti, 3 regole. La normalizzazione automatica è il punto chiave.*
 
-**\[DO\] slide 18 — Unbinned vs binned**
+**\[DO\] slide 17 — Unbinned vs binned**
 
 **SAY:** Now, two kinds of likelihood. In the unbinned case we use every event. The minus log likelihood is the sum, over events, of the minus log of the density. In the binned case, we have a histogram. In each bin, the number of events is Poisson. We call n j the observed number and nu j the expected number, which depends on the parameters. \[PAUSE\] A very important point. **A binned likelihood is not a chi-square fit.** It is exact for low counts, and it works also with empty bins. Binned fits lose information if the bins are wide. Unbinned fits are slow if you have very many events. And in RooFit, the pdf and the code are the same. Only the dataset changes: RooDataSet for the unbinned case, RooDataHist for the binned case.
 
@@ -158,9 +152,9 @@
 
 ---
 
-## 1:50 — Hands-on B: LHCb mass and CLT (slide 19, 55 min)
+## 1:50 — Hands-on B: LHCb mass and CLT (slide 18, 55 min)
 
-**\[DO\] slide 19 — Exercise B**
+**\[DO\] slide 18 — Exercise B**
 
 **SAY:** Exercise B1 uses a simplified dataset, modelled on an LHCb analysis. The file is called b0 invariant mass dot root. Please import the histogram as a RooDataHist. Fit a Breit–Wigner. Then add a Gaussian resolution and compare your mass with the value from the Particle Data Group. \[PAUSE\] Exercise B2 is about the central limit theorem. Generate the sum of N uniform variables. Fit a Gaussian. Then look at the tails, for N equal to two, five, ten, twenty. **Where does the Gaussian stop being a good model? The answer is in the tails.** Fifty minutes. Please start.
 
@@ -182,17 +176,17 @@
 
 ---
 
-## 2:55 — Talk C: Composite models (slides 20–24, 15 min)
+## 2:55 — Talk C: Composite models (slides 19–23, 15 min)
 
-*Timing: slides 21 and 22 take about 2 minutes each. The RDataFrame slide (23) stays at 1 minute.*
+*Timing: slides 20 and 22 take about 2 minutes each. The RDataFrame slide (23) stays at 1 minute.*
 
-**\[DO\] slide 21 — Adding pdfs: signal + background**
+**\[DO\] slide 20 — Adding components: signal + background (1)**
 
 **SAY:** Now the last topic: adding pdfs. In a channel we have two components, the signal pdf and the background pdf. Let's write the model in the two ways. \[PAUSE\] **First, shape-only.** We have one fraction, phi, of signal. The pdf of one event is phi times the signal, plus one minus phi times the background. The model is the product over the events. The number of events n is fixed by the data. \[PAUSE\] **Second, extended.** Now we have the expected number of signal events, nu s, and of background events, nu b. The first factor is a Poisson for the total number of events, with expected value nu s plus nu b. The second factor is the product over events of the same sum, with the fraction written with the two numbers.
 
 *IT: formule S+B affiancate (grandi): shape-only con una frazione φ (n fisso); esteso con ν_s e ν_b e il Poisson sul totale.*
 
-**\[DO\] slide 22 — Shape-only or extended: free parameters**
+**\[DO\] slide 21 — Adding components: signal + background (2)**
 
 **SAY:** Look at the table. **In the extended model there is one more free parameter: the total number of events.** Shape-only has one parameter, phi. Extended has two, nu s and nu b. If we write phi as nu s over nu s plus nu b, the two models have the same fraction, but the extended model also has the total. \[PAUSE\] The signal events are derived in the first case, as phi times n, and fitted in the second case. \[PAUSE\] And a general rule: a mixture of k normalised pdfs needs only k minus one independent coefficients, because the sum must be one. In an extended fit, each component has its own yield, so we need k parameters.
 
@@ -200,13 +194,13 @@
 
 **Ask the class:** How many free parameters do the two models have, besides the shapes? **Expected answer:** one for shape-only, two for extended. **If nobody answers, SAY:** Phi for the first. Nu s and nu b for the second.
 
-**\[DO\] slide 23 — Adding components in RooFit: RooAddPdf**
+**\[DO\] slide 22 — Adding components in RooFit: RooAddPdf**
 
 **SAY:** Now the implementation. In RooFit we add the components with RooAddPdf. We give two lists: the components, and the coefficients. **The number of coefficients tells RooFit what you mean.** \[PAUSE\] With one coefficient for each component, the coefficients are the numbers of events. This is the extended model. You do not need to tell the fit that it is extended: RooFit sees it from the number of coefficients. \[PAUSE\] With one coefficient fewer, the coefficients are fractions, and the last fraction is one minus the sum of the others. This is the shape-only model. \[PAUSE\] **The number of coefficients is the number of free parameters: two for extended, one for shape-only.** Look at the code: two lines, and the difference is only the list of coefficients. And to plot one component, for example the background, we use Components equals bkg.
 
 *IT: k coefficienti per k componenti = numeri di eventi = esteso (non serve dirlo al fit); N−1 coefficienti = frazioni, l'ultima è 1−somma = solo forma; Components per plottare una componente.*
 
-**\[DO\] slide 24 — RDataFrame in one slide**
+**\[DO\] slide 23 — RDataFrame in one slide**
 
 **SAY:** One short remark about data. In real analyses, data are in ROOT files, in trees. RDataFrame is the modern way to read them. You select events with Filter. You create new columns with Define. And you make histograms. \[PAUSE\] RDataFrame is lazy: nothing runs until you ask for a result. And it makes one loop over the events for all your results. With one line, you can use many cores. **We will study RDataFrame again in Lab 4.** For now, remember: Filter, Define, Histo1D. One more thing: the expression in a Define can be a C++ function, compiled just in time. You will try it in exercise C, step four.
 
@@ -214,9 +208,9 @@
 
 ---
 
-## 3:10 — Hands-on C (slides 25–26, 40 min)
+## 3:10 — Hands-on C (slides 24–25, 40 min)
 
-**\[DO\] slide 26 — Exercise C**
+**\[DO\] slide 25 — Exercise C**
 
 **SAY:** Exercise C1 uses the LHCb rare decay, B zero to proton anti-proton. The file is in the data folder. Please fit a Gaussian for the signal, plus an exponential for the background. Use an extended fit. Report the number of signal events and the number of background events, with errors. Plot the components and the pulls. \[PAUSE\] Exercise C2: do the same with fractions, shape-only. What happened to the information on the total yield? **Think about this: the rate is gone.** You have about thirty minutes. If you finish early, step C4 is optional: count the events in a mass window with a C++ function, compiled just in time.
 
@@ -231,7 +225,7 @@
 
 ---
 
-## 3:50 — Wrap-up (slide 27, 10 min)
+## 3:50 — Wrap-up (slide 26, 10 min)
 
 **SAY:** Let's finish. \[PAUSE\] Today you learned three things. First, the marked Poisson model: rate times shape. Second, the RooFit objects: variable, pdf, dataset, frame. Third, unbinned and binned likelihoods, and extended fits. \[PAUSE\] For the next lab, in two weeks, please do four things. One: finish your two notebooks, the ones you choose, and check that every check says PASS. Two: upload them on Virtuale. At the beginning of Lab 2, we look together at the solutions of all three notebooks. Three: read the sections on likelihood and nuisance parameters in Cranmer's paper. Four: open your Codespace once, to check that it still works. \[PAUSE\] **In Lab 2 we open the box: what really happens when we call fitTo.** We will study MINUIT, the likelihood scan, and the nuisance parameters. Thank you very much. See you in two weeks.
 
@@ -241,7 +235,7 @@
 
 ## Emergency notes
 
-- **Running late?** Skip the ranges live demo (after slide 14) and B2 (do at home), and shorten the RDataFrame slide. Never skip the explanation of the submission rule (2 notebooks out of 3).
+- **Running late?** Skip the ranges live demo (after slide 13) and B2 (do at home), and shorten the RDataFrame slide. Never skip the explanation of the submission rule (2 notebooks out of 3).
 - **Codespaces not working?** Say: Please use SWAN, or the shared notebook link. We fix your installation after class.
 - **A student asks something very hard?** Say: That is an excellent question. It goes beyond today. Let's discuss it after class, or in Lab 2.
 - **Silence after a question?** Wait ten seconds. Then rephrase: Let me ask in a different way.

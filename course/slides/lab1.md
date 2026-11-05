@@ -148,21 +148,21 @@ The range of an observable **defines the model**. The range of a parameter **ste
 
 ---
 
-# Channels, processes and components
+# Channels, physics processes and components
 
-A **channel** is a subset of the **data**, defined by a **selection criterion**. It has its observed number $n_c$ of events and a measured quantity $x$.
-A **physics process** (signal, backgrounds) is not a channel: each physics process contributes a **component** to the model of the channel:
+A **channel** is a subset of the **data**, selected with a **criterion**, for example "$B^0$ candidates". It is not the experiment, and it is not a physics process.
+
+Each **physics process** (signal, backgrounds) contributes a **component** to the model of the channel:
 
 $$\nu = \sum_c \nu_c, \qquad f(x) = \sum_c \frac{\nu_c}{\nu}\, f_c(x)$$
 
-| Channel (observable $x$) | Signal (physics process) | Background (physics process) |
+| Channel: selected events (observable $x$) | Signal (physics process) | Background (physics process) |
 |---|---|---|
-| LHCb ($m_{p\bar p}$) | $B^0 \to p\bar p$ decay | random $p\bar p$ pairs |
-| CUORE-0 (energy) | $0\nu\beta\beta$ decay | radioactivity of the materials |
-| MAGIC (image parameter) | $\gamma$ rays | hadrons from cosmic rays |
+| $B^0$ candidates, LHCb ($m_{p\bar p}$) | $B^0 \to p\bar p$ decay | random $p\bar p$ pairs |
+| $0\nu\beta\beta$-like events, CUORE-0 (energy) | $0\nu\beta\beta$ decay | radioactivity of the materials |
+| $\gamma$-like events, MAGIC (image parameter) | $\gamma$ rays | hadrons from cosmic rays |
 
-Different fields, **same structure**.
-*Careful: in particle physics, "decay channel" means something else. In Lab 4, HistFactory calls a component a **sample**.*
+*Careful: "decay channel" in particle physics means something else. In Lab 4, HistFactory calls a component a **sample**.*
 
 ---
 
@@ -244,7 +244,7 @@ Notebook: [`course/lab1/ex_A.ipynb`](../lab1/ex_A.ipynb)  ·  Reference: ROOT [R
 | Object | Role | Example |
 |---|---|---|
 | `RooRealVar` | variable / parameter, with range | `x`, `mean` |
-| pdf (derives from `RooAbsPdf`) | normalised density | `RooGaussian`, `RooExponential` |
+| `RooGaussian` / `RooExponential` | normalised density | pdfs derived from `RooAbsPdf` (see [the list of pdfs](../../docs/roofit_pdfs.md)) |
 | `RooDataSet` / `RooDataHist` | unbinned / binned data | `generate`, `generateBinned` |
 | `RooPlot` | frame to overlay data, pdf, pulls | `x.frame()` |
 

@@ -118,7 +118,7 @@ A parameter stuck at its **limit** is a warning, not a result.
 | Symptom | Likely cause | Remedy |
 |---|---|---|
 | does not converge | bad start values, ranges too wide | start near the data, bound the ranges |
-| huge errors, $|\rho|\to 1$ | two parameters do the same job | fix one, or reparametrise |
+| huge errors, $\|\rho\|\to 1$ | two parameters do the same job | fix one, or reparametrise |
 | parameter at limit | model or range wrong | check model, widen range if physical |
 | fit works on some toys only | low statistics | toy study (Talk C) |
 

@@ -126,6 +126,29 @@ Reparametrising example: fit $\ln\tau$ instead of $\tau$, or use fractions betwe
 
 ---
 
+### When fits go wrong — Debug Flowchart
+
+When a fit fails, follow this checklist in order:
+
+1. **Does not converge** (MIGRAD does not find the minimum)
+   - Initial values too far from the data?
+   - Parameter ranges too wide?
+   - *Fix*: `setVal()` near the data peak, `setRange()` narrower.
+
+2. **Converges but huge errors or correlation |ρ| ≈ 1**
+   - Parameters are degenerate (the fit cannot distinguish them).
+   - *Fix*: fix one of the two parameters, or reformulate the model.
+
+3. **Converges but a parameter is at the limit** (e.g., fraction = 0 or 1)
+   - Physical limit is too tight, or the model is wrong.
+   - *Fix*: widen the range if it makes physical sense, otherwise reparametrize (e.g., fit `ln(τ)` instead of `τ`).
+
+4. **Works only on some toys**
+   - Low statistics → likelihood is not parabolic.
+   - *Fix*: use MINOS, or switch to Neyman intervals (Lab 3).
+
+---   
+
 <!-- _class: lead -->
 # Hands-on A
 ## Anatomy of a fit

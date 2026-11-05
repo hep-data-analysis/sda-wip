@@ -95,7 +95,7 @@ Three algorithms of **MINUIT**, the minimisation library of ROOT:
 - MINOS makes no such assumption, but costs more fits
 - If HESSE and MINOS disagree, the likelihood is not parabolic: **trust MINOS, and say so**
 
-*More: [Hesse and Minos](https://scikit-hep.org/iminuit/notebooks/hesse_and_minos.html)
+*More: [Hesse and Minos](https://scikit-hep.org/iminuit/notebooks/hesse_and_minos.html)*
 
 ---
 

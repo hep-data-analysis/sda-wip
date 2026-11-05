@@ -31,11 +31,11 @@ Today closes the chain: **binned models**, and a first look at **event selection
 
 # Solutions of Lab 3 (15 minutes)
 
-The solutions are in [`solutions/lab3/`](https://github.com/gabriele-sirri/statistical-data-analysis/tree/main/solutions/lab3), from today.
+The solutions are in the `solutions` branch: [`solutions/lab3/`](https://github.com/gabriele-sirri/statistical-data-analysis/tree/solutions/solutions/lab3), from today.
 
-- **[A](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab3/ex_A_solution.ipynb)**: on/off with a Gaussian constraint, and the significance (A1, A2)
-- **[B](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab3/ex_B_solution.ipynb)**: `ModelConfig`, intervals, and the significance of the background-only hypothesis (B1–B3)
-- **[C](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab3/ex_C_solution.ipynb)**: OPERA: covariance and diagonalisation (C1–C3)
+- **[A](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab3/ex_A_solution.ipynb)**: on/off with a Gaussian constraint, and the significance (A1, A2)
+- **[B](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab3/ex_B_solution.ipynb)**: `ModelConfig`, intervals, and the significance of the background-only hypothesis (B1–B3)
+- **[C](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab3/ex_C_solution.ipynb)**: OPERA: covariance and diagonalisation (C1–C3)
 
 ---
 

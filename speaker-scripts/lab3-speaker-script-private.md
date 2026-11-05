@@ -48,7 +48,7 @@
 - **Exercise A (5 min).** A1: NLL, MIGRAD, HESSE. A2: MINOS. A5: the contour. **Ask:** HESSE and MINOS differ: which one do you trust? **Expected:** MINOS: the likelihood is not a parabola.
 - **Exercise B (5 min).** B1: the on/off model, b hat close to 3.8 and s hat close to 13.2. B2: the profile interval against MINOS. B3: slice against profile, with a poorer control region. **Ask:** why is the profile wider than the slice? **Expected:** the nuisance parameter is re-fitted, so its uncertainty adds.
 - **Exercise C (5 min).** C1: the toy loop and the pulls. C2: low statistics, failed fits and boundaries. **Ask:** what does a pull RMS of 1.3 tell you? **Expected:** the errors are underestimated by about thirty percent.
-- If a student asks for another cell, show it. The solutions are in the repository from today.
+- If a student asks for another cell, show it. The solutions are in the solutions branch, from today.
 
 **\[DO\] slide 4 — Schedule**
 

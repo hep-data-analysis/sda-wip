@@ -32,11 +32,11 @@ Discuss in pairs, then we compare:
 
 # Solutions of Lab 1 (15 minutes)
 
-The solutions are in [`solutions/lab1/`](https://github.com/gabriele-sirri/statistical-data-analysis/tree/main/solutions/lab1), from today.
+The solutions are in the `solutions` branch: [`solutions/lab1/`](https://github.com/gabriele-sirri/statistical-data-analysis/tree/solutions/solutions/lab1), from today.
 
-- **[A](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab1/ex_A_solution.ipynb)**: the Gaussian fit and the **ranges** of a parameter and of an observable (A1, A3)
-- **[B](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab1/ex_B_solution.ipynb)**: the **binned** Breit–Wigner fit and the central limit theorem (B1, B2)
-- **[C](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/solutions/lab1/ex_C_solution.ipynb)**: **extended** and **shape-only** fits, and the number of free parameters (C1, C2)
+- **[A](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab1/ex_A_solution.ipynb)**: the Gaussian fit and the **ranges** of a parameter and of an observable (A1, A3)
+- **[B](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab1/ex_B_solution.ipynb)**: the **binned** Breit–Wigner fit and the central limit theorem (B1, B2)
+- **[C](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab1/ex_C_solution.ipynb)**: **extended** and **shape-only** fits, and the number of free parameters (C1, C2)
 
 ---
 
@@ -107,7 +107,7 @@ Always check:
 | `covQual()` | 3 (full, accurate covariance) |
 | EDM (estimated distance to minimum) | tiny |
 | parameters at a limit? | none |
-| correlation coefficients | no $\|\rho\|\approx 1$ |
+| correlation coefficients | no $|\rho|\approx 1$ |
 
 A parameter stuck at its **limit** is a warning, not a result.
 
@@ -117,12 +117,15 @@ A parameter stuck at its **limit** is a warning, not a result.
 
 | Symptom | Likely cause | Remedy |
 |---|---|---|
-| does not converge | bad start values, ranges too wide | start near the data, bound the ranges |
-| huge errors, $\|\rho\|\to 1$ | two parameters do the same job | fix one, or reparametrise |
-| parameter at limit | model or range wrong | check model, widen range if physical |
-| fit works on some toys only | low statistics | toy study (Talk C) |
+| does not converge | bad start values, ranges too wide | start near the expected value, bound the ranges |
+| parameter at its limit, errors not reliable | range too narrow, or wrong model | check the model, widen the range if the limit is not physical |
+| unphysical values ($\sigma\le0$, negative numbers of events) | range too wide | bound the range |
+| huge errors, $|\rho|\to 1$ | two parameters do the same job | fix one, or reparametrise |
+| works on some toys only | low statistics | toy study (Talk C) |
 
-Reparametrising example: fit $\ln\tau$ instead of $\tau$, or use fractions between 0 and 1.
+- **Physical or numerical limit?** $\mu \ge 0$ is physics: it can change the result (Lab 3). A limit only to avoid silly values ($\sigma>0$) is numerics: it must not touch the best value. **Say which one it is**
+- Keep a parameter out of the fit: `par.setConstant(True)`. RooFit warns about parameters without bounds: read the warnings
+- Reparametrise: fit $\ln\tau$ instead of $\tau$, or use fractions between 0 and 1
 
 ---
 

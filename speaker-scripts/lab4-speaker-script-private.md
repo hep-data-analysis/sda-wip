@@ -48,7 +48,7 @@
 - **Exercise A (4 min).** A1: the two model builders, constraint and auxiliary measurement. A2: the significance. **Ask:** with a poor control region, what happens to the significance? **Expected:** it decreases, because the uncertainty on the background grows.
 - **Exercise B (5 min).** B1: the workspace and the ModelConfig. B3: the significance of the background-only hypothesis. **Ask:** what is in a ModelConfig? **Expected:** the parameters of interest, the nuisance parameters, the observables, and the global observables.
 - **Exercise C (6 min).** OPERA: C1 covariance and diagonalisation, C3 the scan of the correlation. **Ask:** how many nuisance parameters after the diagonalisation? **Expected:** the rank of the covariance matrix.
-- If a student asks for another cell, show it. The solutions are in the repository from today.
+- If a student asks for another cell, show it. The solutions are in the solutions branch, from today.
 
 **\[DO\] slide 4 — Schedule**
 

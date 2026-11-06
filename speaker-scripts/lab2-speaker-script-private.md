@@ -1,6 +1,6 @@
 # Lab 2 — Speaker Script
 
-*Companion of lab2.md (24 slides).*
+*Companion of lab2.md (32 slides).*
 
 ## Notes for today
 
@@ -62,11 +62,11 @@
 
 ---
 
-## 0:20 — Talk A: What happens in fitTo (slides 5–9, 15 min)
+## 0:20 — Talk A: What happens in fitTo (slides 5–10, 15 min)
 
 *Time-box: 15 minutes, plus the 5-minute live coding. Keep a timer on the desk. No slide is removed: if you are late, say the bold line of slide 9 now, and come back to its table at the end of the hands-on.*
 
-**\[DO\] slide 6 — From pdf to number**
+**\[DO\] slide 6 — What happens in fitTo**
 
 **SAY:** When you write fit-to, four things happen. \[PAUSE\] First, RooFit builds the negative log-likelihood. It is a function of the parameters. Second, the minimiser finds the minimum. The minimiser is MINUIT, the minimisation library of ROOT, used in particle physics since the nineteen seventies. The algorithm is called MIGRAD. Third, HESSE computes the covariance matrix from the second derivatives. Fourth, if you ask, MINOS computes asymmetric errors. **Today we call each step ourselves, with a class called RooMinimizer.**
 
@@ -86,11 +86,17 @@
 
 *IT: checklist: status 0, covQual 3, EDM piccolo, nessun parametro al limite, nessuna correlazione ±1.*
 
-**\[DO\] slide 9 — When fits go wrong**
+**\[DO\] slide 9 — When fits go wrong — Debug Flowchart (1/2)**
 
-**SAY:** Fits fail. This is normal. Look at the table. If the fit does not converge, the start values are often bad. Choose start values near the data, and bound the ranges. If you see huge errors and a correlation close to one, two parameters are doing the same job. Fix one, or change the parametrisation. If a parameter is at a limit, look at the model. \[PAUSE\] **A limit that is too narrow puts the best value on the boundary, and the errors there are not reliable. A limit that is too wide gives slow fits, or unphysical regions, like a negative sigma, or a negative number of events.** Start near the value you expect: the starting value is not the range. RooFit also warns you when a parameter has no bounds: please read the warnings. \[PAUSE\] And one question: is your limit physical or numerical? A limit like mu greater than zero is physics: in Lab 3 you will see that it can change the result. A limit only to avoid silly values, like sigma greater than zero, is numerics: it must not touch the best value. **Say which one it is.** If you do not want to fit a parameter, fix it with set constant. \[PAUSE\] A small trick: instead of tau, fit the logarithm of tau. Or use fractions between zero and one. **When a fit works on some toys only, we have a low-statistics problem. We study it at the end of the morning.**
+**SAY:** Fits fail. This is normal. When a fit fails, follow this checklist, in this order. \[PAUSE\] **One: it does not converge.** MIGRAD does not find the minimum. The ranges are too wide, or the start values are too far from the minimum. Fix: make the ranges narrower with set range, and put a reasonable start value with set val. Start near the value that you expect: the starting value is not the range. \[PAUSE\] **Two: it converges, but the errors are huge, or a correlation is close to one.** The parameters are degenerate: the fit cannot distinguish them. Fix one of the two, or reformulate the model.
 
-*IT: tabella dei sintomi; limiti dei parametri (troppo stretti: best fit sul bordo, errori non affidabili; troppo larghi: convergenza lenta, regioni non fisiche); fisico o numerico; setConstant; RooFit avvisa se non ci sono limiti. Riparametrizzare aiuta.*
+*IT: checklist in ordine. 1) non converge: range troppo larghi o valori iniziali lontani → setRange più stretto, setVal ragionevole (il valore iniziale non è il range). 2) errori enormi o |ρ|≈1: parametri degeneri → fissarne uno o riformulare.*
+
+**\[DO\] slide 10 — When fits go wrong — Debug Flowchart (2/2)**
+
+**SAY:** **Three: it converges, but a parameter is at its limit.** For example a fraction equal to zero or one. The limit is too tight, or the model is wrong. Fix: widen the range if it makes sense, or reparametrise: for example fit the logarithm of tau instead of tau. \[PAUSE\] A question that I want you to ask yourself: is the limit physical or numerical? A limit like mu greater than zero is physics: in Lab 3 you will see that it can change the result. A limit only to avoid silly values, like sigma greater than zero, is numerics: it must not touch the best value. **Say which one it is.** *(This point is no longer on the slide: say it, or skip it if you are late.)* RooFit also warns you when a parameter has no bounds: please read the warnings. If you do not want to fit a parameter, fix it with set constant. \[PAUSE\] **Four: it works only on some toys.** Low statistics: the likelihood is not parabolic. Fix: use MINOS, or switch to Neyman intervals, which we see in Lab 3. **We study this case at the end of the morning.**
+
+*IT: 3) parametro al limite: limite troppo stretto o modello sbagliato → allargare, riparametrizzare (ln τ). Limite fisico o numerico? (punto non più in slide). 4) funziona solo su alcuni toy: bassa statistica → MINOS o Neyman (Lab 3); lo vediamo a fine mattina.*
 
 ---
 
@@ -106,9 +112,9 @@
 
 ---
 
-## 0:40 — Hands-on A: Anatomy of a fit (slides 10–11, 45 min)
+## 0:40 — Hands-on A: Anatomy of a fit (slides 11–13, 45 min)
 
-**\[DO\] slide 11 — Exercise A**
+**\[DO\] slide 12 — Exercise A**
 
 **SAY:** Now it is your turn. We use the same data and the same model as in Lab 1, exercise C. \[PAUSE\] Step one. Build the negative log-likelihood. Run MIGRAD and HESSE with RooMinimizer. Read the status, the EDM and the covariance quality. Step two. Run MINOS on the signal yield. Are the errors symmetric? Do they agree with HESSE? Step three. Print the correlation matrix. Which two parameters are most correlated? Step four. Plot the likelihood scan, the profile, and the HESSE parabola together. Step five. Draw the one-sigma and two-sigma contours of signal against background. \[PAUSE\] Open ex A in the lab 2 folder. You have forty-five minutes.
 
@@ -125,29 +131,37 @@
 
 ---
 
+**\[DO\] slide 13 — Key Takeaways from Hands-on A (2 min, at the end)**
+
+**SAY:** Five points to remember. \[PAUSE\] fitTo is not magic: it creates the NLL, runs MIGRAD, then HESSE. After a fit, the variables update their value and their error: use get val and get error. For plotting one component, use Components, with a dashed line. The profile re-minimises the nuisance parameters at every point of the parameter of interest. **And for a contour: run HESSE immediately before, to have a clean error matrix, and to avoid stray points.**
+
+*IT: riepilogo A: fitTo = NLL + MIGRAD + HESSE; le variabili si aggiornano; Components per le componenti; profilo = ri-minimizza le nuisance; contour: prima HESSE.*
+
+---
+
 ## 1:25 — BREAK (15 min)
 
 **SAY:** Let's take a break. We restart at 10:30.
 
 ---
 
-## 1:40 — Talk B: Intervals and nuisance parameters (slides 12–15, 15 min)
+## 1:40 — Talk B: Intervals and nuisance parameters (slides 14–17, 15 min)
 
 *Time-box: 15 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold sentence of slide 14 now, and come back to the rest at the end of the hands-on.*
 
-**\[DO\] slide 13 — Likelihood-ratio intervals**
+**\[DO\] slide 15 — Likelihood-ratio intervals**
 
 **SAY:** Welcome back. Now the main idea of the day: likelihood-ratio intervals. For a single parameter, in the large-sample limit, minus two times the log of the likelihood ratio follows a chi-square distribution with one degree of freedom. This is Wilks theorem. \[PAUSE\] Practically: for a sixty-eight percent interval, we look where the negative log-likelihood rises by zero point five. For ninety-five percent, by one point nine two. **The interval is where the curve is below the minimum plus one half. It does not need to be symmetric.** This is the MINOS interval.
 
 *IT: Wilks; 0.5 per il 68%, 1.92 per il 95%; intervallo = dove la curva sta sotto min + 0.5.*
 
-**\[DO\] slide 14 — Nuisance parameters**
+**\[DO\] slide 16 — Nuisance parameters**
 
 **SAY:** A real model has parameters of interest, and nuisance parameters. A nuisance parameter is something we need in the model, but we do not care about. For example, the background rate, the resolution, or an efficiency. \[PAUSE\] There are two ways to draw the likelihood. The slice: we fix the nuisance parameters at their best-fit value. This is too optimistic, because it ignores what we do not know. The profile: for each value of the parameter of interest, we fit the nuisance parameters again. **The profile is wider than the slice. The difference is the cost of the nuisance parameter.**
 
 *IT: slice (parametri fissi, ottimista) vs profile (rifit dei nuisance). Profile più largo.*
 
-**\[DO\] slide 15 — The on/off problem**
+**\[DO\] slide 17 — The on/off problem**
 
 **SAY:** Here is a classical example. We count events in the signal region: n on. We count events in a control region: n off. The control region measures the background. The expected counts are s plus b in the signal region, and tau times b in the control region. Tau is the ratio of the sizes of the two regions. \[PAUSE\] The best fit is simple. b hat is n off divided by tau. And s hat is n on minus b hat. **The uncertainty on the background is not an input. It comes from the control region.** When you read a result like background three point eight plus or minus zero point six, this is the model behind it. In Lab 3 we add constraint terms.
 
@@ -169,9 +183,9 @@
 
 ---
 
-## 2:00 — Hands-on B: the on/off problem (slides 16–17, 45 min)
+## 2:00 — Hands-on B: the on/off problem (slides 18–20, 45 min)
 
-**\[DO\] slide 17 — Exercise B**
+**\[DO\] slide 19 — Exercise B**
 
 **SAY:** Exercise B uses the top-quark numbers. Seventeen events observed in the signal region. Forty in the control region. Tau equal to ten point five three. \[PAUSE\] Step one. Build the model with two Poisson distributions. Fit, and read s hat and b hat. Step two. Compute the sixty-eight percent interval on s in two ways: scan the profile, and use MINOS. Compare them. Step three. Compare with the slice. Step four. Repeat with a poorer control region: n off equal to four, tau equal to one point zero five three. The best-fit background is the same. What changes? \[PAUSE\] Forty-five minutes. Please start with the model.
 
@@ -188,29 +202,37 @@
 
 ---
 
+**\[DO\] slide 20 — Key Takeaways from Hands-on B (2 min, at the end)**
+
+**SAY:** Three points. \[PAUSE\] A slice fixes the nuisance parameters. A profile re-optimises them. **MINOS is exactly the profile scan: the two must agree.** And tau carries the uncertainty on the background from the control region to the signal region.
+
+*IT: riepilogo B: slice fissa le nuisance, profilo le ri-ottimizza; MINOS = scansione del profilo (devono coincidere); τ porta l'incertezza sul fondo dalla regione di controllo a quella di segnale.*
+
+---
+
 ## 2:45 — BREAK (10 min)
 
 **SAY:** Let's take a short break. Ten minutes. We restart at 11:45.
 
 ---
 
-## 2:55 — Talk C: Toy MC, pulls and residuals (slides 20–25, 10 min)
+## 2:55 — Talk C: Toy MC, pulls and residuals (slides 21–26, 10 min)
 
-*Time-box: 10 minutes, plus the 5-minute live coding. No slide is removed: about 2 minutes for each of slides 21, 22 and 23, and 1.5 minutes for slides 24 and 25. If you are late, say the bold sentence of each slide and come back to the rest at the end of the hands-on.*
+*Time-box: 10 minutes, plus the 5-minute live coding. No slide is removed: about 2 minutes for each of slides 22, 23 and 24, and 1.5 minutes for slides 25 and 26. If you are late, say the bold sentence of each slide and come back to the rest at the end of the hands-on.*
 
-**\[DO\] slide 21 — Testing the fit with Toy MC**
+**\[DO\] slide 22 — Testing the fit with Toy MC**
 
 **SAY:** One last question. How do we know that the errors of the fit are correct? HESSE and MINOS are approximations: they assume that the likelihood is close to a parabola. Is it true for my model, with my number of events? \[PAUSE\] We can test it with a toy study. Four steps. One: generate a dataset from the model, with known true parameters. Two: fit it, exactly as we fit the data. Three: record the fitted values and their errors. Four: repeat, three hundred or a thousand times, and look at the distribution of the results. \[PAUSE\] **In RooFit, a class does this loop for us: RooMCStudy.** We use it in a few minutes.
 
 *IT: toy = molti esperimenti finti con verità nota: genera → fit → registra → ripeti; poi guarda la distribuzione. In RooFit: RooMCStudy.*
 
-**\[DO\] slide 22 — The pull**
+**\[DO\] slide 23 — The pull**
 
 **SAY:** For each toy, we compare the fit with the truth. But in which unit? **In units of the error that the fit quotes.** This is the pull: the fitted value, minus the true value, divided by the fitted error. \[PAUSE\] Think about it. The numerator is how far the fit is from the truth. The denominator is how large the fit says its error is. If the estimator is unbiased, and the error is its true spread, then the pull has mean zero and standard deviation one. **A healthy fit gives a standard Gaussian.** \[PAUSE\] One important point: the pull is one number per toy. We need many toys to see its distribution.
 
 *IT: pull = (valore fittato − vero) / errore fittato; fit sano → gaussiana standard; un numero per toy, serve la distribuzione.*
 
-**\[DO\] slide 23 — What to look at in the pull distribution**
+**\[DO\] slide 24 — What to look at in the pull distribution**
 
 **SAY:** Now, what do we look at? Five things. \[PAUSE\] **The mean.** If it is not zero, the estimator is biased. A mean of plus point four means that, on average, the fit is point four sigma above the truth. **The RMS.** If it is larger than one, the errors are underestimated: the fit is too optimistic. If it is smaller than one, the errors are overestimated: the fit is conservative. \[PAUSE\] **The coverage.** The fraction of toys where the pull is between minus one and plus one. It should be about sixty-eight percent. It tells us the same as the RMS, but in a way that does not depend on the shape. \[PAUSE\] **The shape.** A skew or tails mean that the likelihood is not a parabola. And finally the **failed fits**: count them, because they are information about your model.
 
@@ -218,13 +240,13 @@
 
 **Ask the class:** A pull distribution has mean plus 0.4 and RMS 0.8. What do you conclude? **Expected answer:** the estimator is biased high, and the uncertainty is overestimated, so the errors are conservative. **If nobody answers, SAY:** The mean is not zero: bias. The RMS is below one: the quoted error is larger than the real spread.
 
-**\[DO\] slide 24 — What goes wrong at low statistics**
+**\[DO\] slide 25 — What goes wrong at low statistics**
 
 **SAY:** What happens with few events? The likelihood is no longer a parabola. Parameters hit boundaries, for example the signal yield cannot be negative. The pulls are not Gaussian. \[PAUSE\] The remedy: report profile or MINOS intervals. Or use a full toy construction, which we see in Lab 3. **A toy that fails is not a missing result. It is information about your model.** In Exercise C you will see this with five signal events.
 
 *IT: bassa statistica: parametri al bordo, pull non gaussiani; riportare intervalli MINOS/profile; contare i fit falliti. Collegare all'esercizio C (ν_s = 5).*
 
-**\[DO\] slide 25 — Residuals vs. pulls**
+**\[DO\] slide 26 — Residuals vs. pulls**
 
 **SAY:** One last slide, to avoid a common confusion. Residuals and pulls are both normalised differences, but they answer different questions. \[PAUSE\] **Residuals** are computed on the observable, for one dataset, real or simulated. They are the data minus the model, divided by the uncertainty, bin by bin. They test the shape of the model: the goodness of fit. \[PAUSE\] **Pulls** are computed on the parameters, and they need many toys. They test the fitter: bias, size of the errors, and coverage. **Residuals: one dataset, many bins, the model. Pulls: many datasets, one parameter, the fitter.**
 
@@ -244,9 +266,9 @@
 
 ---
 
-## 3:10 — Hands-on C: pulls, bias, coverage (slides 26–29, 25 min)
+## 3:10 — Hands-on C: pulls, bias, coverage (slides 27–30, 25 min)
 
-**\[DO\] slide 28 — Exercise C**
+**\[DO\] slide 29 — Exercise C**
 
 **SAY:** Exercise C is short. We use the LHCb model again, with RooMCStudy. \[PAUSE\] Step one: the study with thirty-three signal events, which we wrote together. Look at the pulls: the mean, the RMS and the coverage. The checks tell you if they are right. Step two: repeat with five signal events. What happens to the pulls? How many fits fail, and how many sit at the boundary? \[PAUSE\] A study takes a few seconds. Then read the questions in the notebook, and answer them with the numbers you see.
 
@@ -263,7 +285,15 @@
 
 ---
 
-## 3:35 — Open lab (slide 30, 20 min)
+**\[DO\] slide 30 — Key Takeaways from Hands-on C (2 min, at the end)**
+
+**SAY:** Four points. \[PAUSE\] RooMCStudy runs the generate-and-fit loop and keeps the results. Plot pull, with FitGauss True, draws the pull with a Gaussian fit. The dataset of the fit parameters, fit par data set, has one row for each converged toy, with the value, the error and the pull. **So the failed fits are the number of toys minus the number of rows.** And remember: RooMCStudy generates with the current values of the parameters, so set the truth before creating the study.
+
+*IT: riepilogo C: RooMCStudy; plotPull(FitGauss(True)); fitParDataSet = una riga per toy convergente (nsig, nsigerr, nsigpull) → falliti = toy − righe; set_truth PRIMA di creare lo studio.*
+
+---
+
+## 3:35 — Open lab (slide 31, 20 min)
 
 **SAY:** Now twenty minutes of open lab. \[PAUSE\] Work on the notebook you have not finished. If you have finished, look at the third one: we see the solutions at the next lab. All the notebooks of today are independent, so you can start from any. Run it from the top, and check that every check says PASS. \[PAUSE\] I walk around. Please call me early.
 
@@ -278,7 +308,7 @@
 
 ---
 
-## 3:55 — Wrap-up (slide 31, 5 min)
+## 3:55 — Wrap-up (slide 32, 5 min)
 
 **SAY:** Let's finish. \[PAUSE\] Today you learned three things. First, what the fit does: the likelihood, MIGRAD, HESSE, MINOS. Second, the profile likelihood, and why nuisance parameters make intervals wider. Third, toys: pulls, bias and coverage. \[PAUSE\] For the next lab, in two weeks: submit two of the three notebooks, the ones you prefer, on Virtuale. At the beginning of Lab 3, we look together at the solutions of all three. And please read the first two sections of the paper by Cowan, Cranmer, Gross and Vitells. The reference is on the slide. \[PAUSE\] **In Lab 3 we model systematic uncertainties, we use RooStats, and we study a real problem with correlated uncertainties.** Thank you very much. See you in two weeks.
 
@@ -289,7 +319,7 @@
 ## Emergency notes
 
 - **Talk time-boxes:** A 15 min, B 15 min, C 10 min. Keep a timer on the desk: in Lab 1 the talks were too long for some students.
-- **Running late?** Shorten slide 9 (when fits go wrong) and skip the contour in A5. Do not skip the toys: it is the bridge to Lab 3.
+- **Running late?** Shorten slides 9 and 10 (when fits go wrong) and skip the contour in A5. Do not skip the toys: it is the bridge to Lab 3.
 - **Toy study too slow?** Say: Please set NTOYS to two hundred. A thousand toys take about a second here.
 - **A student asks about RDataFrame?** Say: Good question. There is a short backup slide in lab1 backup, and we use it again in Lab 4. Come to me at the break.
 - **A student asks about Bayesian intervals?** Say: Good question. We see the frequentist and Bayesian tools in Lab 3, with RooStats.

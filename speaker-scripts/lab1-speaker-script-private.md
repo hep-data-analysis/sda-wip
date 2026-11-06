@@ -1,6 +1,6 @@
 # Lab 1 — Speaker Script
 
-*Companion of lab1.md (27 slides).*
+*Companion of lab1.md (26 slides).*
 
 *How to use the scripts, survival phrases and pronunciation help: see `how-to-use-and-pronunciation-private.md`.*
 

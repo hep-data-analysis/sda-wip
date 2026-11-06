@@ -30,7 +30,7 @@
 
 **\[DO\] slide 2 — Recap**
 
-**SAY:** First a short recap. Please discuss in pairs for two minutes. Question one: slice and profile likelihood. Which is wider, and why? Question two: in the on/off problem, where does the uncertainty on the background come from? Question three: your pull has an RMS of one point three. What does it tell you? Question four: which two notebooks of Lab 2 did you submit? Did the toy loop converge for you?
+**SAY:** First a short recap. Please discuss in pairs for two minutes. Question one: slice and profile likelihood. Which is wider, and why? Question two: in the on/off problem, where does the uncertainty on the background come from? Question three: your pull has an RMS of one point three. What does it tell you? Question four: which two notebooks of Lab 2 did you submit? Did the toy study run for you?
 
 **Expected answers:**
 
@@ -47,7 +47,7 @@
 
 - **Exercise A (5 min).** A1: NLL, MIGRAD, HESSE. A2: MINOS. A5: the contour. **Ask:** HESSE and MINOS differ: which one do you trust? **Expected:** MINOS: the likelihood is not a parabola.
 - **Exercise B (5 min).** B1: the on/off model, b hat close to 3.8 and s hat close to 13.2. B2: the profile interval against MINOS. B3: slice against profile, with a poorer control region. **Ask:** why is the profile wider than the slice? **Expected:** the nuisance parameter is re-fitted, so its uncertainty adds.
-- **Exercise C (5 min).** C1: the toy loop and the pulls. C2: low statistics, failed fits and boundaries. **Ask:** what does a pull RMS of 1.3 tell you? **Expected:** the errors are underestimated by about thirty percent.
+- **Exercise C (5 min).** C1: the toy study and the pulls. C2: low statistics, failed fits and boundaries. **Ask:** what does a pull RMS of 1.3 tell you? **Expected:** the errors are underestimated by about thirty percent.
 - If a student asks for another cell, show it. The solutions are in the solutions branch, from today.
 
 **\[DO\] slide 4 — Schedule**

@@ -26,7 +26,7 @@ Discuss in pairs, then we compare:
 1. Slice vs profile likelihood: which is wider, and why?
 2. In the on/off problem, where does the uncertainty on the background come from?
 3. What does a pull RMS of 1.3 tell you?
-4. Which two Lab 2 notebooks did you submit? Did the toy loop converge for you?
+4. Which two Lab 2 notebooks did you submit? Did the toy study run for you?
 
 ---
 
@@ -36,7 +36,7 @@ The solutions are in the `solutions` branch: [`solutions/lab2/`](https://github.
 
 - **[A](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab2/ex_A_solution.ipynb)**: `HESSE`, `MINOS` and the contour (A1, A2, A5)
 - **[B](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab2/ex_B_solution.ipynb)**: the on/off model, and the profile interval versus `MINOS` (B1, B2)
-- **[C](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab2/ex_C_solution.ipynb)**: the toy loop, the pulls and the failed fits (C1, C2)
+- **[C](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab2/ex_C_solution.ipynb)**: the toy study, the pulls and the failed fits (C1, C2)
 
 ---
 

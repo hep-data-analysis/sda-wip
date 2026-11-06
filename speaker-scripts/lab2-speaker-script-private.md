@@ -212,13 +212,15 @@
 
 ---
 
-## 3:05 — Live coding C1: the toy loop (5 min)
+## 3:05 — Live coding C1: the toy study with RooMCStudy (5 min)
 
-**\[DO\]** Open the notebook ex C, cell C1. The loop is already written, with two TODO lines. We read it from the top, and we fill the two lines on the screen. Run it with three toys, not three hundred (change ntoys for the first run).
+**\[DO\]** Open the notebook ex C, cell C1. The setup and the model are already there. We fill the two TODO lines on the screen. The study takes about a second for a thousand toys: run it with the full number.
 
-**SAY:** Now the toy loop. \[PAUSE\] Read the function from the top. For each toy, **first we reset the parameters to their true values: this is the line that everybody forgets, and it is already there for you.** \[PAUSE\] Second, we generate a dataset: model dot generate, with the observable, and Extended True. Third, we fit it: model dot fitTo, with Extended True, Save, and print level minus one. \[PAUSE\] Fourth, the check that is already in the notebook: if the status is not zero, we count a failed fit and go to the next toy. Fifth, if the fit is good, the pull: the fitted value, minus the true value, divided by the error. \[PAUSE\] We run three toys to see that it works. Now you run three hundred. It takes about a minute.
+**SAY:** Now the toy study. \[PAUSE\] We do not write the loop by hand: RooFit has a class for it, **RooMCStudy**. It repeats generate and fit, resets the parameters at every toy, and keeps the results. \[PAUSE\] First line: the study. We give it the model, the observable m inside a RooArgSet, and two options. **Extended True: the number of events fluctuates, as in the data. Silence: keeps the output short.** \[PAUSE\] Second line: generate and fit, with the number of toys. \[PAUSE\] **Look at the line above: set truth, thirty-three. The study generates with the current values of the parameters, and it starts the fits from them.** That is why the truth must be set before creating the study. \[PAUSE\] Now run it. About a second. In the next cell, plot pull draws the histogram of the pulls with a Gaussian fit, and the helper computes mean, RMS and coverage.
 
-*IT: leggi il loop dall'alto e riempi i 2 TODO dal vivo (circa 5 min): generate con Extended(True), fitTo con Extended, Save, PrintLevel(-1). Il reset, il controllo dello status e il pull ci sono già: spiegali. Esegui con 3 toy; poi loro con 300.*
+*IT: riempi dal vivo i 2 TODO di C1 (circa 5 min): RooMCStudy(model, RooArgSet(m), Silence(), Extended(True)) e generateAndFit(NTOYS). Il set_truth viene PRIMA di creare lo studio: genera e parte dai valori correnti. Mille toy in circa un secondo. La cella successiva (già scritta) fa plotPull, media, RMS, copertura e i check.*
+
+**Expected (to verify on your machine):** with 1000 toys and nsig = 33: pull mean close to 0, RMS about 1.05 to 1.1, coverage about 0.68. No fit fails.
 
 ---
 
@@ -226,18 +228,18 @@
 
 **\[DO\] slide 22 — Exercise C**
 
-**SAY:** Exercise C is short. We use the LHCb model again. \[PAUSE\] Step one. Write the toy loop: generate, fit, compute the pull. Use thirty-three signal events. Fill a histogram. Compute the mean, the RMS and the coverage. Step two. Repeat with five signal events. What happens to the pulls? How many fits sit at the boundary? \[PAUSE\] The loop takes about a minute. While it runs, please read the questions in the notebook. If you finish early, step C3 is optional: the same loop written in C++. Compare the time.
+**SAY:** Exercise C is short. We use the LHCb model again, with RooMCStudy. \[PAUSE\] Step one: the study with thirty-three signal events, which we wrote together. Look at the pulls: the mean, the RMS and the coverage. The checks tell you if they are right. Step two: repeat with five signal events. What happens to the pulls? How many fits fail, and how many sit at the boundary? \[PAUSE\] A study takes a few seconds. Then read the questions in the notebook, and answer them with the numbers you see.
 
-*IT: loop toy; nu\_s=33 poi nu\_s=5. Il loop impiega circa un minuto.*
+*IT: studio toy con RooMCStudy; nu\_s=33 (scritto insieme) poi nu\_s=5: media, RMS, copertura, fit falliti, frazione al bordo. Pochi secondi per studio.*
 
 **While walking around:**
 
-- Did you reset the parameters before each toy?
-- Is the dataset extended?
-- How many toys failed?
-- What is the shape of the pull for five events?
+- Did you call set truth before creating the study? (The study generates with the current values.)
+- Is the study extended? What changes if it is not?
+- How many fits failed? (Number of toys minus the rows of the dataset.)
+- What is the shape of the pull for five events, and where is its mean?
 
-**At the end (SAY):** Look at the result for thirty-three events. \[PAUSE\] Mean close to zero. RMS close to one. **The errors are reliable.** Now five events. The distribution is distorted, and many fits sit at zero. **Here a symmetric error is wrong. We need another tool.** We will build it in Lab 3.
+**At the end (SAY):** Look at the result for thirty-three events. \[PAUSE\] Mean close to zero. RMS close to one. **The errors are reliable.** Now five events. The distribution is distorted: the mean moves to about plus point four, and the RMS goes down to about point eight. A few fits fail, and a small fraction sits at zero. **Here a symmetric error is wrong. We need another tool.** We will build it in Lab 3. *(Numbers from a test with 1000 toys: check them on your machine.)*
 
 ---
 
@@ -268,7 +270,7 @@
 
 - **Talk time-boxes:** A 15 min, B 15 min, C 10 min. Keep a timer on the desk: in Lab 1 the talks were too long for some students.
 - **Running late?** Shorten slide 9 (when fits go wrong) and skip the contour in A5. Do not skip the toys: it is the bridge to Lab 3.
-- **Toy loop too slow?** Say: Please use two hundred toys instead of three hundred.
+- **Toy study too slow?** Say: Please set NTOYS to two hundred. A thousand toys take about a second here.
 - **A student asks about RDataFrame?** Say: Good question. There is a short backup slide in lab1 backup, and we use it again in Lab 4. Come to me at the break.
 - **A student asks about Bayesian intervals?** Say: Good question. We see the frequentist and Bayesian tools in Lab 3, with RooStats.
 - **Confusion between slice and profile?** Draw two curves on the board: the narrow one is the slice, the wide one is the profile.
@@ -284,7 +286,7 @@
 **Notes for you:**
 
 - Ask who used Codespaces in Lab 1 and whether the quota is enough. Remind them to stop the codespace when they finish.
-- The toy loop of Exercise C takes about a minute. On a slow laptop or a 2-core codespace it can take longer: suggest 200 toys instead of 300.
+- The toy study of Exercise C takes a few seconds for 1000 toys. On a very slow laptop suggest NTOYS = 200.
 - If a student works in Codespaces, they download the notebooks and upload them on Virtuale.
 
 | Situation | Say | IT |

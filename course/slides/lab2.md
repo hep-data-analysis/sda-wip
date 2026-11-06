@@ -51,7 +51,7 @@ The solutions are in the `solutions` branch: [`solutions/lab1/`](https://github.
 | 10:40 | Talk B: likelihood intervals, nuisance parameters |
 | 11:00 | Hands-on B: the on/off problem |
 | 11:45 | **Break (10 min)** |
-| 11:55 | Talk C: validate with toys |
+| 11:55 | Talk C: residuals, pulls and Toy MC |
 | 12:10 | Hands-on C: pulls, bias, coverage |
 | 12:35 | Open lab: finish a notebook, ask questions |
 | 12:55 | Wrap-up |
@@ -64,20 +64,20 @@ The solutions are in the `solutions` branch: [`solutions/lab1/`](https://github.
 
 ---
 
-# From pdf to number
+# What happens in `fitTo`
 
-`pdf.fitTo(data)` does four things:
+`pdf.fitTo(data)` is a convenient wrapper. Under the hood, it does four things:
 
 1. Builds the **negative log-likelihood** $-\ln L(\theta)$ (a function of the parameters)
-2. Minimises it with **MINUIT**, the minimisation library of ROOT: the algorithm `MIGRAD`
-3. Computes the covariance matrix: `HESSE`
-4. (On request) computes asymmetric errors: `MINOS`
+2. Minimises it with **MIGRAD** (the gradient-descent algorithm of MINUIT).
+3. Computes the covariance matrix with **HESSE** (second derivatives).
+4. (On request) computes asymmetric errors with **MINOS**.
 
 $$-\ln L(\theta) = -\sum_i \ln f(x_i\,|\,\theta) \;\;[+\,\nu(\theta)\;\text{ if extended}]$$
 
 Today we open the box and call each step ourselves, with `RooMinimizer`.
 
-*More: [why MINUIT, and the risks of another minimiser (backup)](./lab2_backup.md)*
+*More: [why MINUIT, and the risks of another minimiser](./lab2_backup.md)*
 
 ---
 
@@ -87,13 +87,15 @@ Three algorithms of **MINUIT**, the minimisation library of ROOT:
 
 | Step | What it does | Output |
 |---|---|---|
-| **MIGRAD** | follows the gradient to the minimum (variable metric) | best-fit values, **EDM** |
+| **MIGRAD** | follows the gradient to the minimum (variable metric) | best-fit values, **EDM** (Estimated Distance to Minimum).|
 | **HESSE** | second derivatives at the minimum: $V = H^{-1}$, $H_{ij}=\partial^2(-\ln L)/\partial\theta_i\partial\theta_j$ | symmetric errors, correlations |
 | **MINOS** | scans $-\ln L$ until it rises by 0.5 for each parameter | asymmetric errors |
 
 - HESSE assumes the likelihood is a **parabola** near the minimum
 - MINOS makes no such assumption, but costs more fits
 - If HESSE and MINOS disagree, the likelihood is not parabolic: **trust MINOS, and say so**
+
+*More: [Hesse and Minos](https://scikit-hep.org/iminuit/notebooks/hesse_and_minos.html)*
 
 ---
 
@@ -113,21 +115,31 @@ A parameter stuck at its **limit** is a warning, not a result.
 
 ---
 
-# When fits go wrong
+# When fits go wrong — Debug Flowchart (1/2)
 
-| Symptom | Likely cause | Remedy |
-|---|---|---|
-| does not converge | bad start values, ranges too wide | start near the expected value, bound the ranges |
-| parameter at its limit, errors not reliable | range too narrow, or wrong model | check the model, widen the range if the limit is not physical |
-| unphysical values ($\sigma\le0$, negative numbers of events) | range too wide | bound the range |
-| huge errors, $|\rho|\to 1$ | two parameters do the same job | fix one, or reparametrise |
-| works on some toys only | low statistics | toy study (Talk C) |
+When a fit fails, follow this checklist in order:
 
-- **Physical or numerical limit?** $\mu \ge 0$ is physics: it can change the result (Lab 3). A limit only to avoid silly values ($\sigma>0$) is numerics: it must not touch the best value. **Say which one it is**
-- Keep a parameter out of the fit: `par.setConstant(True)`. RooFit warns about parameters without bounds: read the warnings
-- Reparametrise: fit $\ln\tau$ instead of $\tau$, or use fractions between 0 and 1
+1. **Does not converge** (MIGRAD does not find the minimum)
+   - Parameter ranges too wide? Initial values too far from the likelihood minimum? 
+   - *Fix*: `setRange()` narrower, `setVal()` to reasonable value.
+
+2. **Converges but huge errors or correlation |ρ| ≈ 1**
+   - Parameters are degenerate (the fit cannot distinguish them).
+   - *Fix*: fix one of the two parameters, or reformulate the model.
 
 ---
+
+# When fits go wrong — Debug Flowchart (2/2)
+
+3. **Converges but a parameter is at the limit** (e.g., fraction = 0 or 1)
+   - Physical limit is too tight, or the model is wrong.
+   - *Fix*: widen the range if it makes sense, or reparametrize (e.g., fit `ln(τ)` instead of `τ`).
+
+4. **Works only on some toys**
+   - Low statistics → likelihood is not parabolic.
+   - *Fix*: use MINOS, or switch to Neyman intervals (Lab 3).
+
+---   
 
 <!-- _class: lead -->
 # Hands-on A
@@ -150,6 +162,16 @@ Notebook: [`course/lab2/ex_A.ipynb`](../lab2/ex_A.ipynb)
 
 ---
 
+### Key Takeaways from Hands-on A
+
+- **`fitTo()` demystified**: It creates an NLL, runs `RooMinimizer(nll).migrad()`, then `.hesse()`.
+- **Statefulness**: After a fit, `RooRealVar` objects *automatically update* their central value and error. Just call `var.getVal()` and `var.getError()`.
+- **Plotting Components**: `model.plotOn(frame, ROOT.RooFit.Components("bkg_name"), ROOT.RooFit.LineStyle(ROOT.kDashed))`
+- **Profiling**: `nll.createProfile(poi)` creates a function that re-minimizes nuisance parameters for each point of the POI.
+- **Contours**: `minimizer.contour(var1, var2, 1, 2)` draws $\Delta\text{NLL}$ contours. **Crucial**: Always run `minimizer.hesse()` immediately before `contour()` to ensure a clean, accurate error matrix and avoid stray points.
+
+---
+
 <!-- _class: lead -->
 # Talk B
 ## Likelihood intervals and nuisance parameters
@@ -158,17 +180,18 @@ Notebook: [`course/lab2/ex_A.ipynb`](../lab2/ex_A.ipynb)
 
 # Likelihood-ratio intervals
 
-For one parameter $\mu$ (Wilks' theorem, large samples):
+For **one** parameter $\mu$ (Wilks' theorem, large samples):
 
 $$-2\ln\frac{L(\mu)}{L(\hat\mu)} \;\sim\; \chi^2_1$$
 
 | Confidence level | $\Delta(-\ln L)$ | $-2\Delta\ln L$ |
 |---|---|---|
 | 68.3 % | 0.5 | 1 |
+| 90% | 1.36 | 2.71 |
 | 95 % | 1.92 | 3.84 |
 
-The interval is where the NLL curve is below the minimum **+ 0.5**.
-It need not be symmetric: this is the MINOS interval.
+The interval is where the NLL curve $ -\ln L $ is below the minimum **+ 0.5**.
+It need not be symmetric: this is the **MINOS interval**.
 
 ---
 
@@ -178,8 +201,8 @@ A model has **parameters of interest** $\mu$ and **nuisance parameters** $\theta
 
 Two ways to draw the likelihood in $\mu$:
 
-- **Slice**: fix $\theta$ at its best-fit value → too optimistic, ignores what we do not know
-- **Profile**: for every $\mu$, re-fit $\theta$
+- **Slice**: fix $\theta$ at its best-fit value → too optimistic, ignores uncertainty
+- **Profile**: for every $\mu$, re-fit $\theta$ → correct frequentist coverage.
 
 $$\lambda(\mu)=\frac{L\big(\mu,\hat{\hat\theta}(\mu)\big)}{L(\hat\mu,\hat\theta)}, \qquad q(\mu) = -2\ln\lambda(\mu)$$
 
@@ -187,7 +210,7 @@ The profile curve is **wider** than the slice. The gap is the cost of the nuisan
 
 ---
 
-# The on/off problem
+# Signal region / control region (the classic on/off problem)
 
 Counting experiment with an **auxiliary measurement** of the background:
 
@@ -199,6 +222,8 @@ $$L(s,b) = \text{Pois}(n_{\rm on}\,|\,s+b)\;\times\;\text{Pois}(n_{\rm off}\,|\,
 - The uncertainty on $b$ is **not an input**: it comes from the control region
 
 This is the model behind “background $3.8\pm0.6$”. Constraint terms in Lab 3.
+
+*Note: The same concept extends naturally to shape analyses: control regions become additional channels that constrain nuisance parameters through a simultaneous likelihood fit.*
 
 ---
 
@@ -222,9 +247,29 @@ Notebook: [`course/lab2/ex_B.ipynb`](../lab2/ex_B.ipynb)
 
 ---
 
+### Key Takeaways from Hands-on B
+
+- **Profile vs. Slice**: A slice fixes nuisance parameters. A profile (`createProfile`) re-optimizes them.
+- **MINOS = Profile Scan**: The `MINOS` algorithm in MINUIT is *exactly* the numerical evaluation of the profile likelihood interval ($\Delta\text{NLL} = 0.5$). They must match.
+- **The role of $\tau$**: Propagates the background uncertainty from the control region to the signal region.
+
+---
+
 <!-- _class: lead -->
 # Talk C
-## Validate with toys
+## Residuals, Pulls and Toy MC
+
+---
+
+# Residuals vs. Pulls: What are we looking at?
+
+- **Residuals**: Evaluated on the **observable** ($x$) for a given **dataset** (real or simulated). 
+  - Formula: $(N_{\text{data}} - N_{\text{model}}) / \sigma_{\text{model}}$
+  - Purpose: Check the *goodness-of-fit* of the model shape.
+
+- **Pulls**: Evaluated on the **parameters** ($\theta$) of the model. Requires an ensemble of **Toy Monte Carlo** experiments.
+  - Formula: $\text{pull} = \frac{\hat{\theta} - \theta_{\text{true}}}{\hat{\sigma}_{\theta}}$
+  - Purpose: Check the *statistical properties* of the fitter (bias, error estimation, coverage).
 
 ---
 
@@ -235,12 +280,12 @@ Errors from HESSE or MINOS are **approximations**. A toy study tests them:
 1. Generate a dataset with known true parameters
 2. Fit it
 3. Save the result. Repeat 300–1000 times
-
-**Pull** of a parameter:
-
-$$\text{pull} = \frac{\hat\theta-\theta_{\rm true}}{\hat\sigma_\theta}$$
-
-Healthy fit: pull **mean ≈ 0** (no bias), **RMS ≈ 1** (errors have the right size), and ≈ 68 % of toys inside $|{\rm pull}|<1$ (**coverage**).
+   
+## What do Pull distributions tell us?
+For a healthy, unbiased fit with correctly estimated errors, the pull distribution should be a standard Gaussian $\mathcal{N}(0, 1)$:
+1. **Mean $\approx 0$**: No systematic bias in the estimator $\hat{\theta}$.
+2. **RMS $\approx 1$**: The fit errors $\hat{\sigma}_{\theta}$ correctly reflect the true statistical fluctuations.
+3. **Coverage**: The fraction of toys where the true value falls within the $1\sigma$ interval should be $\approx 68\%$.
 
 ---
 
@@ -262,17 +307,34 @@ Always check the **fraction of failed fits**: toys that fail to converge are not
 
 ---
 
+<!-- _class: lead -->
+# Hands-on C
+## Pulls, bias, coverage (with `RooMCStudy`)
+
+---
+
 # Exercise C (≈ 25 min)
 
-Model: LHCb signal + background, extended.
+**Model:** LHCb signal + background, extended.
 
-1. Write the toy loop: **generate → fit → pull**, for $\nu_s=33$
-2. Fill a histogram of the pulls. Mean, RMS, coverage
-3. Repeat with $\nu_s=5$. What happens to the pulls? How many fits fail or sit at the boundary?
-4. *(optional)* The same loop **in C++** (`gInterpreter.Declare`): compare the time
+Instead of writing a manual Python loop, we will use the native, highly-optimized C++ class **`RooMCStudy`**, which handles generation, fitting, and pull calculation automatically.
 
-We write the toy loop of step 1 **together**, live (5 min), then you continue.
-Notebook: [`course/lab2/ex_C.ipynb`](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/course/lab2/ex_C.ipynb)
+1. Set the true values and initialize `RooMCStudy` **(we will write this part together, live, 5 min)**.
+2. Run `generateAndFit()` and use the native `plotPull()` method to visualize the results.
+3. Check the statistics: Mean $\approx 0$ (no bias), RMS $\approx 1$ (correct error estimation), Coverage $\approx 68\%$.
+4. **Stress test:** Repeat the study with a low signal yield ($\nu_s=5$). 
+   - *Question:* What happens to the pull distribution? How many fits fail or hit the physical boundary ($\nu_s \ge 0$)?
+
+Notebook: [`course/lab2/ex_C.ipynb`](../lab2/ex_C.ipynb)
+
+---
+
+### Key Takeaways from Hands-on C
+
+- **`RooMCStudy`**: The native, highly optimized C++ class for Toy Monte Carlo. It handles the generation loop, the fitting, and memory management automatically. *Never write a manual Python loop for toys if you can use this!*
+- **`plotPull(var)`**: A built-in method of `RooMCStudy` that generates a beautiful `RooPlot` showing the pull distribution for a specific parameter, complete with a Gaussian fit overlay and mean/sigma statistics.
+- **`pullDist(var)` / `fitPar(var)`**: Methods to extract the raw `TH1` histograms of the pulls or the fitted parameter values for further custom analysis.
+- **Statefulness in Toys**: When generating toys, `RooMCStudy` uses the *current* values of the `RooRealVar` objects as the "true" values. Always set your parameters to the desired true values before calling `generateAndFit()`.
 
 ---
 

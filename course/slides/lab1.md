@@ -379,7 +379,7 @@ What happened to the information on the total yield?
 - unbinned vs binned likelihood, extended fits
 
 **By Lab 2**
-1. Submit **2 of 3** notebooks of [`lab1/`](../lab1/) (your choice), every check `PASS`
+1. Submit **2 of 3** notebooks of [`lab1/`](../lab1/) (A, B, C, your choice), every check `PASS`
 2. Upload them on **Virtuale**
 3. Read *Practical Statistics for the LHC*, sections on likelihood and nuisance parameters
 4. Open your Codespace once, to confirm it still works

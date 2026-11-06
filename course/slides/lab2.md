@@ -257,7 +257,58 @@ Notebook: [`course/lab2/ex_B.ipynb`](../lab2/ex_B.ipynb)
 
 <!-- _class: lead -->
 # Talk C
-## Residuals, Pulls and Toy MC
+## Toy MC, pulls and residuals
+
+---
+
+# Testing the fit with Toy MC
+
+HESSE and MINOS errors are **approximations**: they assume a likelihood close to a parabola. Is it true for **my** model, with **my** statistics? A toy study answers:
+
+1. **Generate** a dataset from the model, with **known true** parameters
+2. **Fit** it, exactly as you fit the data
+3. **Record** the fitted values and their errors
+4. **Repeat** 300–1000 times, and look at the **distribution** of the results
+
+In RooFit, the class **`RooMCStudy`** runs this loop for you.
+
+---
+
+# The pull
+
+For each toy, compare the fit with the truth, **in units of the error that the fit quotes**:
+
+$$\text{pull} = \frac{\hat{\theta} - \theta_{\text{true}}}{\hat{\sigma}_{\theta}}$$
+
+- **numerator**: how far the fit is from the truth
+- **denominator**: how large the fit *says* its error is
+- If $\hat\theta$ is unbiased and $\hat\sigma_\theta$ is its true spread, the pulls of the toys follow a **standard Gaussian** $\mathcal{N}(0,1)$
+
+The pull is **one number per toy**: we need many toys to see its distribution.
+
+---
+
+# What to look at in the pull distribution
+
+| Look at | Healthy | If not |
+|---|---|---|
+| **Mean** | $\approx 0$ | $\neq 0$: **bias** of the estimator ($+0.4$: on average $0.4\,\sigma$ above the truth) |
+| **RMS** | $\approx 1$ | $>1$: uncertainty **underestimated**. $<1$: **overestimated** |
+| **Coverage**: fraction of toys with $\lvert\text{pull}\rvert<1$ | $\approx 68\%$ ($95\%$ for $\lvert\text{pull}\rvert<2$) | smaller: errors too small. Larger: errors too large |
+| **Shape** | Gaussian | skewed or with tails: the likelihood is **not a parabola** |
+| **Failed fits** | none | count them: they are information about the model |
+
+---
+
+# What goes wrong at low statistics
+
+- Poisson fluctuations make the likelihood **non-parabolic**
+- Parameters hit **boundaries** (e.g. $\nu_s \ge 0$): pulls are no longer Gaussian
+- A small bias on the mean is common; a wrong RMS means **wrong errors**
+
+Remedy: report **MINOS or profile intervals**, or run a Neyman construction with toys (Lab 3).
+
+Always check the **fraction of failed fits**: toys that fail to converge are not “missing”, they are data about your model.
 
 ---
 
@@ -271,33 +322,6 @@ Notebook: [`course/lab2/ex_B.ipynb`](../lab2/ex_B.ipynb)
   - Formula: $\text{pull} = \frac{\hat{\theta} - \theta_{\text{true}}}{\hat{\sigma}_{\theta}}$
   - Purpose: Check the *statistical properties* of the fitter (bias, error estimation, coverage).
 
----
-
-# Why toys?
-
-Errors from HESSE or MINOS are **approximations**. A toy study tests them:
-
-1. Generate a dataset with known true parameters
-2. Fit it
-3. Save the result. Repeat 300–1000 times
-   
-## What do Pull distributions tell us?
-For a healthy, unbiased fit with correctly estimated errors, the pull distribution should be a standard Gaussian $\mathcal{N}(0, 1)$:
-1. **Mean $\approx 0$**: No systematic bias in the estimator $\hat{\theta}$.
-2. **RMS $\approx 1$**: The fit errors $\hat{\sigma}_{\theta}$ correctly reflect the true statistical fluctuations.
-3. **Coverage**: The fraction of toys where the true value falls within the $1\sigma$ interval should be $\approx 68\%$.
-
----
-
-# What goes wrong at low statistics
-
-- Poisson fluctuations make the likelihood **non-parabolic**
-- Parameters hit **boundaries** (e.g. $\nu_s \ge 0$): pulls are no longer Gaussian
-- A small bias on the mean is common; a wrong RMS means **wrong errors**
-
-Remedy: report **MINOS or profile intervals**, or run a Neyman construction with toys (Lab 3).
-
-Always check the **fraction of failed fits**: toys that fail to converge are not “missing”, they are data about your model.
 
 ---
 
@@ -331,11 +355,10 @@ Notebook: [`course/lab2/ex_C.ipynb`](../lab2/ex_C.ipynb)
 
 ### Key Takeaways from Hands-on C
 
-- **`RooMCStudy`**: The native, highly optimized C++ class for Toy Monte Carlo. It handles the generation loop, the fitting, and memory management automatically. *Never write a manual Python loop for toys if you can use this!*
-- **`plotPull(var)`**: A built-in method of `RooMCStudy` that generates a beautiful `RooPlot` showing the pull distribution for a specific parameter, complete with a Gaussian fit overlay and mean/sigma statistics.
-- **`pullDist(var)` / `fitPar(var)`**: Methods to extract the raw `TH1` histograms of the pulls or the fitted parameter values for further custom analysis.
-- **Statefulness in Toys**: When generating toys, `RooMCStudy` uses the *current* values of the `RooRealVar` objects as the "true" values. Always set your parameters to the desired true values before calling `generateAndFit()`.
-
+- **`RooMCStudy`**: the RooFit class for Toy Monte Carlo. It runs the generate-and-fit loop, resets the parameters at every toy, and keeps the results
+- **`plotPull(var, FitGauss(True))`**: draws the pull histogram of a parameter, with a Gaussian fit that gives its mean and sigma
+- **`fitParDataSet()`**: one row per **converged** toy, with the columns `nsig`, `nsigerr` and `nsigpull`. **Failed fits = number of toys − number of rows**
+- **Statefulness**: `RooMCStudy` generates with the **current** values of the parameters. Set the true values *before* creating the study
 ---
 
 # Open lab (20 min)

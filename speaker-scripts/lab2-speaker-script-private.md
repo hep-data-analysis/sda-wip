@@ -194,21 +194,41 @@
 
 ---
 
-## 2:55 — Talk C: Validate with toys (slides 18–20, 10 min)
+## 2:55 — Talk C: Toy MC, pulls and residuals (slides 20–25, 10 min)
 
-*Time-box: 10 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold sentence of slide 20 now, and come back to it at the end of the hands-on.*
+*Time-box: 10 minutes, plus the 5-minute live coding. No slide is removed: about 2 minutes for each of slides 21, 22 and 23, and 1.5 minutes for slides 24 and 25. If you are late, say the bold sentence of each slide and come back to the rest at the end of the hands-on.*
 
-**\[DO\] slide 19 — Why toys?**
+**\[DO\] slide 21 — Testing the fit with Toy MC**
 
-**SAY:** One last question. How do we know that the errors are correct? HESSE and MINOS are approximations. We can test them with toys. \[PAUSE\] The recipe has three steps. One: generate a dataset with known true parameters. Two: fit it. Three: save the result. Repeat three hundred times, or more. \[PAUSE\] We define the pull. It is the fitted value, minus the true value, divided by the estimated error. **If everything is fine, the pull has mean zero and RMS one.** The mean tells us about bias. The RMS tells us if the errors have the right size. And about sixty-eight percent of the toys should have a pull between minus one and plus one. This is the coverage.
+**SAY:** One last question. How do we know that the errors of the fit are correct? HESSE and MINOS are approximations: they assume that the likelihood is close to a parabola. Is it true for my model, with my number of events? \[PAUSE\] We can test it with a toy study. Four steps. One: generate a dataset from the model, with known true parameters. Two: fit it, exactly as we fit the data. Three: record the fitted values and their errors. Four: repeat, three hundred or a thousand times, and look at the distribution of the results. \[PAUSE\] **In RooFit, a class does this loop for us: RooMCStudy.** We use it in a few minutes.
 
-*IT: toy → fit → pull. Media 0 = nessun bias, RMS 1 = errori giusti, copertura \~68%.*
+*IT: toy = molti esperimenti finti con verità nota: genera → fit → registra → ripeti; poi guarda la distribuzione. In RooFit: RooMCStudy.*
 
-**\[DO\] slide 20 — Low statistics**
+**\[DO\] slide 22 — The pull**
 
-**SAY:** What happens with few events? The likelihood is no longer a parabola. Parameters hit boundaries, for example the signal yield cannot be negative. The pulls are not Gaussian. \[PAUSE\] The remedy: report profile or MINOS intervals. Or use a full toy construction, which we see in Lab 3. And please count the failed fits. **A toy that fails is not a missing result. It is information about your model.**
+**SAY:** For each toy, we compare the fit with the truth. But in which unit? **In units of the error that the fit quotes.** This is the pull: the fitted value, minus the true value, divided by the fitted error. \[PAUSE\] Think about it. The numerator is how far the fit is from the truth. The denominator is how large the fit says its error is. If the estimator is unbiased, and the error is its true spread, then the pull has mean zero and standard deviation one. **A healthy fit gives a standard Gaussian.** \[PAUSE\] One important point: the pull is one number per toy. We need many toys to see its distribution.
 
-*IT: bassa statistica: parametri al bordo, pull non gaussiani; riportare intervalli MINOS/profile; contare i fit falliti.*
+*IT: pull = (valore fittato − vero) / errore fittato; fit sano → gaussiana standard; un numero per toy, serve la distribuzione.*
+
+**\[DO\] slide 23 — What to look at in the pull distribution**
+
+**SAY:** Now, what do we look at? Five things. \[PAUSE\] **The mean.** If it is not zero, the estimator is biased. A mean of plus point four means that, on average, the fit is point four sigma above the truth. **The RMS.** If it is larger than one, the errors are underestimated: the fit is too optimistic. If it is smaller than one, the errors are overestimated: the fit is conservative. \[PAUSE\] **The coverage.** The fraction of toys where the pull is between minus one and plus one. It should be about sixty-eight percent. It tells us the same as the RMS, but in a way that does not depend on the shape. \[PAUSE\] **The shape.** A skew or tails mean that the likelihood is not a parabola. And finally the **failed fits**: count them, because they are information about your model.
+
+*IT: media ≠ 0 = bias; RMS > 1 errori sottostimati, < 1 sovrastimati; copertura ~68%; forma non gaussiana = verosimiglianza non parabolica; contare i fit falliti.*
+
+**Ask the class:** A pull distribution has mean plus 0.4 and RMS 0.8. What do you conclude? **Expected answer:** the estimator is biased high, and the uncertainty is overestimated, so the errors are conservative. **If nobody answers, SAY:** The mean is not zero: bias. The RMS is below one: the quoted error is larger than the real spread.
+
+**\[DO\] slide 24 — What goes wrong at low statistics**
+
+**SAY:** What happens with few events? The likelihood is no longer a parabola. Parameters hit boundaries, for example the signal yield cannot be negative. The pulls are not Gaussian. \[PAUSE\] The remedy: report profile or MINOS intervals. Or use a full toy construction, which we see in Lab 3. **A toy that fails is not a missing result. It is information about your model.** In Exercise C you will see this with five signal events.
+
+*IT: bassa statistica: parametri al bordo, pull non gaussiani; riportare intervalli MINOS/profile; contare i fit falliti. Collegare all'esercizio C (ν_s = 5).*
+
+**\[DO\] slide 25 — Residuals vs. pulls**
+
+**SAY:** One last slide, to avoid a common confusion. Residuals and pulls are both normalised differences, but they answer different questions. \[PAUSE\] **Residuals** are computed on the observable, for one dataset, real or simulated. They are the data minus the model, divided by the uncertainty, bin by bin. They test the shape of the model: the goodness of fit. \[PAUSE\] **Pulls** are computed on the parameters, and they need many toys. They test the fitter: bias, size of the errors, and coverage. **Residuals: one dataset, many bins, the model. Pulls: many datasets, one parameter, the fitter.**
+
+*IT: residui = su un dataset, sull'osservabile, bontà della forma del modello; pull = sui parametri, servono molti toy, proprietà statistiche del fitter.*
 
 ---
 
@@ -224,9 +244,9 @@
 
 ---
 
-## 3:10 — Hands-on C: pulls, bias, coverage (slides 21–22, 25 min)
+## 3:10 — Hands-on C: pulls, bias, coverage (slides 26–29, 25 min)
 
-**\[DO\] slide 22 — Exercise C**
+**\[DO\] slide 28 — Exercise C**
 
 **SAY:** Exercise C is short. We use the LHCb model again, with RooMCStudy. \[PAUSE\] Step one: the study with thirty-three signal events, which we wrote together. Look at the pulls: the mean, the RMS and the coverage. The checks tell you if they are right. Step two: repeat with five signal events. What happens to the pulls? How many fits fail, and how many sit at the boundary? \[PAUSE\] A study takes a few seconds. Then read the questions in the notebook, and answer them with the numbers you see.
 
@@ -243,7 +263,7 @@
 
 ---
 
-## 3:35 — Open lab (slide 23, 20 min)
+## 3:35 — Open lab (slide 30, 20 min)
 
 **SAY:** Now twenty minutes of open lab. \[PAUSE\] Work on the notebook you have not finished. If you have finished, look at the third one: we see the solutions at the next lab. All the notebooks of today are independent, so you can start from any. Run it from the top, and check that every check says PASS. \[PAUSE\] I walk around. Please call me early.
 
@@ -258,7 +278,7 @@
 
 ---
 
-## 3:55 — Wrap-up (slide 24, 5 min)
+## 3:55 — Wrap-up (slide 31, 5 min)
 
 **SAY:** Let's finish. \[PAUSE\] Today you learned three things. First, what the fit does: the likelihood, MIGRAD, HESSE, MINOS. Second, the profile likelihood, and why nuisance parameters make intervals wider. Third, toys: pulls, bias and coverage. \[PAUSE\] For the next lab, in two weeks: submit two of the three notebooks, the ones you prefer, on Virtuale. At the beginning of Lab 3, we look together at the solutions of all three. And please read the first two sections of the paper by Cowan, Cranmer, Gross and Vitells. The reference is on the slide. \[PAUSE\] **In Lab 3 we model systematic uncertainties, we use RooStats, and we study a real problem with correlated uncertainties.** Thank you very much. See you in two weeks.
 

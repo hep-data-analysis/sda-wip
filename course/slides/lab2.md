@@ -307,17 +307,34 @@ Always check the **fraction of failed fits**: toys that fail to converge are not
 
 ---
 
+<!-- _class: lead -->
+# Hands-on C
+## Pulls, bias, coverage (with `RooMCStudy`)
+
+---
+
 # Exercise C (≈ 25 min)
 
-Model: LHCb signal + background, extended.
+**Model:** LHCb signal + background, extended.
 
-1. Write the toy loop: **generate → fit → pull**, for $\nu_s=33$
-2. Fill a histogram of the pulls. Mean, RMS, coverage
-3. Repeat with $\nu_s=5$. What happens to the pulls? How many fits fail or sit at the boundary?
-4. *(optional)* The same loop **in C++** (`gInterpreter.Declare`): compare the time
+Instead of writing a manual Python loop, we will use the native, highly-optimized C++ class **`RooMCStudy`**, which handles generation, fitting, and pull calculation automatically.
 
-We write the toy loop of step 1 **together**, live (5 min), then you continue.
-Notebook: [`course/lab2/ex_C.ipynb`](https://github.com/gabriele-sirri/statistical-data-analysis/blob/main/course/lab2/ex_C.ipynb)
+1. Set the true values and initialize `RooMCStudy` **(we will write this part together, live, 5 min)**.
+2. Run `generateAndFit()` and use the native `plotPull()` method to visualize the results.
+3. Check the statistics: Mean $\approx 0$ (no bias), RMS $\approx 1$ (correct error estimation), Coverage $\approx 68\%$.
+4. **Stress test:** Repeat the study with a low signal yield ($\nu_s=5$). 
+   - *Question:* What happens to the pull distribution? How many fits fail or hit the physical boundary ($\nu_s \ge 0$)?
+
+Notebook: [`course/lab2/ex_C.ipynb`](../lab2/ex_C.ipynb)
+
+---
+
+### Key Takeaways from Hands-on C
+
+- **`RooMCStudy`**: The native, highly optimized C++ class for Toy Monte Carlo. It handles the generation loop, the fitting, and memory management automatically. *Never write a manual Python loop for toys if you can use this!*
+- **`plotPull(var)`**: A built-in method of `RooMCStudy` that generates a beautiful `RooPlot` showing the pull distribution for a specific parameter, complete with a Gaussian fit overlay and mean/sigma statistics.
+- **`pullDist(var)` / `fitPar(var)`**: Methods to extract the raw `TH1` histograms of the pulls or the fitted parameter values for further custom analysis.
+- **Statefulness in Toys**: When generating toys, `RooMCStudy` uses the *current* values of the `RooRealVar` objects as the "true" values. Always set your parameters to the desired true values before calling `generateAndFit()`.
 
 ---
 

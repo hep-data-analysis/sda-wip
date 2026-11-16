@@ -1,6 +1,6 @@
 # Lab 1 — Speaker Script
 
-*Companion of lab1.md (26 slides).*
+*Companion of lab1.md (29 slides).*
 
 *How to use the scripts, survival phrases and pronunciation help: see `how-to-use-and-pronunciation-private.md`.*
 
@@ -90,7 +90,7 @@
 
 ---
 
-## 0:30 — Hands-on A: Gaussian, toys, fit (slides 12–14, 50 min)
+## 0:30 — Hands-on A: Gaussian, toys, fit (slides 12–15, 50 min)
 
 **\[DO\] slide 13 — The minimal RooFit program (live coding)**
 
@@ -126,6 +126,13 @@
 
 **At the end (SAY):** Time is up. Let's compare. Who can show me the result of A2? \[PAUSE\] Thank you. **Notice: with fewer events, the errors are larger. The error scales roughly as one over the square root of N.**
 
+
+**\[DO\] slide 15 — Key Takeaways from Hands-on A (2 min, at the end)**
+
+**SAY:** Statistics first. **An observable needs a range, and the range is part of the model. A parameter needs a start value and limits, which steer the minimiser.** Unbinned uses every event, binned uses only the counts per bin: for narrow bins they agree. \[PAUSE\] RooFit. An observable is a RooRealVar with min and max, a parameter has a start value too. Generate gives a RooDataSet, generate binned gives a RooDataHist. fitTo with Save True returns the result. And set range with Range in fitTo fits a sub-range.
+
+*IT: statistica: osservabile = range (parte del modello); parametro = valore iniziale + limiti (guidano il minimizzatore); unbinned usa ogni evento, binned i conteggi per bin. RooFit: RooRealVar; generate / generateBinned; fitTo(Save=True); setRange + Range.*
+
 ---
 
 ## 1:15 — BREAK (15 min)
@@ -134,15 +141,15 @@
 
 ---
 
-## 1:30 — Talk B: RooFit building blocks (slides 15–17, 20 min)
+## 1:30 — Talk B: RooFit building blocks (slides 16–18, 20 min)
 
-**\[DO\] slide 16 — Four objects to know**
+**\[DO\] slide 17 — Four objects to know**
 
 **SAY:** Welcome back. Now let me organise what you have just used. In RooFit there are four objects to know. \[PAUSE\] The first is RooRealVar. It is a variable or a parameter, with a range. The second is the pdf, the normalised density. In practice we use concrete classes, for example RooGaussian and RooExponential. They all derive from one abstract class, RooAbsPdf, and this is why they all behave in the same way: you can fit them, generate from them, and plot them. There is a page in the repository with the list of the pdfs: the link is in the table. We will use other classes in the notebooks, when we need them. The third is the dataset. It can be unbinned, a RooDataSet, or binned, a RooDataHist. The fourth is RooPlot, the frame where we draw data and model. \[PAUSE\] Three rules of thumb. Observables have a range. Parameters have a range and a start value. **And the pdf is normalised over the observable automatically.**
 
 *IT: 4 oggetti, 3 regole. La normalizzazione automatica è il punto chiave.*
 
-**\[DO\] slide 17 — Unbinned vs binned**
+**\[DO\] slide 18 — Unbinned vs binned**
 
 **SAY:** Now, two kinds of likelihood. In the unbinned case we use every event. The minus log likelihood is the sum, over events, of the minus log of the density. In the binned case, we have a histogram. In each bin, the number of events is Poisson. We call n j the observed number and nu j the expected number, which depends on the parameters. \[PAUSE\] A very important point. **A binned likelihood is not a chi-square fit.** It is exact for low counts, and it works also with empty bins. Binned fits lose information if the bins are wide. Unbinned fits are slow if you have very many events. And in RooFit, the pdf and the code are the same. Only the dataset changes: RooDataSet for the unbinned case, RooDataHist for the binned case.
 
@@ -152,9 +159,9 @@
 
 ---
 
-## 1:50 — Hands-on B: LHCb mass and CLT (slide 18, 55 min)
+## 1:50 — Hands-on B: LHCb mass and CLT (slides 19–20, 55 min)
 
-**\[DO\] slide 18 — Exercise B**
+**\[DO\] slide 19 — Exercise B**
 
 **SAY:** Exercise B1 uses a simplified dataset, modelled on an LHCb analysis. The file is called b0 invariant mass dot root. Please import the histogram as a RooDataHist. Fit a Breit–Wigner. Then add a Gaussian resolution and compare your mass with the value from the Particle Data Group. \[PAUSE\] Exercise B2 is about the central limit theorem. Generate the sum of N uniform variables. Fit a Gaussian. Then look at the tails, for N equal to two, five, ten, twenty. **Where does the Gaussian stop being a good model? The answer is in the tails.** Fifty minutes. Please start.
 
@@ -168,6 +175,13 @@
 
 **At the end (SAY):** Let's stop here. \[PAUSE\] Quick question: for N equal to ten, does the Gaussian look good in the centre? Yes. And in the tails? Not exactly. **This is the message: a five sigma claim needs an explicit calculation. We cannot only say the Gaussian is a good approximation.** We will use this idea in Lab 3.
 
+
+**\[DO\] slide 20 — Key Takeaways from Hands-on B (2 min, at the end)**
+
+**SAY:** Statistics. A resonance has a natural width, and the detector adds a resolution: the Breit–Wigner alone mixes the two. **The central limit theorem describes the bulk: the tails converge slowly.** \[PAUSE\] RooFit. A RooDataHist for the histogram, RooBreitWigner for the line shape, RooVoigtian, which is the Breit–Wigner convolved with a Gaussian, for the resolution. And always check the result against a known value: here the PDG mass.
+
+*IT: statistica: larghezza naturale + risoluzione; il CLT descrive il centro, le code convergono lentamente. RooFit: RooDataHist, RooBreitWigner, RooVoigtian; controllare con un valore noto (PDG).*
+
 ---
 
 ## 2:45 — BREAK (10 min)
@@ -176,17 +190,17 @@
 
 ---
 
-## 2:55 — Talk C: Composite models (slides 19–23, 15 min)
+## 2:55 — Talk C: Composite models (slides 21–25, 15 min)
 
 *Timing: slides 20 and 22 take about 2 minutes each. The RDataFrame slide (23) stays at 1 minute.*
 
-**\[DO\] slide 20 — Adding components: signal + background (1)**
+**\[DO\] slide 22 — Adding components: signal + background (1)**
 
 **SAY:** Now the last topic: adding pdfs. In a channel we have two components, the signal pdf and the background pdf. Let's write the model in the two ways. \[PAUSE\] **First, shape-only.** We have one fraction, phi, of signal. The pdf of one event is phi times the signal, plus one minus phi times the background. The model is the product over the events. The number of events n is fixed by the data. \[PAUSE\] **Second, extended.** Now we have the expected number of signal events, nu s, and of background events, nu b. The first factor is a Poisson for the total number of events, with expected value nu s plus nu b. The second factor is the product over events of the same sum, with the fraction written with the two numbers.
 
 *IT: formule S+B affiancate (grandi): shape-only con una frazione φ (n fisso); esteso con ν_s e ν_b e il Poisson sul totale.*
 
-**\[DO\] slide 21 — Adding components: signal + background (2)**
+**\[DO\] slide 23 — Adding components: signal + background (2)**
 
 **SAY:** Look at the table. **In the extended model there is one more free parameter: the total number of events.** Shape-only has one parameter, phi. Extended has two, nu s and nu b. If we write phi as nu s over nu s plus nu b, the two models have the same fraction, but the extended model also has the total. \[PAUSE\] The signal events are derived in the first case, as phi times n, and fitted in the second case. \[PAUSE\] And a general rule: a mixture of k normalised pdfs needs only k minus one independent coefficients, because the sum must be one. In an extended fit, each component has its own yield, so we need k parameters.
 
@@ -194,13 +208,13 @@
 
 **Ask the class:** How many free parameters do the two models have, besides the shapes? **Expected answer:** one for shape-only, two for extended. **If nobody answers, SAY:** Phi for the first. Nu s and nu b for the second.
 
-**\[DO\] slide 22 — Adding components in RooFit: RooAddPdf**
+**\[DO\] slide 24 — Adding components in RooFit: RooAddPdf**
 
 **SAY:** Now the implementation. In RooFit we add the components with RooAddPdf. We give two lists: the components, and the coefficients. **The number of coefficients tells RooFit what you mean.** \[PAUSE\] With one coefficient for each component, the coefficients are the numbers of events. This is the extended model. You do not need to tell the fit that it is extended: RooFit sees it from the number of coefficients. \[PAUSE\] With one coefficient fewer, the coefficients are fractions, and the last fraction is one minus the sum of the others. This is the shape-only model. \[PAUSE\] **The number of coefficients is the number of free parameters: two for extended, one for shape-only.** Look at the code: two lines, and the difference is only the list of coefficients. And to plot one component, for example the background, we use Components equals bkg.
 
 *IT: k coefficienti per k componenti = numeri di eventi = esteso (non serve dirlo al fit); N−1 coefficienti = frazioni, l'ultima è 1−somma = solo forma; Components per plottare una componente.*
 
-**\[DO\] slide 23 — RDataFrame in one slide**
+**\[DO\] slide 25 — RDataFrame in one slide**
 
 **SAY:** One short remark about data. In real analyses, data are in ROOT files, in trees. RDataFrame is the modern way to read them. You select events with Filter. You create new columns with Define. And you make histograms. \[PAUSE\] RDataFrame is lazy: nothing runs until you ask for a result. And it makes one loop over the events for all your results. With one line, you can use many cores. **We will study RDataFrame again in Lab 4.** For now, remember: Filter, Define, Histo1D. One more thing: the expression in a Define can be a C++ function, compiled just in time. You will try it in exercise C, step four.
 
@@ -208,9 +222,9 @@
 
 ---
 
-## 3:10 — Hands-on C (slides 24–25, 40 min)
+## 3:10 — Hands-on C (slides 26–28, 40 min)
 
-**\[DO\] slide 25 — Exercise C**
+**\[DO\] slide 27 — Exercise C**
 
 **SAY:** Exercise C1 uses the LHCb rare decay, B zero to proton anti-proton. The file is in the data folder. Please fit a Gaussian for the signal, plus an exponential for the background. Use an extended fit. Report the number of signal events and the number of background events, with errors. Plot the components and the pulls. \[PAUSE\] Exercise C2: do the same with fractions, shape-only. What happened to the information on the total yield? **Think about this: the rate is gone.** You have about thirty minutes. If you finish early, step C4 is optional: count the events in a mass window with a C++ function, compiled just in time.
 
@@ -223,9 +237,16 @@
 - Is it graded? — No grade: the outcome is "work done", and it gives access to the written exam.
 - A check says FAIL. What do I do? — A FAIL means the notebook stops. Fix the cell, or come to my office hours.
 
+
+**\[DO\] slide 28 — Key Takeaways from Hands-on C (2 min, at the end)**
+
+**SAY:** Statistics. In the extended fit, nu s and nu b are parameters: the data constrain shape and rate. In the shape-only fit there is only the fraction: one parameter fewer. **In the extended fit the error on nu s includes the Poisson fluctuation of n: n is not fixed.** \[PAUSE\] RooFit. RooAddPdf with as many coefficients as pdfs is extended; with one fewer, the coefficients are fractions. And Components draws one component.
+
+*IT: statistica: esteso = ν_s e ν_b parametri; shape-only = una frazione, un parametro in meno; nell'esteso l'errore include la fluttuazione di Poisson di n. RooFit: RooAddPdf N coefficienti = esteso, N−1 = frazioni; Components.*
+
 ---
 
-## 3:50 — Wrap-up (slide 26, 10 min)
+## 3:50 — Wrap-up (slide 29, 10 min)
 
 **SAY:** Let's finish. \[PAUSE\] Today you learned three things. First, the marked Poisson model: rate times shape. Second, the RooFit objects: variable, pdf, dataset, frame. Third, unbinned and binned likelihoods, and extended fits. \[PAUSE\] For the next lab, in two weeks, please do four things. One: finish your two notebooks, the ones you choose, and check that every check says PASS. Two: upload them on Virtuale. At the beginning of Lab 2, we look together at the solutions of all three notebooks. Three: read the sections on likelihood and nuisance parameters in Cranmer's paper. Four: open your Codespace once, to check that it still works. \[PAUSE\] **In Lab 2 we open the box: what really happens when we call fitTo.** We will study MINUIT, the likelihood scan, and the nuisance parameters. Thank you very much. See you in two weeks.
 

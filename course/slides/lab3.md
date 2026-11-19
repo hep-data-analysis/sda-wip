@@ -105,7 +105,9 @@ $$\text{Pois}(n_{\rm off}\,\vert\,\tau \beta)\;\approx\;\text{Gauss}(b_0\,\vert\
 
 Rule: **use the measurement when you have it; use a constraint when you only have its result.**
 
-![w:640](img/poisson_vs_gauss.png)
+---
+
+![w:1200](img/poisson_vs_gauss.png)
 
 ---
 
@@ -131,7 +133,7 @@ $$L(\mu,\vec\theta)=\underbrace{\text{Pois}\big(n\,|\,\nu(\mu,\vec\theta)\big)\p
 Top-quark case: $n_{\rm on}=17$, $n_{\rm off}=40$, $\tau=10.53$, i.e. “background $3.8\pm0.6$”.
 
 1. Build the model with a **Gaussian constraint** on $b$ (global observable $b_0=3.80$, $\sigma_b=0.60$)
-2. Compute the **significance** $Z_0$ for both models (auxiliary Poisson, Gaussian): they should agree
+2. Compute the **significance** $Z_0$ for both models (auxiliary Poisson measurement, Gaussian contraint term): they should agree
 3. Repeat with a poor control region ($n_{\rm off}=4$, $\tau=1.053$): which model is **too optimistic**?
 4. When is it fine to use a constraint?
 

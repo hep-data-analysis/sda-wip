@@ -25,17 +25,25 @@ G. Sirri · Hands-on sessions, 9:00–13:00
 2. A source of systematic uncertainty moves three channels. How many nuisance parameters do you need?
 3. Which tool for a discovery, which for an upper limit?
 
+---
+
+# Recap: answers
+
+1. **Auxiliary measurement**: you have the control data, use it. **Constraint term**: you only have its result ($b_0\pm\sigma_b$)
+2. **One** nuisance parameter if the source is fully correlated across the channels. In general, the number of nuisance parameters is the **rank** of the covariance matrix
+3. **Discovery**: the $p$-value of the background-only hypothesis. **Upper limit**: $\text{CL}_s$, with `HypoTestInverter`
+
 Today closes the chain: **binned models**, and a first look at **event selection** with TMVA.
 
 ---
 
 # Solutions of Lab 3 (15 minutes)
 
-The solutions are in the `solutions` branch: [`solutions/lab3/`](https://github.com/gabriele-sirri/statistical-data-analysis/tree/solutions/solutions/lab3), from today.
+The solutions are in the `solutions` branch: [`solutions/lab3/`](../../solutions/lab3), from today.
 
-- **[A](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab3/ex_A_solution.ipynb)**: on/off with a Gaussian constraint, and the significance (A1, A2)
-- **[B](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab3/ex_B_solution.ipynb)**: `ModelConfig`, intervals, and the significance of the background-only hypothesis (B1–B3)
-- **[C](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab3/ex_C_solution.ipynb)**: OPERA: covariance and diagonalisation (C1–C3)
+- **[A](../../solutions/lab3/ex_A_solution.ipynb)**: on/off with a Gaussian constraint, and the significance (A1, A2)
+- **[B](../../solutions/lab3/ex_B_solution.ipynb)**: `ModelConfig`, intervals, and the significance of the background-only hypothesis (B1–B3)
+- **[C](../../solutions/lab3/ex_C_solution.ipynb)**: OPERA: covariance and diagonalisation (C1–C3)
 
 ---
 
@@ -129,6 +137,17 @@ ROOT Team course `02-roofit`, in [`third_party/root-cpp-course-roofit/`](../../t
 
 Notebook: [`course/lab4/ex_A.ipynb`](../lab4/ex_A.ipynb) (guide, C++ macros run from Python)
 
+
+---
+
+### Key Takeaways from Hands-on A
+
+**Statistics**
+- The **unbinned** fit uses the **known shapes**, the **HistFactory** fit uses **templates** from simulation: the templates have their own **statistical uncertainty** (`ActivateStatError`)
+- The three fits of the same toy give **compatible** results: they are three ways to write one likelihood
+
+**Tools**
+- The macros of the ROOT Team course (`make_toys`, `unbinned`, `analysis`, `histfactory`) run from Python with `subprocess`. The results are in `results/*.root`
 ---
 
 <!-- _class: lead -->
@@ -207,6 +226,18 @@ CMS Open Data, $H\to ZZ^*\to4\ell$ ([arXiv:1207.7235](https://arxiv.org/abs/1207
 
 Notebook: [`course/lab4/ex_B.ipynb`](../lab4/ex_B.ipynb)
 
+
+---
+
+### Key Takeaways from Hands-on B
+
+**Statistics**
+- A **control region** constrains a background normalisation that the signal region shares. A **shared `NormFactor`** (same name in two channels) is **one** parameter
+- A **luminosity uncertainty** is a global nuisance parameter that scales all the samples
+
+**HistFactory**
+- `Measurement`, `Channel`, `Sample`: `AddNormFactor("mu", 1, 0, 5)` on the signal, `AddNormFactor("kZZ", 1, 0.1, 3)` on ZZ, and `SetLumi`, `SetLumiRelErr` for the luminosity
+- The workspace goes straight into RooStats
 ---
 
 # Wrap-up and feedback

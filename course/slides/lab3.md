@@ -30,13 +30,22 @@ Discuss in pairs, then we compare:
 
 ---
 
+# Recap: answers
+
+1. A **slice** keeps the nuisance parameters fixed. A **profile** re-fits them at every point, so their uncertainty adds: **the profile is wider**
+2. From the **control region**: $\sigma_b=\sqrt{n_{\rm off}}/\tau$, the Poisson uncertainty of the control count
+3. RMS $>1$: **the uncertainty is underestimated** (1.3 means about 30 % too small)
+4. The hardest cells: we open them now
+
+---
+
 # Solutions of Lab 2 (15 minutes)
 
-The solutions are in the `solutions` branch: [`solutions/lab2/`](https://github.com/gabriele-sirri/statistical-data-analysis/tree/solutions/solutions/lab2), from today.
+The solutions are in the `solutions` branch: [`solutions/lab2/`](../../solutions/lab2), from today.
 
-- **[A](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab2/ex_A_solution.ipynb)**: `HESSE`, `MINOS` and the contour (A1, A2, A5)
-- **[B](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab2/ex_B_solution.ipynb)**: the on/off model, and the profile interval versus `MINOS` (B1, B2)
-- **[C](https://github.com/gabriele-sirri/statistical-data-analysis/blob/solutions/solutions/lab2/ex_C_solution.ipynb)**: the toy study, the pulls and the failed fits (C1, C2)
+- **[A](../../solutions/lab2/ex_A_solution.ipynb)**: `HESSE`, `MINOS` and the contour (A1, A2, A5)
+- **[B](../../solutions/lab2/ex_B_solution.ipynb)**: the on/off model, and the profile interval versus `MINOS` (B1, B2)
+- **[C](../../solutions/lab2/ex_C_solution.ipynb)**: the toy study, the pulls and the failed fits (C1, C2)
 
 ---
 
@@ -96,6 +105,8 @@ $$\text{Pois}(n_{\rm off}\,\vert\,\tau \beta)\;\approx\;\text{Gauss}(b_0\,\vert\
 
 Rule: **use the measurement when you have it; use a constraint when you only have its result.**
 
+![w:640](img/poisson_vs_gauss.png)
+
 ---
 
 # The full model, and global observables
@@ -126,6 +137,18 @@ Top-quark case: $n_{\rm on}=17$, $n_{\rm off}=40$, $\tau=10.53$, i.e. “backgro
 
 Notebook: [`course/lab3/ex_A.ipynb`](../lab3/ex_A.ipynb)
 
+
+---
+
+### Key Takeaways from Hands-on A
+
+**Statistics**
+- A **constraint** is the pdf of an **auxiliary measurement**: a Gaussian of $b_0$ around $b$. The measurement $b_0$ is a number, not a data event
+- A **poor control region** means a **large** uncertainty on $b$, and a **lower** significance
+
+**RooFit**
+- `RooGaussian(b0, b, sigma_b)` is the constraint, multiplied by the model with `RooProdPdf`
+- `createNLL(data, GlobalObservables(b0))` tells the fit that $b_0$ is a **global observable**, not a free variable
 ---
 
 <!-- _class: lead -->
@@ -152,7 +175,7 @@ Then **calculators** work on `(data, ModelConfig)`: `ProfileLikelihoodCalculator
 
 # Hypothesis test and significance
 
-Null hypothesis: no signal ($\mu=0$). Test statistic:
+Null hypothesis: no signal ($\mu=0$). Test statistic ($\hat{\hat\theta}$: the nuisance parameters re-fitted with $\mu=0$ fixed, the *profile* of Lab 2):
 
 $$q_0=-2\ln\frac{L(0,\hat{\hat\theta})}{L(\hat\mu,\hat\theta)}\quad(\hat\mu\ge 0),\qquad Z=\sqrt{q_0},\qquad p=1-\Phi(Z)$$
 
@@ -171,7 +194,7 @@ $s/\sqrt b$ **overstates** the significance when $s\gtrsim b$.
 
 # Intervals and limits
 
-- **Profile-likelihood interval** (what we used in Lab 2): the $\mu$ where $q(\mu)\le 1$
+- **Profile-likelihood interval** (what we used in Lab 2): the $\mu$ where $q(\mu)\le 1$, with $q(\mu)=-2\ln\lambda(\mu)$: the same ratio as $q_0$, with $\mu$ fixed at the tested value
 - **Upper limit** when the signal is not seen: $\text{CL}_s$ method, via `HypoTestInverter`
 - Asymptotic formulae are fast and good for large samples; **toys** are needed when counts are small
 
@@ -202,6 +225,18 @@ Same top-quark model, now in a **workspace** with a `ModelConfig`.
 
 Notebook: [`course/lab3/ex_B.ipynb`](../lab3/ex_B.ipynb)
 
+
+---
+
+### Key Takeaways from Hands-on B
+
+**Statistics**
+- A **discovery** is a test of the background-only hypothesis: a **p-value**, expressed in sigma. An **upper limit** is a different question (CL$_s$: see the optional notebook)
+- $s/\sqrt b$ is a rough guide. $Z_A$ ignores the uncertainty on $b$
+
+**RooFit and RooStats**
+- `RooWorkspace` holds the model and the data. `ModelConfig` gives the **roles**: pdf, parameter of interest, nuisance parameters, observables, global observables
+- A **calculator** takes a `ModelConfig`: `ProfileLikelihoodCalculator` gives the **intervals** (B2) and the **p-value** of the background-only hypothesis (B3)
 ---
 
 <!-- _class: lead -->
@@ -273,6 +308,18 @@ Final OPERA analysis ([arXiv:1804.04912](https://arxiv.org/abs/1804.04912), Tabl
 
 Notebook: [`course/lab3/ex_C.ipynb`](../lab3/ex_C.ipynb)
 
+
+---
+
+### Key Takeaways from Hands-on C
+
+**Statistics**
+- Correlated uncertainties: the **covariance matrix** $\Sigma$. We write $\Sigma = A A^T$ and give **one nuisance parameter per independent source**
+- The **number of nuisance parameters** is the **rank** of $\Sigma$
+
+**RooFit**
+- `numpy.linalg.eigh` gives the eigenvalues and eigenvectors: keep the non-zero ones, $A=U\sqrt{w}$
+- Each channel gets a `RooFormulaVar` with the nuisance parameters $\theta_k$ and a `RooGaussian` constraint for each
 ---
 
 # Open lab (15 min)

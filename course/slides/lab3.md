@@ -66,14 +66,16 @@ The solutions are in the `solutions` branch: [`solutions/lab2/`](https://github.
 
 # Two ways to model a systematic
 
-A nuisance parameter $\theta$ is known only up to an uncertainty. Where does that knowledge come from?
+A nuisance parameter $\theta$ is a quantity needed in the model, known only up to an uncertainty.  
+Where does our knowledge of $\theta$ come from?
 
-| | Auxiliary measurement | Constraint term |
+| | **Auxiliary measurement** | **Constraint term** |
 |---|---|---|
-| What you write | the likelihood of the control data | a pdf for the *result* of that measurement |
-| Example | $\text{Pois}(n_{\rm off}\,|\,\tau b)$ | $\text{Gauss}(b_0\,|\,b,\sigma_b)$ |
-| You need | the control data | only the summary $b_0\pm\sigma_b$ |
-| Typical use | a sideband, a control region you fit | “background $3.8\pm0.6$” from a publication or a separate group |
+| Source of knowledge | a dedicated measurement we perform | an external result (a publication or another group) |
+| Concrete case | fitting a sideband or control region | using a quoted value (e.g., “bkg = $3.8 \pm 0.6$”) |
+| You need | the control data $n_{\rm off}$ | only the published estimate $\hat{\beta}\pm\sigma_{\hat{\beta}}$ |
+| What you write | the likelihood of the control data | a PDF treating $\hat{\beta}$ as a *global observable*, $\hat{\beta} \rightarrow b_0$ |
+| Example | $\text{Pois}(n_{\rm off}\,\vert\,\tau \beta)$ | $\text{Gauss}(b_0\,\vert\,\beta,\sigma_{\hat{\beta}})$ |
 
 Both enter the likelihood **as a factor**. The second is an approximation of the first.
 
@@ -81,15 +83,16 @@ Both enter the likelihood **as a factor**. The second is an approximation of the
 
 # From on/off to a Gaussian constraint
 
-The control measurement gives $\hat b_0=n_{\rm off}/\tau$ with $\sigma_b=\sqrt{n_{\rm off}}/\tau$.
+The control measurement gives $b_0=n_{\rm off}/\tau$ with $\sigma_{\hat \beta}=\sqrt{n_{\rm off}}/\tau$.
 
 For large $n_{\rm off}$:
 
-$$\text{Pois}(n_{\rm off}\,|\,\tau b)\;\approx\;\text{Gauss}(b_0\,|\,b,\sigma_b)$$
+$$\text{Pois}(n_{\rm off}\,\vert\,\tau \beta)\;\approx\;\text{Gauss}(b_0\,\vert\,\beta,\sigma_{\hat \beta})$$
 
-- Good for $n_{\rm off}\gtrsim 30$–$50$. Bad for few counts: the Gaussian is symmetric, allows $b<0$, and **overstates significance**
+- Good for $n_{\rm off}\gtrsim 30$–$50$. 
+  Bad for few counts: the Gaussian is symmetric, allows $\beta<0$, and **overstates significance**
 - Positive, multiplicative uncertainty (efficiency, luminosity)? use a **log-normal**
-- Counts with a known $\tau$? the exact companion of the Poisson is a **Gamma**
+- Few Poisson counts? a **Gamma** constraint matches the exact Poisson shape
 
 Rule: **use the measurement when you have it; use a constraint when you only have its result.**
 
@@ -99,9 +102,10 @@ Rule: **use the measurement when you have it; use a constraint when you only hav
 
 $$L(\mu,\vec\theta)=\underbrace{\text{Pois}\big(n\,|\,\nu(\mu,\vec\theta)\big)\prod_{i=1}^{n} f(x_i\,|\,\mu,\vec\theta)}_{\text{extended marked Poisson}}\;\times\;\underbrace{\prod_j c_j(a_j\,|\,\theta_j)}_{\text{constraints}}$$
 
-- $a_j$ = result of the auxiliary measurement: a **global observable**
+- $a_j$ = is a proxy for a result of the auxiliary measurement: a **global observable**
 - In the **fit**: $a_j$ are constants. In **toys**: $a_j$ are re-thrown with the data (frequentist)
-- RooFit: `createNLL(data, GlobalObservables(...))`; RooStats: `ModelConfig.SetGlobalObservables`
+- RooFit: `createNLL(data, GlobalObservables(...))`; 
+  RooStats: `ModelConfig.SetGlobalObservables`
 
 ---
 

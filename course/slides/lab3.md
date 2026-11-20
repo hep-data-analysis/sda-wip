@@ -145,12 +145,12 @@ Notebook: [`course/lab3/ex_A.ipynb`](../lab3/ex_A.ipynb)
 ### Key Takeaways from Hands-on A
 
 **Statistics**
-- A **constraint** is the pdf of an **auxiliary measurement**: a Gaussian of $b_0$ around $b$. The measurement $b_0$ is a number, not a data event
+- A **constraint** is the PDF of an external estimate: e.g., $\text{Gauss}(b_0 \mid \beta, \sigma_{\hat{\beta}})$ centered on the true parameter $\beta$. Here $b_0$ is a fixed number (*global observable*), not an event in the dataset.
 - A **poor control region** means a **large** uncertainty on $b$, and a **lower** significance
 
 **RooFit**
 - `RooGaussian(b0, b, sigma_b)` is the constraint, multiplied by the model with `RooProdPdf`
-- `createNLL(data, GlobalObservables(b0))` tells the fit that $b_0$ is a **global observable**, not a free variable
+- `createNLL(data, GlobalObservables(b0))` tells the fit that $b_0$ is a **global observable**, not a free variable (so RooFit randomizes it properly in frequentist toys)
 ---
 
 <!-- _class: lead -->
@@ -159,54 +159,67 @@ Notebook: [`course/lab3/ex_A.ipynb`](../lab3/ex_A.ipynb)
 
 ---
 
-# Roles in RooStats
+# From the model to a statement
 
-RooStats needs every element of the model to have a **role**:
+Three questions, **one likelihood**:
+
+| Question | Statement | Tool |
+|---|---|---|
+| how significant is the excess? | $p$-value, $Z$ | hypothesis test ($q_0$) |
+| what is $\mu$, with its uncertainty? | interval | profile-likelihood interval |
+| nothing seen: how large can $\mu$ be? | upper limit | $\text{CL}_s$ (optional notebook) |
+
+**RooFit** builds the pdf and the likelihood. **RooStats** turns them into these statements: it works on any model, but needs to know what each element **is**.
+
+---
+
+# Roles in RooStats: `ModelConfig`
+
+
+RooStats needs every element of the model to have a **role**, via a **`ModelConfig`** object:
 
 | Element | In `ModelConfig` |
 |---|---|
 | the model | `SetPdf` |
-| parameters of interest | `SetParametersOfInterest` |
-| nuisance parameters | `SetNuisanceParameters` |
-| observables | `SetObservables` |
-| global observables | `SetGlobalObservables` |
+| parameter of interest ($\mu$ or $s$) | `SetParametersOfInterest` |
+| nuisance parameters ($b$) | `SetNuisanceParameters` |
+| observables ($n_{\rm on}$) | `SetObservables` |
+| global observables ($b_0$) | `SetGlobalObservables` |
 
-Then **calculators** work on `(data, ModelConfig)`: `ProfileLikelihoodCalculator`, `AsymptoticCalculator`, `FrequentistCalculator`, `HypoTestInverter`…
+A **calculator** takes `(data, ModelConfig)` and returns the statement: 
+`ProfileLikelihoodCalculator` (today), `AsymptoticCalculator`, `FrequentistCalculator` (toys), `HypoTestInverter` (limits).
+
+*The right roles are all RooStats needs: no change to the model.*
 
 ---
 
-# Hypothesis test and significance
+# One test statistics, two uses
 
-Null hypothesis: no signal ($\mu=0$). Test statistic ($\hat{\hat\theta}$: the nuisance parameters re-fitted with $\mu=0$ fixed, the *profile* of Lab 2):
+**Profile likelihood ratio** (Lab 2): $\;\lambda(\mu)=\dfrac{L(\mu,\hat{\hat\theta})}{L(\hat\mu,\hat\theta)}$, $\;q(\mu)=-2\ln\lambda(\mu)$
 
-$$q_0=-2\ln\frac{L(0,\hat{\hat\theta})}{L(\hat\mu,\hat\theta)}\quad(\hat\mu\ge 0),\qquad Z=\sqrt{q_0},\qquad p=1-\Phi(Z)$$
+| | Fix $\mu$ at | Result |
+|---|---|---|
+| **Significance** | $\mu=0$ (background only): $q_0$ | $Z=\sqrt{q_0}$, $p=1-\Phi(Z)$ |
+| **Interval** | every $\mu$: $q(\mu)\le 1$ (68 %), $3.84$ (95 %) | $[\mu_{\rm lo},\mu_{\rm hi}]$ |
 
 | Claim | $Z$ | $p$ (one-sided) |
 |---|---|---|
 | evidence | 3 | $1.3\times10^{-3}$ |
 | discovery | 5 | $2.9\times10^{-7}$ |
 
-**Counting estimate, background known:** ([Cowan, Cranmer, Gross, Vitells 2011](https://arxiv.org/abs/1007.1727))
-
-$$Z_A=\sqrt{2\Big[(s+b)\ln\Big(1+\frac{s}{b}\Big)-s\Big]}\;\xrightarrow{s\ll b}\;\frac{s}{\sqrt b}$$
-
-$s/\sqrt b$ **overstates** the significance when $s\gtrsim b$.
+By Wilks' theorem $q$ is asymptotically $\chi^2$: **fast, but good only for large samples**. With few counts use **toys**.
 
 ---
 
-# Intervals and limits
+# Estimating $Z$ by hand
 
-- **Profile-likelihood interval** (what we used in Lab 2): the $\mu$ where $q(\mu)\le 1$, with $q(\mu)=-2\ln\lambda(\mu)$: the same ratio as $q_0$, with $\mu$ fixed at the tested value
-- **Upper limit** when the signal is not seen: $\text{CL}_s$ method, via `HypoTestInverter`
-- Asymptotic formulae are fast and good for large samples; **toys** are needed when counts are small
+Background **known** ([Cowan, Cranmer, Gross, Vitells 2011](https://arxiv.org/abs/1007.1727)):
 
-Choose the calculator from the **question**:
+$$Z_A=\sqrt{2\Big[(s+b)\ln\Big(1+\frac{s}{b}\Big)-s\Big]}\;\xrightarrow{s\ll b}\;\frac{s}{\sqrt b}$$
 
-| Question | Tool |
-|---|---|
-| how significant is the excess? | hypothesis test ($q_0$) |
-| what is $\mu$ and its uncertainty? | profile-likelihood interval |
-| nothing seen, how big can $\mu$ be? | $\text{CL}_s$ upper limit |
+- $s/\sqrt b$ **overstates** $Z$ when $s\gtrsim b$: use it as a guide, never for a result
+- $Z_A$ ignores the uncertainty on $b$: RooStats, which profiles $b$, gives a **lower** $Z$
+- In Exercise B you compare the three on the top-quark case
 
 ---
 

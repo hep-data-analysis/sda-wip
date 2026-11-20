@@ -138,23 +138,36 @@
 
 *Time-box: 15 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold line of each slide and come back to the rest at the end of the hands-on.*
 
-**\[DO\] slide 14 — Roles in RooStats**
+**\[DO\] slide 15 —  From the model to a statement**
 
-**SAY:** Welcome back. Now RooStats. RooStats needs to know the role of every element of the model. \[PAUSE\] Look at the table. The model: SetPdf. The parameters of interest: for us, the signal strength. The nuisance parameters. The observables, the data. And the global observables. All of these live in an object called ModelConfig. Then the calculators work on a pair: the data, and the ModelConfig. **If you give the right roles, RooStats does the rest.** The calculators we see: the profile likelihood calculator, the asymptotic calculator, the frequentist calculator with toys, and the hypothesis test inverter for limits.
 
-*IT: ModelConfig = ruoli degli elementi. I calcolatori lavorano su (dati, ModelConfig).*
-
-**\[DO\] slide 15 — Hypothesis test and significance**
-
-**SAY:** The hypothesis test. The null hypothesis is: no signal, mu equal to zero. The test statistic, q zero, is minus two times the log of the profile likelihood ratio. The significance Z is the square root of q zero. And the p-value is one minus the Gaussian cumulative of Z. \[PAUSE\] Two numbers to remember. Three sigma, one in about eight hundred: evidence. Five sigma, about three in ten million: discovery. \[PAUSE\] And a useful formula, from the paper of Cowan, Cranmer, Gross and Vitells. When the background is known, the Asimov significance is: square root of two times s plus b, times the log of one plus s over b, minus s. For s much smaller than b it becomes s over square root of b. **But s over root b overestimates the significance when s is not small. Do not use it for a result.**
-
-*IT: q0, Z=sqrt(q0), p; 3σ=1.3e-3, 5σ=2.9e-7; formula di Asimov; s/√b sovrastima.*
-
-**\[DO\] slide 16 — Intervals and limits**
+SAY: “Three questions, one likelihood. Significance, interval, limit. RooFit builds the model, RooStats gives the statement.” (~1 min)
 
 **SAY:** Three questions, three tools. How significant is the excess? The hypothesis test. What is mu, with its uncertainty? The profile likelihood interval, as in Lab 2. Nothing is seen: how large can mu be? The upper limit, with the CLs method. \[PAUSE\] Asymptotic formulae are fast, and good for large samples. With few counts you need toys. **Choose the calculator from the question, not from habit.**
 
 *IT: tre domande, tre strumenti; asintotico vs toy. CLs nel notebook opzionale.*
+
+
+**\[DO\] slide 16 — Roles in RooStats**
+
+**SAY:** Welcome back. Now we move from RooFit to **RooStats**. Remember the division of labor: RooFit build PDFs and likelihoods, while RooStats is the statistical inference layer on top—it and automates hypothesis tests, confidence intervals, and upper limits. [PAUSE] Unlike a manual `Migrad` fit, RooStats cannot guess what each variable in your model represents. It needs to know the **role** of every element, and we store those roles inside a **`ModelConfig`** object. Look at the table The model: SetPdf. The parameters of interest: for us, the signal strength. The nuisance parameters. The observables, the data. And the global observables. All of these live in an object called ModelConfig. Then the calculators work on a pair: the data, and the ModelConfig. **If you give the right roles, RooStats does the rest.** The calculators we see: the profile likelihood calculator, the asymptotic calculator, the frequentist calculator with toys, and the hypothesis test inverter for limits.
+
+*IT: ModelConfig = ruoli degli elementi. I calcolatori lavorano su (dati, ModelConfig).*
+
+**\[DO\] slide 17 — One ratio, two uses**
+
+SAY: “Same ratio as Lab 2. Fix mu at zero: significance. Fix mu at every value: interval.” The hypothesis test. The null hypothesis is: no signal, mu equal to zero. The test statistic, q zero, is minus two times the log of the profile likelihood ratio. The significance Z is the square root of q zero. And the p-value is one minus the Gaussian cumulative of Z. \[PAUSE\] Poi 3σ/5σ. Two numbers to remember. Three sigma, one in about eight hundred: evidence. Five sigma, about three in ten million: discovery. \[PAUSE\] 
+Chiudi con “asymptotic is fast, toys for few counts”. 
+
+*IT: q0, Z=sqrt(q0), p; 3σ=1.3e-3, 5σ=2.9e-7;*
+
+**\[DO\] slide 18 — Estimating Z by hand**
+
+And a useful formula, from the paper of Cowan, Cranmer, Gross and Vitells. When the background is known, the Asimov significance is: square root of two times s plus b, times the log of one plus s over b, minus s. For s much smaller than b it becomes s over square root of b. **But s over root b overestimates the significance when s is not small. Do not use it for a result.**
+
+Chiudi con il link a Ex B4.
+
+*IT: formula di Asimov; s/√b sovrastima.*
 
 ---
 

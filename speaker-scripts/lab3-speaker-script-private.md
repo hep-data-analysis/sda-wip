@@ -215,65 +215,70 @@ Chiudi con il link a Ex B4.
 
 ---
 
-## 2:45 — Talk C: Correlated systematics (slides 20–23, 10 min)
+## 2:45 — Talk C: Correlated systematics (slides 20–24, 12 min)
 
-*Time-box: 10 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold line of each slide and come back to the rest at the end of the hands-on.*
+*Time-box: 12 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold line of each slide and come back to the rest at the end of the hands-on.*
 
-**\[DO\] slide 21 — Systematics are correlated**
+**\[DO\] slide 21 — Systematics are correlated across channels**
 
-**SAY:** A systematic uncertainty rarely affects only one number. A source, for example the charm cross section, or the tagging efficiency, or the luminosity, moves several yields together. \[PAUSE\] We write this with a covariance matrix. Sigma i j is the sum, over the sources, of the effect of source k on channel i, times the effect on channel j. If the errors are independent, the matrix is diagonal. If a source is common to two channels, we have off-diagonal terms. **Ignoring them changes the size of the uncertainty on mu. How much? Only a calculation can tell.**
+**SAY:** Welcome to the final part: correlated systematics. A systematic rarely affects only one number. A source—for example the charm cross section, the tagging efficiency, or the luminosity—moves several channel yields together. \[PAUSE\] Look at the first equation: we associate an independent, standard-normal nuisance parameter theta k to each physical source k, and v i k tells us how much channel i moves for a one-sigma shift. Across the channels, this automatically induces a covariance matrix: Sigma i j is the sum over the sources of v i k times v j k. If every channel had independent errors, Sigma would be purely diagonal. Shared sources create off-diagonal terms. **Ignoring them changes the size of the uncertainty on mu. How much? Only a calculation can tell.**
 
-*IT: una sorgente muove più canali; Sigma = somma v v^T; fuori diagonale = correlazioni.*
+*IT: una sorgente θ_k muove più canali di v_ik; questo induce la matrice di covarianza Σ = Σ v v^T; fuori diagonale = correlazioni.*
 
-**\[DO\] slide 22 — Diagonalise**
+**\[DO\] slide 22 — A 2-channel example: two ways to write the same model**
 
-**SAY:** How do we put a covariance matrix in a likelihood? We diagonalise it. A real symmetric matrix can be written as U Lambda U transpose. Lambda is diagonal, with the eigenvalues. Then we define independent nuisance parameters, z k. Each one is a standard Gaussian. And the correlated parameters are: beta zero, plus U, times square root of Lambda, times z. \[PAUSE\] Two practical results. One: we need one nuisance parameter for each non-zero eigenvalue. This is the rank of the matrix. Four channels, three sources: three nuisance parameters, not four. Two: if the errors are fully correlated, there is only one nuisance parameter. **This is what HistFactory, pyhf, and the experiment combinations do under the hood.**
+**SAY:** Let's see this on a concrete two-channel example before touching any linear algebra. Suppose two channels share a single common ten-percent uncertainty, so correlation rho equals one. If you write the covariance matrix Sigma, its determinant is zero: it is a rank-one matrix, so you cannot invert it to write a two-dimensional Gaussian! \[PAUSE\] Instead, look at the smart way—which is the standard in high-energy physics. We introduce **just one** standard-normal parameter theta, and write beta one equal to beta zero one plus sigma one times theta, and beta two equal to beta zero two plus sigma two times theta. **A single shared parameter theta automatically enforces one-hundred-percent correlation without ever inverting Sigma.**
 
-*IT: Σ=UΛU^T; β=β0+U√Λ z; z indipendenti N(0,1); rango = numero di sorgenti.*
+*IT: esempio 2 canali con correlazione 100%: Σ ha rango 1 e non è invertibile; invece di una Gaussiana 2D, basta un solo parametro condiviso θ ~ N(0,1).*
 
-**\[DO\] slide 23 — A real problem: OPERA**
+**\[DO\] slide 23 — General case: from any Sigma to independent theta k**
 
-**SAY:** Here is our real problem. The OPERA experiment. It looks for tau neutrinos appearing in a muon-neutrino beam. This is the final analysis, from the 2018 paper. Four channels, which are four decay modes of the tau. Ten candidate events. \[PAUSE\] Look at the table: the backgrounds by source, the expected signal, the observed events. Notice something. All the signal errors are about twenty percent. In the 2015 paper, the sources are listed: the model, ten percent. The oscillation parameters, ten percent. The tagging efficiency, fifteen percent. These are common to all channels. \[PAUSE\] **Our assumption: each source is fully correlated across the channels it affects. This is our modelling choice. It is not the published treatment of the collaboration.** Please remember this, and say it in your report.
+**SAY:** Now, what if a paper or a model gives you only the full covariance matrix Sigma, and not the individual sources v i k? Any symmetric positive-semidefinite Sigma can be diagonalised: U Lambda U transpose. Define A equal to U times the square root of Lambda, keeping only the non-zero eigenvalues. Then beta vector is beta zero plus A times theta vector, with independent standard-normal theta k. \[PAUSE\] Two key lessons. One: we need one nuisance parameter theta k per non-zero eigenvalue—that is the **rank** of Sigma, never more than the number of channels. Two: in RooFit, once A is computed, you only need linear RooFormulaVar expressions and one-dimensional RooGaussian constraints. **This is what HistFactory, pyhf, and LHC combinations do under the hood.**
+
+*IT: caso generale: se ho solo Σ, diagonalizzo Σ = UΛU^T → A = U√Λ (autovalori > 0); numero di θ_k = rango di Σ; in RooFit solo RooFormulaVar lineari e RooGaussian 1D.*
+
+**\[DO\] slide 24 — A real problem: OPERA**
+
+**SAY:** Here is our real problem: the OPERA experiment, searching for tau neutrinos appearing in a muon-neutrino beam. This is the final analysis from the 2018 paper: four channels, corresponding to four decay modes of the tau, and ten candidate events. \[PAUSE\] Look at the table: the backgrounds by source, the expected signal, and the observed counts. Notice that all signal errors are about twenty percent. In the 2015 paper, the sources are listed: the model, ten percent; the oscillation parameters, ten percent; the tagging efficiency, fifteen percent. These are common to all channels. \[PAUSE\] **Our assumption: each source is fully correlated across the channels it touches. This is our modelling choice, not the published treatment of the collaboration.** Please remember this, and state it clearly in your notebook.
 
 *IT: OPERA reale (Tab. III, arXiv:1804.04912). L'ipotesi di correlazione piena è NOSTRA, non della collaborazione: ribadiscilo.*
 
 ---
 
-## 2:55 — Live coding C1: covariance and diagonalisation (5 min)
+## 2:57 — Live coding C1: covariance and diagonalisation (5 min)
 
-**\[DO\]** Open the notebook ex C, cell C1. The function `factor` has a TODO with the hint in a comment. We write the three lines on the screen.
+**\[DO\]** Open the notebook ex C, cell C1. We inspect `Sigma_b` and fill the TODO lines to compute the factor matrix `A_b`.
 
-**SAY:** Now the factorisation of the covariance matrix. \[PAUSE\] We want a matrix A such that A times A transposed is Sigma. First line: eigh of Sigma, which gives the eigenvalues, w, and the eigenvectors, U. \[PAUSE\] Second line: **we keep only the non-zero eigenvalues**. Third line: A is U times the square root of the eigenvalues, one column for each non-zero eigenvalue. \[PAUSE\] **The number of columns is the rank of Sigma: the number of independent sources.** Four channels with three sources give three columns, so three nuisance parameters, not four.
+**SAY:** Let's look at cell C1 together. We build the four-by-four background covariance matrix Sigma b from the three background sources: charm, hadronic re-interactions, and large-angle muon scattering. \[PAUSE\] Then `np.linalg.eigh` gives us the eigenvalues and the eigenvectors U. Look at the printed eigenvalues: one of them is essentially zero, ten to the minus twenty-one! \[PAUSE\] So in the TODO we filter `keep = evals_b > 1e-10` and multiply `U_b[:, keep]` by the square root of those eigenvalues. **The number of columns of A b is three—the rank of Sigma b—so we need only three independent nuisance parameters theta k for four channels.**
 
-*IT: riempi dal vivo factor (circa 5 min): eigh(Sigma) → tieni solo gli autovalori > tol → A = U·sqrt(w). Le colonne = rango = fonti indipendenti: 4 canali e 3 fonti → 3 nuisance.*
+*IT: cella C1: costruiamo Σ_b dalle 3 sorgenti; eigh dà 1 autovalore nullo (10^-21) e 3 positivi; filtriamo evals_b > 1e-10 e calcoliamo A_b = U√Λ → 3 colonne = 3 nuisance parameter θ_k.*
 
-**Ask:** Four channels, three independent sources. How many columns does A have? **Expected:** three.
+**Ask:** Four channels, three independent sources. How many columns does A b have? **Expected:** three.
 
 ---
 
-## 3:00 — Hands-on C: OPERA with a covariance matrix (slides 24–26, 40 min)
+## 3:02 — Hands-on C: OPERA with a covariance matrix (slides 25–27, 40 min)
 
-**\[DO\] slide 25 — Exercise C**
+**\[DO\] slide 26 — Exercise C**
 
-**SAY:** Exercise C is the main one today. \[PAUSE\] Step one: build the covariance matrix of the backgrounds from the three sources, and diagonalise it with numpy. What is the rank? Step two: build the RooFit model. Four Poisson terms. The expected background is beta zero plus A times z. And one Gaussian constraint for each z. Step three: fit, compute the significance and the sixty-eight percent interval on mu. Step four: add the signal uncertainty, twenty percent per channel, with correlation rho. Scan rho equal to zero, zero point five, one. Step five: by how much does the interval change? Does the significance change? \[PAUSE\] This will take about forty minutes. Please ask when you are stuck: the model building is the difficult part.
+**SAY:** Exercise C is the capstone of today. \[PAUSE\] Step one: check the rank and factorisation of Sigma b. Step two: build the RooFit model in C2 for uncorrelated signal errors, rho equal to zero. Four Poisson terms, linear expressions for beta i and s i using the nuisance parameters theta k, and one-dimensional RooGaussian constraints around the global observables g k equal to zero. Step three: fit, compute the significance Z zero and the sixty-eight percent interval on mu. Step four: in C3, scan the signal correlation rho equal to zero, zero point five, and one. Step five: how much does the interval change? Does Z zero change? And why? \[PAUSE\] You have about forty minutes. Please ask if you get stuck on the RooFormulaVar indices.
 
-*IT: C1 factor(), C2 build\_opera (formule lin e lam), C3 scansione rho. Attesi: rango 3; Z≈3.9; larghezza intervallo ≈0.96 (ρ=0), ≈1.06 (ρ=1).*
+*IT: C1 rank/A_b, C2 modello RooFit per ρ=0 (formule lineari con θ_k e vincoli Gauss(g_k | θ_k, 1)), C3 scansione ρ=0, 0.5, 1. Attesi: rango 3; Z≈3.9; larghezza intervallo ≈0.96 (ρ=0), ≈1.06 (ρ=1).*
 
 **While walking around:**
 
-- What is the rank of your matrix? Why not four?
-- What is the range of z? Is the background positive at the minimum?
-- Why do we use max of the expression and a small number in the Poisson mean?
-- Does the fit converge?
+- What is the rank of your matrix? Why is it three instead of four?
+- Which variables are the nuisance parameters (`zb`, `zs`), and which are the global observables (`gb`, `gs`)?
+- Why do we put `max(..., 1e-9)` inside the Poisson expectation `lam`?
+- Why did we create a fresh `ProfileLikelihoodCalculator` when testing `mu = 0`?
 
-**At the end (SAY):** Let's see the result. \[PAUSE\] The interval on mu is about ten percent wider when the signal uncertainty is fully correlated. And the significance of mu equal to zero does not change at all. Why? \[PAUSE\] Because at mu equal to zero the signal is multiplied by zero. **The signal uncertainty cannot matter for the discovery. It matters for the measurement.** And the main message: ten events. The Poisson fluctuation dominates. The systematics change the interval by only ten percent. So improving the systematic estimate would help little here.
+**At the end (SAY):** Let's compare the numbers from C3. \[PAUSE\] When the signal uncertainty goes from uncorrelated (rho equal to zero) to fully correlated (rho equal to one), the number of signal nuisance parameters drops from four to one, and the sixty-eight percent interval on mu gets about ten percent wider. \[PAUSE\] Meanwhile, the significance Z zero of mu equal to zero does not change at all. Why? Because under the null hypothesis mu equals zero, the signal term mu times s i is zero! **Signal uncertainties cannot affect a discovery significance; they affect the precision of the measurement.** And notice the big picture: with only ten observed events, statistical fluctuations dominate—improving the systematic uncertainty would barely shrink the error bar here.
 
+**\[DO\] slide 27 — Key Takeaways from Hands-on C (2 min, at the end)**
 
-**\[DO\] slide 26 — Key Takeaways from Hands-on C (2 min, at the end)**
+**SAY:** Statistics. Correlated uncertainties are encoded in the covariance matrix Sigma. By factorising Sigma as A times A transpose, we assign **one independent nuisance parameter theta k per source—and the number of parameters is the rank of Sigma**. \[PAUSE\] RooFit. Eigen-decomposition gives A equal to U times square root of Lambda for non-zero eigenvalues. Each channel then gets a linear RooFormulaVar combining the theta k, paired with a one-dimensional RooGaussian constraint centered on the global observable g k equal to zero.
 
-**SAY:** Statistics. Correlated uncertainties: the covariance matrix Sigma. We write Sigma as A times A transposed, and we give one nuisance parameter to each independent source. **The number of nuisance parameters is the rank of Sigma.** \[PAUSE\] RooFit. numpy eigh gives eigenvalues and eigenvectors: keep the non-zero ones. Each channel gets a RooFormulaVar with the nuisance parameters theta k, and each theta k a RooGaussian constraint.
-
-*IT: statistica: matrice di covarianza Σ = A·Aᵀ, un nuisance per ogni fonte indipendente; numero di nuisance = rango di Σ. RooFit: eigh → autovalori ≠ 0; RooFormulaVar per canale con θ_k; RooGaussian di vincolo per ogni θ_k.*
+*IT: statistica: covarianza Σ = A·Aᵀ → un nuisance θ_k per sorgente indipendente; numero di nuisance = rango di Σ. RooFit: A = U√Λ (autovalori > 0); RooFormulaVar lineare per canale con θ_k; RooGaussian(g_k, θ_k, 1) con g_k = 0.*
 
 ---
 

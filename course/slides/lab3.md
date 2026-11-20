@@ -281,50 +281,67 @@ Notebook: [`course/lab3/ex_B.ipynb`](../lab3/ex_B.ipynb)
 
 ---
 
-# Systematics are correlated
+# Systematics are correlated across channels
 
-A systematic rarely affects one number. A **source** (charm cross section, tagging efficiency, luminosity) moves several expected numbers of events (yields) at once.
+A systematic source $k$ (e.g., charm cross section, tagging efficiency, luminosity) shifts several channel yields $i$ at once by $v_{ik}$:
 
-For $N$ channels, with a source $k$ moving channel $i$ by $v_{ik}$:
+$$\beta_i = \beta_{0i} + \sum_k v_{ik}\,\theta_k, \qquad \theta_k \sim \mathcal{N}(0,1)\;\;\text{independent}$$
 
-$$\Sigma_{ij}=\sum_k v_{ik}\,v_{jk}\qquad\text{(sources independent, each fully correlated across channels)}$$
+This induces a **covariance matrix** across channels:
 
-- Independent errors per channel: $\Sigma$ **diagonal**
-- A common source: off-diagonal terms. Ignoring them changes the **size** of the uncertainty on $\mu$
+$$\Sigma_{ij} = \text{cov}(\beta_i, \beta_j) = \sum_k v_{ik}\,v_{jk}$$
 
-Question: **how much does it change the result?** Only a calculation tells.
+- **Uncorrelated errors** per channel $\rightarrow$ $\Sigma$ is **diagonal** ($\Sigma_{ij} = 0$ for $i \neq j$)
+- **Shared sources** $\rightarrow$ off-diagonal terms $\Sigma_{ij} \neq 0$; ignoring them distorts the uncertainty on $\mu$
 
 ---
 
-# Diagonalise: independent nuisance parameters
+# A 2-channel example: two ways to write the same model
 
-Real symmetric $\Sigma=U\Lambda U^T$ ($\Lambda$ diagonal, eigenvalues $\lambda_k\ge 0$).
+Suppose 2 channels have nominal yields $\beta_{01}, \beta_{02}$ and a **single common** $10\%$ uncertainty ($\rho = 1$):
 
-$$\vec\beta=\vec\beta_0+U\sqrt{\Lambda}\,\vec z,\qquad z_k\sim\mathcal N(0,1)\;\;\text{independent}$$
+$$\Sigma = \begin{pmatrix} \sigma_1^2 & \sigma_1\sigma_2 \\ \sigma_1\sigma_2 & \sigma_2^2 \end{pmatrix} \qquad (\det \Sigma = 0 \implies \text{rank } 1)$$
 
-- One standard-normal nuisance parameter $z_k$ per **non-zero eigenvalue**
-- **Rank** of $\Sigma$ = number of independent sources: 4 channels with 3 sources → 3 nuisance parameters, not 4
-- Fully correlated errors in $N$ channels: **one** nuisance parameter
+- **Naive way (hard):** use 2 correlated parameters $(\beta_1, \beta_2)$ with a 2D Gaussian $\mathcal{N}_2(\vec{b}_0 \mid \vec{\beta}, \Sigma)$ — fails here because $\Sigma$ is singular!
+- **Smart way (standard HEP):** write both yields using **1** standard-normal parameter $\theta \sim \mathcal{N}(0,1)$:
 
-This is exactly what HistFactory, `pyhf` and CMS/ATLAS combinations do under the hood.
+$$\beta_1 = \beta_{01} + \sigma_1\,\theta, \qquad \beta_2 = \beta_{02} + \sigma_2\,\theta$$
+
+**Takeaway:** A single shared parameter $\theta$ automatically enforces $100\%$ correlation without inverting $\Sigma$.
+
+---
+
+# General case: from any $\Sigma$ to independent $\theta_k$
+
+What if we are only given a covariance matrix $\Sigma$ (not the individual sources $v_{ik}$)?
+
+Any symmetric positive-semidefinite $\Sigma$ can be **diagonalised**:
+
+$$\Sigma = U\Lambda U^T = A A^T, \qquad A = U\sqrt{\Lambda} \quad (\text{keeping }\lambda_k > 0)$$
+
+- **Reparametrisation:** $\vec{\beta} = \vec{\beta}_0 + A\,\vec{\theta}$, with independent $\theta_k \sim \mathcal{N}(0,1)$
+- **Rank reduction:** we need **one $\theta_k$ per non-zero eigenvalue $\lambda_k$** ($\text{rank}(\Sigma)$), never more than the number of channels
+- **In RooFit (C++ / Python):** once $A$ is known, you only need linear `RooFormulaVar` expressions and 1D `RooGaussian` constraints
+
+*This is what HistFactory, `pyhf`, and LHC combinations do under the hood.*
 
 ---
 
 # A real problem: OPERA $\nu_\tau$ appearance
 
-Final OPERA analysis ([arXiv:1804.04912](https://arxiv.org/abs/1804.04912), Table III): 4 channels, 10 candidates.
+Final OPERA analysis ([arXiv:1804.04912](https://arxiv.org), Table III): 4 channels, 10 candidates.
 
-| Channel | Bkg: charm | had. re-int. | large-$\mu$ scat. | Signal $\mu=1$ | Observed |
+| Channel | Bkg: charm | had. re-int. | large-$\mu$ scat. | Signal ($\mu=1$) | Observed |
 |---|---|---|---|---|---|
-| $\tau\to1h$ | $0.15\pm0.03$ | $1.28\pm0.38$ | – | $2.96\pm0.59$ | 6 |
-| $\tau\to3h$ | $0.44\pm0.09$ | $0.09\pm0.03$ | – | $1.83\pm0.37$ | 3 |
+| $\tau\to 1h$ | $0.15\pm0.03$ | $1.28\pm0.38$ | – | $2.96\pm0.59$ | 6 |
+| $\tau\to 3h$ | $0.44\pm0.09$ | $0.09\pm0.03$ | – | $1.83\pm0.37$ | 3 |
 | $\tau\to\mu$ | $0.008\pm0.002$ | – | $0.016\pm0.008$ | $1.15\pm0.23$ | 1 |
 | $\tau\to e$ | $0.035\pm0.007$ | – | – | $0.84\pm0.17$ | 0 |
 
-- Every signal error is **≈ 20 %**. The 2015 paper lists the sources: model (10 %), $\theta_{23},\Delta m^2_{23}$ (10 %), tagging efficiency (15 %). They are common to all channels
+- Every signal error is **$\approx 20\%$**. The 2015 paper lists the sources: model ($10\%$), $\theta_{23},\Delta m^2_{23}$ ($10\%$), tagging efficiency ($15\%$). They are common to all channels
 - Background sources are shared across channels (charm in all four)
 
-**Assumption in this exercise:** each source is fully correlated across the channels it touches. It is our modelling choice, not the collaboration's published treatment.
+**Assumption in this exercise:** each source is fully correlated across the channels it touches (our modelling choice, not the collaboration's published treatment).
 
 ---
 
@@ -334,29 +351,28 @@ Final OPERA analysis ([arXiv:1804.04912](https://arxiv.org/abs/1804.04912), Tabl
 
 ---
 
-# Exercise C (≈ 40 min)
+# Exercise C ($\approx 40$ min)
 
-1. Build $\Sigma_b$ from the three background sources. **Diagonalise** it with `numpy`. Rank? Eigenvalues?
-2. Build the RooFit model: 4 Poisson terms, $\beta_i=\beta_{0i}+\sum_k A_{ik}z_k$ with $A=U\sqrt\Lambda$, constraints $\text{Gauss}(0|z_k,1)$
-3. Fit, compute the **significance** $Z_0$ and the 68 % interval on $\mu$
-4. Add a **signal uncertainty** of 20 % per channel with correlation $\rho$ between channels. Scan $\rho=0,\,0.5,\,1$
+1. Inspect $\Sigma_b$ from the three background sources and its factorisation $\Sigma_b = A_b A_b^T$ (given). Check its **rank** and eigenvalues
+2. Build the RooFit model: 4 Poisson terms, linear yields $\beta_i=\beta_{0i}+\sum_k A^{(b)}_{ik}\theta^{(b)}_k$, and 1D constraints $\text{Gauss}(g_k \mid \theta_k, 1)$ with $g_k = 0$
+3. Fit, compute the **significance** $Z_0$ and the 68% interval on $\mu$
+4. Add a **signal uncertainty** of $20\%$ per channel with correlation $\rho$ between channels (using the given factor $A_s(\rho)$). Scan $\rho=0,\,0.5,\,1$
 5. How much does the interval on $\mu$ change? Does $Z_0$ change? Why?
 
 Notebook: [`course/lab3/ex_C.ipynb`](../lab3/ex_C.ipynb)
-
 
 ---
 
 ### Key Takeaways from Hands-on C
 
 **Statistics**
-- Correlated uncertainties: the **covariance matrix** $\Sigma$. We write $\Sigma = A A^T$ and give **one nuisance parameter per independent source**
-- The **number of nuisance parameters** is the **rank** of $\Sigma$
+- Correlated uncertainties: the **covariance matrix** $\Sigma$. Factorising $\Sigma = A A^T$ assigns **one independent nuisance parameter $\theta_k$ per source**
+- The **number of nuisance parameters** is the **rank** of $\Sigma$, not the number of channels
 
 **RooFit**
-- `numpy.linalg.eigh` gives the eigenvalues and eigenvectors: keep the non-zero ones, $A=U\sqrt{w}$
-- Each channel gets a `RooFormulaVar` with the nuisance parameters $\theta_k$ and a `RooGaussian` constraint for each
----
+- Diagonalisation ($A = U\sqrt{\Lambda}$, keeping $\lambda_k > 0$) turns correlated channels into independent unit-normal parameters $\theta_k$
+- Each channel gets a linear `RooFormulaVar` combining $\theta_k$, paired with a 1D `RooGaussian(g_k, theta_k, 1)` constraint ($g_k = 0$ global observable)
+
 
 # Open lab (15 min)
 

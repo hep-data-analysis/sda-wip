@@ -283,7 +283,7 @@ Notebook: [`course/lab3/ex_B.ipynb`](../lab3/ex_B.ipynb)
 
 # Systematics are correlated across channels
 
-A systematic source $k$ (e.g., charm cross section, tagging efficiency, luminosity) shifts several channel yields $i$ at once by $v_{ik}$:
+A systematic source $k$ (e.g., luminosity, tagging efficiency, background cross section) shifts several channel yields $i$ at once by $v_{ik}$:
 
 $$\beta_i = \beta_{0i} + \sum_k v_{ik}\,\theta_k, \qquad \theta_k \sim \mathcal{N}(0,1)\;\;\text{independent}$$
 
@@ -292,7 +292,7 @@ This induces a **covariance matrix** across channels:
 $$\Sigma_{ij} = \text{cov}(\beta_i, \beta_j) = \sum_k v_{ik}\,v_{jk}$$
 
 - **Uncorrelated errors** per channel $\rightarrow$ $\Sigma$ is **diagonal** ($\Sigma_{ij} = 0$ for $i \neq j$)
-- **Shared sources** $\rightarrow$ off-diagonal terms $\Sigma_{ij} \neq 0$; ignoring them distorts the uncertainty on $\mu$
+- **Shared sources** $\rightarrow$ off-diagonal terms $\Sigma_{ij} \neq 0$; ignoring them distorts both the uncertainty on $\mu$ and the significance $Z_0$
 
 ---
 
@@ -327,37 +327,34 @@ $$\Sigma = U\Lambda U^T = A A^T, \qquad A = U\sqrt{\Lambda} \quad (\text{keeping
 
 ---
 
-# A real problem: OPERA $\nu_\tau$ appearance
+# Hands-on problem: a 2-channel search ($e$ and $\mu$)
 
-Final OPERA analysis ([arXiv:1804.04912](https://arxiv.org), Table III): 4 channels, 10 candidates.
+We combine two decay channels ($e$ and $\mu$) with an excess over a large background:
 
-| Channel | Bkg: charm | had. re-int. | large-$\mu$ scat. | Signal ($\mu=1$) | Observed |
-|---|---|---|---|---|---|
-| $\tau\to 1h$ | $0.15\pm0.03$ | $1.28\pm0.38$ | – | $2.96\pm0.59$ | 6 |
-| $\tau\to 3h$ | $0.44\pm0.09$ | $0.09\pm0.03$ | – | $1.83\pm0.37$ | 3 |
-| $\tau\to\mu$ | $0.008\pm0.002$ | – | $0.016\pm0.008$ | $1.15\pm0.23$ | 1 |
-| $\tau\to e$ | $0.035\pm0.007$ | – | – | $0.84\pm0.17$ | 0 |
+| Channel | Expected bkg $\beta_{0i}$ | Bkg uncertainty $\sigma_{bi}$ | Expected signal $s_i$ ($\mu=1$) | Observed $n_i$ |
+|---|---|---|---|---|
+| **$e$ channel** | $100$ | $15$ ($15\%$) | $25$ | $130$ |
+| **$\mu$ channel** | $100$ | $15$ ($15\%$) | $25$ | $128$ |
 
-- Every signal error is **$\approx 20\%$**. The 2015 paper lists the sources: model ($10\%$), $\theta_{23},\Delta m^2_{23}$ ($10\%$), tagging efficiency ($15\%$). They are common to all channels
-- Background sources are shared across channels (charm in all four)
+$$\Sigma_b(\rho) = \begin{pmatrix} \sigma_e^2 & \rho\,\sigma_e\sigma_\mu \\ \rho\,\sigma_e\sigma_\mu & \sigma_\mu^2 \end{pmatrix}$$
 
-**Assumption in this exercise:** each source is fully correlated across the channels it touches (our modelling choice, not the collaboration's published treatment).
+- **$\rho = 0$ (uncorrelated):** two independent background fluctuations can partially cancel across channels.
+- **$\rho = 1$ (fully correlated):** a single shared source (e.g., luminosity or cross section) moves both backgrounds **together** $\rightarrow$ larger uncertainty on $\mu$ and **lower significance $Z_0$**.
 
 ---
 
 <!-- _class: lead -->
 # Hands-on C
-## OPERA with a covariance matrix
+## Two channels with correlated background
 
 ---
 
 # Exercise C ($\approx 40$ min)
 
-1. Inspect $\Sigma_b$ from the three background sources and its factorisation $\Sigma_b = A_b A_b^T$ (given). Check its **rank** and eigenvalues
-2. Build the RooFit model: 4 Poisson terms, linear yields $\beta_i=\beta_{0i}+\sum_k A^{(b)}_{ik}\theta^{(b)}_k$, and 1D constraints $\text{Gauss}(g_k \mid \theta_k, 1)$ with $g_k = 0$
-3. Fit, compute the **significance** $Z_0$ and the 68% interval on $\mu$
-4. Add a **signal uncertainty** of $20\%$ per channel with correlation $\rho$ between channels (using the given factor $A_s(\rho)$). Scan $\rho=0,\,0.5,\,1$
-5. How much does the interval on $\mu$ change? Does $Z_0$ change? Why?
+1. **Diagonalise $\Sigma_b(\rho)$:** build the $2\times 2$ covariance matrix and compute $A = U\sqrt{\Lambda}$ for $\rho = 0$ (rank 2) and $\rho = 1$ (rank 1)
+2. **Build the $\rho = 0$ model:** 2 Poisson terms (`pois_e`, `pois_mu`), linear background yields $\beta_i = \beta_{0i} + \sum_k A_{ik}\theta_k$, and 1D constraints $\text{Gauss}(g_k \mid \theta_k, 1)$ with $g_k = 0$
+3. **Fit and test:** measure $\hat{\mu}$, the 68% profile-likelihood interval, and the significance $Z_0$ with RooStats
+4. **Compare $\rho = 0,\, 0.5,\, 1$:** see how the interval width grows and $Z_0$ drops when the background uncertainty is fully correlated
 
 Notebook: [`course/lab3/ex_C.ipynb`](../lab3/ex_C.ipynb)
 
@@ -366,13 +363,15 @@ Notebook: [`course/lab3/ex_C.ipynb`](../lab3/ex_C.ipynb)
 ### Key Takeaways from Hands-on C
 
 **Statistics**
-- Correlated uncertainties: the **covariance matrix** $\Sigma$. Factorising $\Sigma = A A^T$ assigns **one independent nuisance parameter $\theta_k$ per source**
-- The **number of nuisance parameters** is the **rank** of $\Sigma$, not the number of channels
+- Correlated uncertainties are encoded in $\Sigma = A A^T$, assigning **one independent nuisance parameter $\theta_k$ per non-zero eigenvalue**
+- **Number of nuisance parameters = $\text{rank}(\Sigma)$:** 2 channels with $\rho = 1$ need **1** parameter, not 2
+- Positive correlation on the **background** reduces cancellation between channels $\rightarrow$ wider interval on $\mu$ and **lower significance $Z_0$**
 
 **RooFit**
-- Diagonalisation ($A = U\sqrt{\Lambda}$, keeping $\lambda_k > 0$) turns correlated channels into independent unit-normal parameters $\theta_k$
-- Each channel gets a linear `RooFormulaVar` combining $\theta_k$, paired with a 1D `RooGaussian(g_k, theta_k, 1)` constraint ($g_k = 0$ global observable)
+- Eigen-decomposition ($A = U\sqrt{\Lambda}$, keeping $\lambda_k > 0$) turns correlated channels into independent unit-normal parameters $\theta_k$
+- Each channel uses a linear `RooFormulaVar` combining $\theta_k$, paired with `RooGaussian(g_k, theta_k, 1)` ($g_k = 0$ global observable)
 
+---
 
 # Open lab (15 min)
 

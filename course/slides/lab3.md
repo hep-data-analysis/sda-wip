@@ -192,6 +192,26 @@ A **calculator** takes `(data, ModelConfig)` and returns the statement:
 *The right roles are all RooStats needs: no change to the model.*
 
 ---
+<!--
+
+---
+
+# Intervals and limits
+
+- **Profile-likelihood interval** (what we used in Lab 2): the $\mu$ where $q(\mu)\le 1$, with $q(\mu)=-2\ln\lambda(\mu)$: the same ratio as $q_0$, with $\mu$ fixed at the tested value
+- **Upper limit** when the signal is not seen: $\text{CL}_s$ method, via `HypoTestInverter`
+- Asymptotic formulae are fast and good for large samples; **toys** are needed when counts are small
+
+Choose the calculator from the **question**:
+
+| Question | Tool |
+|---|---|
+| how significant is the excess? | hypothesis test ($q_0$) |
+| what is $\mu$ and its uncertainty? | profile-likelihood interval |
+| nothing seen, how big can $\mu$ be? | $\text{CL}_s$ upper limit |
+
+---
+-->
 
 # One test statistics, two uses
 
@@ -207,7 +227,8 @@ A **calculator** takes `(data, ModelConfig)` and returns the statement:
 | evidence | 3 | $1.3\times10^{-3}$ |
 | discovery | 5 | $2.9\times10^{-7}$ |
 
-By Wilks' theorem $q$ is asymptotically $\chi^2$: **fast, but good only for large samples**. With few counts use **toys**.
+By Wilks' theorem $q$ is asymptotically $\chi^2$: **fast, but good only for large samples**.   
+With few counts use **toys**.
 
 ---
 

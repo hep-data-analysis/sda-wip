@@ -1,4 +1,4 @@
-# Index of the topics: from the problem to the tool
+# Topics
 
 For each statistical **problem**: the **concept** that solves it, the **tool** (RooFit, RooStats, HistFactory, TMVA, ROOT) and **where** to find it. The slides are in [`slides/`](slides/), the exercises in the folder of each lab.
 

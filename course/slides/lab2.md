@@ -212,7 +212,7 @@ $$-2\ln\frac{L(\mu)}{L(\hat\mu)} \;\sim\; \chi^2_1$$
 | 90% | 1.36 | 2.71 |
 | 95 % | 1.92 | 3.84 |
 
-The interval is where the NLL curve $ -\ln L $ is below the minimum **+ 0.5**.
+The interval is where the NLL curve $-\ln L$ is below the minimum **+ the value of the table** (0.5 for 68 %).
 It need not be symmetric: this is the **MINOS interval** (see the figure of Talk A).
 
 ---

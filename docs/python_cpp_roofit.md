@@ -12,28 +12,29 @@ The [RooFit tutorials](https://root.cern/doc/master/group__tutorial__roofit__mai
 | Header | `import ROOT` | `#include "RooRealVar.h"`, `#include "RooGaussian.h"`, ... and `using namespace RooFit;` |
 | Entry point | top-level code | `void macro() { ... }` |
 | Options of a function | keyword arguments: `Save=True`, `PrintLevel=-1`, `Range="fit"` | `RooFit` helpers: `Save()`, `PrintLevel(-1)`, `Range("fit")` |
-| Objects | normal objects | create objects on the stack (`RooRealVar x(...)`), and use `->` for pointers |
+| Objects | normal objects | create objects on the stack (`RooRealVar x{...};`), and use `->` for pointers |
 
 ## The same program
 
 | Task | Python | C++ |
 |---|---|---|
-| Observable | `x = ROOT.RooRealVar("x", "x", -10, 10)` | `RooRealVar x("x", "x", -10, 10);` |
-| Parameter (start, min, max) | `mean = ROOT.RooRealVar("mean", "mean", 0, -10, 10)` | `RooRealVar mean("mean", "mean", 0, -10, 10);` |
+| Observable | `x = ROOT.RooRealVar("x", "x", -10, 10)` | `RooRealVar x{"x", "x", -10, 10};` |
+| Parameter (start, min, max) | `mean = ROOT.RooRealVar("mean", "mean", 0, -10, 10)` | `RooRealVar mean{"mean", "mean", 0, -10, 10};` |
 | Constant | `tau.setConstant(True)` | `tau.setConstant(true);` |
-| Pdf | `gauss = ROOT.RooGaussian("gauss", "gauss", x, mean, sigma)` | `RooGaussian gauss("gauss", "gauss", x, mean, sigma);` |
-| Generate | `data = gauss.generate(ROOT.RooArgSet(x), 10000)` | `std::unique_ptr<RooDataSet> data{gauss.generate(RooArgSet(x), 10000)};` |
+| Pdf | `gauss = ROOT.RooGaussian("gauss", "gauss", x, mean, sigma)` | `RooGaussian gauss{"gauss", "gauss", x, mean, sigma};` |
+| Generate | `data = gauss.generate(ROOT.RooArgSet(x), 10000)` | `auto data = gauss.generate(RooArgSet(x), 10000);` or `std::unique_ptr<RooDataSet> data{gauss.generate(RooArgSet(x), 10000)};` |
 | Fit | `res = gauss.fitTo(data, Save=True, PrintLevel=-1)` | `auto res = gauss.fitTo(*data, Save(), PrintLevel(-1));` |
 | Fit in a sub-range | `x.setRange("fit", -5, 5)`, then `fitTo(data, Range="fit")` | `x.setRange("fit", -5, 5);`, then `fitTo(*data, Range("fit"))` |
 | Plot | `frame = x.frame()`, `data.plotOn(frame)`, `gauss.plotOn(frame)`, `frame.Draw()` | `RooPlot* frame = x.frame(); data->plotOn(frame); gauss.plotOn(frame); frame->Draw();` |
 | One component | `model.plotOn(frame, Components="bkg")` | `model.plotOn(frame, Components("bkg"));` |
-| Sum of pdfs (extended) | `ROOT.RooAddPdf("model", "model", ROOT.RooArgList(sig, bkg), ROOT.RooArgList(nsig, nbkg))` | `RooAddPdf model("model", "model", RooArgList(sig, bkg), RooArgList(nsig, nbkg));` |
-| Sum of pdfs (fraction) | `ROOT.RooAddPdf("model", "model", ROOT.RooArgList(sig, bkg), ROOT.RooArgList(fsig))` | `RooAddPdf model("model", "model", RooArgList(sig, bkg), RooArgList(fsig));` |
-| NLL | `nll = model.createNLL(data, ROOT.RooFit.Extended(True))` | `std::unique_ptr<RooAbsReal> nll{model.createNLL(*data, Extended(true))};` |
-| Minimiser | `minim = ROOT.RooMinimizer(nll)`, `minim.minimize("Minuit2", "Migrad")`, `minim.hesse()` | `RooMinimizer minim(*nll); minim.minimize("Minuit2", "Migrad"); minim.hesse();` |
+| Sum of pdfs (extended) | `ROOT.RooAddPdf("model", "model", ROOT.RooArgList(sig, bkg), ROOT.RooArgList(nsig, nbkg))` or `ROOT.RooAddPdf("model", "model", [sig, bkg], [nsig, nbkg])` | `RooAddPdf model("model", "model", RooArgList(sig, bkg), RooArgList(nsig, nbkg));` or `RooAddPdf model{"model", "model", {sig, bkg}, {nsig, nbkg}};` |
+| Sum of pdfs (fraction) | `ROOT.RooAddPdf("model", "model", ROOT.RooArgList(sig, bkg), ROOT.RooArgList(fsig))` or `ROOT.RooAddPdf("model", "model", [sig, bkg], [fsig])` | `RooAddPdf model("model", "model", RooArgList(sig, bkg), RooArgList(fsig));` or `RooAddPdf model{"model", "model", {sig, bkg}, {fsig}};` |
+| NLL | `nll = model.createNLL(data, ROOT.RooFit.Extended(True))` | `auto nll = model.createNLL(*data, Extended(true));` or `std::unique_ptr<RooAbsReal> nll{model.createNLL(*data, Extended(true))};` |
+| Minimiser | `minim = ROOT.RooMinimizer(nll)`, `minim.minimize("Minuit2", "Migrad")`, `minim.hesse()` | `RooMinimizer minim{*nll}; minim.minimize("Minuit2", "Migrad"); minim.hesse();` |
 | Result | `res = minim.save()`, `res.status()` | `auto res = minim.save(); res->status();` |
 
-## Two habits that save time
+## Habits that save time
 
-- In C++ `generate` returns a pointer: use `*data` when a function wants an object, and `data->` to call a method.
+- In C++ `generate` returns a **pointer**: use `*data` when a function wants an object, and `data->` to call a method. With `auto` you own the pointer and should `delete` it, with `std::unique_ptr` it is deleted for you.
+- In C++ a last argument `0` (an integer) is ambiguous for `RooRealVar`: write `0.`, for example `RooRealVar c{"c", "c", -0.3, -2., 0.};`.
 - The notebooks print `PASS` or `FAIL` with a `check(...)` function. In a macro, print the same numbers with `std::cout` and compare them to the values written in the notebook.

@@ -1,8 +1,6 @@
 # Examples: real measurements, simplified for teaching
 
-Each case is a **simplified analysis modelled on a real measurement**. Every folder has a `README.md` (the physics, the data and the link to the paper), a `data/` folder and the original exercise text (`exercise-original.md`). Solutions are **not** here: see the `solutions` branch.
-
-## The gallery
+Each case is a **simplified analysis modelled on a real measurement**. Every folder has a `README.md` (the physics, the data and the link to the paper), a `data/` folder and the exercise (`exercise.md`). Solutions are **not** here: see the `solutions` branch.
 
 **[LHCb: the rarest $B^0$ decay ever observed](lhcb-b0-ppbar/)** · Labs 1 and 2
 *In 2017 LHCb saw, for the first time, a $B^0$ meson decay into a proton and an antiproton: about one decay in eighty million. A small peak on a flat background: is it a discovery?* Paper: [arXiv:1709.01156](https://arxiv.org/abs/1709.01156).
@@ -49,8 +47,6 @@ Each case is a **simplified analysis modelled on a real measurement**. Every fol
 
 <!-- FIGURE: enubet-test-beam/fit_result.png -->
 
-## The table
-
 | Case | Field | Role in the course | Data |
 |---|---|---|---|
 | [`lhcb-b0-ppbar`](lhcb-b0-ppbar/) | flavour | **Lab 1, Lab 2** | 166 masses, a mass histogram |
@@ -65,6 +61,6 @@ Each case is a **simplified analysis modelled on a real measurement**. Every fol
 
 **Notes**
 - The problems are simplified on purpose and imitate the published plots. Do not quote physics results from them.
-- `exercise-original.md`: the original statement of the exercise, as plain text (equations, figures and tables are not included).
+- `exercise.md`: the original statement of the exercise, as plain text (equations, figures and tables are not included).
 - The extra cases are for self-study: each has a suggested path to follow on your own after the corresponding lab.
 - Adding a case = adding a folder with the same four parts.

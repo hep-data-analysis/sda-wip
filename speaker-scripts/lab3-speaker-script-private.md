@@ -138,23 +138,36 @@
 
 *Time-box: 15 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold line of each slide and come back to the rest at the end of the hands-on.*
 
-**\[DO\] slide 14 — Roles in RooStats**
+**\[DO\] slide 15 —  From the model to a statement**
 
-**SAY:** Welcome back. Now RooStats. RooStats needs to know the role of every element of the model. \[PAUSE\] Look at the table. The model: SetPdf. The parameters of interest: for us, the signal strength. The nuisance parameters. The observables, the data. And the global observables. All of these live in an object called ModelConfig. Then the calculators work on a pair: the data, and the ModelConfig. **If you give the right roles, RooStats does the rest.** The calculators we see: the profile likelihood calculator, the asymptotic calculator, the frequentist calculator with toys, and the hypothesis test inverter for limits.
 
-*IT: ModelConfig = ruoli degli elementi. I calcolatori lavorano su (dati, ModelConfig).*
-
-**\[DO\] slide 15 — Hypothesis test and significance**
-
-**SAY:** The hypothesis test. The null hypothesis is: no signal, mu equal to zero. The test statistic, q zero, is minus two times the log of the profile likelihood ratio. The significance Z is the square root of q zero. And the p-value is one minus the Gaussian cumulative of Z. \[PAUSE\] Two numbers to remember. Three sigma, one in about eight hundred: evidence. Five sigma, about three in ten million: discovery. \[PAUSE\] And a useful formula, from the paper of Cowan, Cranmer, Gross and Vitells. When the background is known, the Asimov significance is: square root of two times s plus b, times the log of one plus s over b, minus s. For s much smaller than b it becomes s over square root of b. **But s over root b overestimates the significance when s is not small. Do not use it for a result.**
-
-*IT: q0, Z=sqrt(q0), p; 3σ=1.3e-3, 5σ=2.9e-7; formula di Asimov; s/√b sovrastima.*
-
-**\[DO\] slide 16 — Intervals and limits**
+SAY: “Three questions, one likelihood. Significance, interval, limit. RooFit builds the model, RooStats gives the statement.” (~1 min)
 
 **SAY:** Three questions, three tools. How significant is the excess? The hypothesis test. What is mu, with its uncertainty? The profile likelihood interval, as in Lab 2. Nothing is seen: how large can mu be? The upper limit, with the CLs method. \[PAUSE\] Asymptotic formulae are fast, and good for large samples. With few counts you need toys. **Choose the calculator from the question, not from habit.**
 
 *IT: tre domande, tre strumenti; asintotico vs toy. CLs nel notebook opzionale.*
+
+
+**\[DO\] slide 16 — Roles in RooStats**
+
+**SAY:** Welcome back. Now we move from RooFit to **RooStats**. Remember the division of labor: RooFit build PDFs and likelihoods, while RooStats is the statistical inference layer on top—it and automates hypothesis tests, confidence intervals, and upper limits. [PAUSE] Unlike a manual `Migrad` fit, RooStats cannot guess what each variable in your model represents. It needs to know the **role** of every element, and we store those roles inside a **`ModelConfig`** object. Look at the table The model: SetPdf. The parameters of interest: for us, the signal strength. The nuisance parameters. The observables, the data. And the global observables. All of these live in an object called ModelConfig. Then the calculators work on a pair: the data, and the ModelConfig. **If you give the right roles, RooStats does the rest.** The calculators we see: the profile likelihood calculator, the asymptotic calculator, the frequentist calculator with toys, and the hypothesis test inverter for limits.
+
+*IT: ModelConfig = ruoli degli elementi. I calcolatori lavorano su (dati, ModelConfig).*
+
+**\[DO\] slide 17 — One ratio, two uses**
+
+SAY: “Same ratio as Lab 2. Fix mu at zero: significance. Fix mu at every value: interval.” The hypothesis test. The null hypothesis is: no signal, mu equal to zero. The test statistic, q zero, is minus two times the log of the profile likelihood ratio. The significance Z is the square root of q zero. And the p-value is one minus the Gaussian cumulative of Z. \[PAUSE\] Poi 3σ/5σ. Two numbers to remember. Three sigma, one in about eight hundred: evidence. Five sigma, about three in ten million: discovery. \[PAUSE\] 
+Chiudi con “asymptotic is fast, toys for few counts”. 
+
+*IT: q0, Z=sqrt(q0), p; 3σ=1.3e-3, 5σ=2.9e-7;*
+
+**\[DO\] slide 18 — Estimating Z by hand**
+
+And a useful formula, from the paper of Cowan, Cranmer, Gross and Vitells. When the background is known, the Asimov significance is: square root of two times s plus b, times the log of one plus s over b, minus s. For s much smaller than b it becomes s over square root of b. **But s over root b overestimates the significance when s is not small. Do not use it for a result.**
+
+Chiudi con il link a Ex B4.
+
+*IT: formula di Asimov; s/√b sovrastima.*
 
 ---
 
@@ -201,66 +214,46 @@
 **SAY:** Let's take a short break. We restart at 11:35.
 
 ---
+## 2:45 — Talk C: Correlated systematics (slides 20–24, 12 min)
 
-## 2:45 — Talk C: Correlated systematics (slides 20–23, 10 min)
+**\[DO\] slide 21 — Systematics are correlated across channels**
+**SAY:** Welcome to the final part: correlated systematics. A systematic rarely affects only one number. A source—for example the luminosity, a tagging efficiency, or a background cross section—moves several channel yields together. \[PAUSE\] We associate an independent, standard-normal nuisance parameter theta k to each physical source k, and v i k tells us how much channel i moves for a one-sigma shift. Across the channels, this induces a covariance matrix: Sigma i j is the sum over sources of v i k times v j k. **Ignoring off-diagonal terms changes both the uncertainty on mu and the significance Z zero.**
 
-*Time-box: 10 minutes, plus the 5-minute live coding. No slide is removed: if you are late, say the bold line of each slide and come back to the rest at the end of the hands-on.*
+**\[DO\] slide 22 — A 2-channel example: two ways to write the same model**
+**SAY:** Let's see this on a concrete two-channel example before touching any matrices. Suppose two channels share a single common ten-percent uncertainty, so correlation rho equals one. The covariance matrix Sigma has determinant zero—it is rank one, so you cannot invert it to write a two-dimensional Gaussian! \[PAUSE\] Instead, we use the standard high-energy physics trick: we introduce **just one** standard-normal parameter theta, and write beta one equal to beta zero one plus sigma one times theta, and beta two equal to beta zero two plus sigma two times theta. **A single shared parameter theta automatically enforces one-hundred-percent correlation without inverting Sigma.**
 
-**\[DO\] slide 21 — Systematics are correlated**
+**\[DO\] slide 23 — General case: from any Sigma to independent theta k**
+**SAY:** Now, what if we are given a general covariance matrix Sigma? Any symmetric positive-semidefinite Sigma can be diagonalised: U Lambda U transpose. Define A equal to U times the square root of Lambda, keeping only the non-zero eigenvalues. Then beta vector is beta zero plus A times theta vector, with independent standard-normal theta k. \[PAUSE\] **The number of nuisance parameters theta k is the rank of Sigma—never more than the number of channels.** And in RooFit, once A is computed, you only need linear RooFormulaVar expressions and one-dimensional RooGaussian constraints.
 
-**SAY:** A systematic uncertainty rarely affects only one number. A source, for example the charm cross section, or the tagging efficiency, or the luminosity, moves several yields together. \[PAUSE\] We write this with a covariance matrix. Sigma i j is the sum, over the sources, of the effect of source k on channel i, times the effect on channel j. If the errors are independent, the matrix is diagonal. If a source is common to two channels, we have off-diagonal terms. **Ignoring them changes the size of the uncertainty on mu. How much? Only a calculation can tell.**
-
-*IT: una sorgente muove più canali; Sigma = somma v v^T; fuori diagonale = correlazioni.*
-
-**\[DO\] slide 22 — Diagonalise**
-
-**SAY:** How do we put a covariance matrix in a likelihood? We diagonalise it. A real symmetric matrix can be written as U Lambda U transpose. Lambda is diagonal, with the eigenvalues. Then we define independent nuisance parameters, z k. Each one is a standard Gaussian. And the correlated parameters are: beta zero, plus U, times square root of Lambda, times z. \[PAUSE\] Two practical results. One: we need one nuisance parameter for each non-zero eigenvalue. This is the rank of the matrix. Four channels, three sources: three nuisance parameters, not four. Two: if the errors are fully correlated, there is only one nuisance parameter. **This is what HistFactory, pyhf, and the experiment combinations do under the hood.**
-
-*IT: Σ=UΛU^T; β=β0+U√Λ z; z indipendenti N(0,1); rango = numero di sorgenti.*
-
-**\[DO\] slide 23 — A real problem: OPERA**
-
-**SAY:** Here is our real problem. The OPERA experiment. It looks for tau neutrinos appearing in a muon-neutrino beam. This is the final analysis, from the 2018 paper. Four channels, which are four decay modes of the tau. Ten candidate events. \[PAUSE\] Look at the table: the backgrounds by source, the expected signal, the observed events. Notice something. All the signal errors are about twenty percent. In the 2015 paper, the sources are listed: the model, ten percent. The oscillation parameters, ten percent. The tagging efficiency, fifteen percent. These are common to all channels. \[PAUSE\] **Our assumption: each source is fully correlated across the channels it affects. This is our modelling choice. It is not the published treatment of the collaboration.** Please remember this, and say it in your report.
-
-*IT: OPERA reale (Tab. III, arXiv:1804.04912). L'ipotesi di correlazione piena è NOSTRA, non della collaborazione: ribadiscilo.*
+**\[DO\] slide 24 — Hands-on problem: a 2-channel search (e and mu)**
+**SAY:** Here is our hands-on problem: combining two search channels, electron and muon. Each channel has one hundred expected background events with a fifteen-percent uncertainty, twenty-five expected signal events, and we observe one hundred thirty and one hundred twenty-eight events. \[PAUSE\] Look at what happens as we vary the correlation rho between the two background uncertainties: when rho is zero, independent background fluctuations can partially cancel; when rho is one, a single shared source moves both backgrounds together, widening the interval on mu and lowering the discovery significance Z zero.
 
 ---
 
-## 2:55 — Live coding C1: covariance and diagonalisation (5 min)
+## 2:57 — Live coding C1: diagonalising Sigma_b (5 min)
 
-**\[DO\]** Open the notebook ex C, cell C1. The function `factor` has a TODO with the hint in a comment. We write the three lines on the screen.
+**\[DO\]** Open `ex_C.ipynb`, cell C1. We inspect `Sigma_0` and `Sigma_1` and fill `A_0`.
 
-**SAY:** Now the factorisation of the covariance matrix. \[PAUSE\] We want a matrix A such that A times A transposed is Sigma. First line: eigh of Sigma, which gives the eigenvalues, w, and the eigenvectors, U. \[PAUSE\] Second line: **we keep only the non-zero eigenvalues**. Third line: A is U times the square root of the eigenvalues, one column for each non-zero eigenvalue. \[PAUSE\] **The number of columns is the rank of Sigma: the number of independent sources.** Four channels with three sources give three columns, so three nuisance parameters, not four.
-
-*IT: riempi dal vivo factor (circa 5 min): eigh(Sigma) → tieni solo gli autovalori > tol → A = U·sqrt(w). Le colonne = rango = fonti indipendenti: 4 canali e 3 fonti → 3 nuisance.*
-
-**Ask:** Four channels, three independent sources. How many columns does A have? **Expected:** three.
+**SAY:** Let's look at cell C1 together. For rho equal to zero, the covariance matrix is diagonal, so `eigh` gives two equal eigenvalues: fifteen squared, two hundred twenty-five. Keeping eigenvalues above ten to the minus ten gives a two-by-two matrix A zero—so two nuisance parameters. \[PAUSE\] Now look right below at rho equal to one: one eigenvalue is zero, and the other is four hundred fifty! So A one has **only one column**: a single shared nuisance parameter theta zero.
 
 ---
 
-## 3:00 — Hands-on C: OPERA with a covariance matrix (slides 24–26, 40 min)
+## 3:02 — Hands-on C: Two channels with correlated background (40 min)
 
-**\[DO\] slide 25 — Exercise C**
+**\[DO\] slide 26 — Exercise C**
 
-**SAY:** Exercise C is the main one today. \[PAUSE\] Step one: build the covariance matrix of the backgrounds from the three sources, and diagonalise it with numpy. What is the rank? Step two: build the RooFit model. Four Poisson terms. The expected background is beta zero plus A times z. And one Gaussian constraint for each z. Step three: fit, compute the significance and the sixty-eight percent interval on mu. Step four: add the signal uncertainty, twenty percent per channel, with correlation rho. Scan rho equal to zero, zero point five, one. Step five: by how much does the interval change? Does the significance change? \[PAUSE\] This will take about forty minutes. Please ask when you are stuck: the model building is the difficult part.
+**SAY:** In Exercise C, you build this two-channel model in RooFit. First, complete the linear background expressions beta e and beta mu and the Poisson expectations in C2 for rho equal to zero, then compute the sixty-eight percent interval and significance Z zero with RooStats. Next, run C3 to scan rho equal to zero, zero point five, and one, and answer the four questions at the bottom. You have forty minutes.
 
-*IT: C1 factor(), C2 build\_opera (formule lin e lam), C3 scansione rho. Attesi: rango 3; Z≈3.9; larghezza intervallo ≈0.96 (ρ=0), ≈1.06 (ρ=1).*
+**At the end (SAY):** Look at the numbers from C3. For uncorrelated backgrounds (rho equal to zero), we get a significance of about two point six sigma. When the background errors are fully correlated (rho equal to one), the model uses just one shared nuisance parameter, the interval on mu becomes nearly thirty percent wider, and the significance drops to about two point one sigma—because both backgrounds can now fluctuate upward together to mimic the excess!
 
-**While walking around:**
+---
 
-- What is the rank of your matrix? Why not four?
-- What is the range of z? Is the background positive at the minimum?
-- Why do we use max of the expression and a small number in the Poisson mean?
-- Does the fit converge?
+**\[DO\] slide 27 — Key Takeaways from Hands-on C (2 min, at the end)**
 
-**At the end (SAY):** Let's see the result. \[PAUSE\] The interval on mu is about ten percent wider when the signal uncertainty is fully correlated. And the significance of mu equal to zero does not change at all. Why? \[PAUSE\] Because at mu equal to zero the signal is multiplied by zero. **The signal uncertainty cannot matter for the discovery. It matters for the measurement.** And the main message: ten events. The Poisson fluctuation dominates. The systematics change the interval by only ten percent. So improving the systematic estimate would help little here.
+**SAY:** Statistics. Correlated uncertainties are encoded in the covariance matrix Sigma equal to A times A transpose, assigning **one independent nuisance parameter theta k per non-zero eigenvalue—so the number of parameters equals the rank of Sigma**. For two channels with correlation one, you need just one parameter, not two. And remember what you just saw: positive correlation on the background prevents fluctuations from cancelling across channels, widening the interval on mu and **lowering the significance Z zero**. \[PAUSE\] RooFit. Eigen-decomposition gives A equal to U times square root of Lambda for non-zero eigenvalues. Each channel then gets a linear RooFormulaVar combining the theta k, paired with a one-dimensional RooGaussian constraint centered on the global observable g k equal to zero.
 
+*IT: statistica: covarianza Σ = A·Aᵀ → un nuisance θ_k per autovalore ≠ 0 (numero di nuisance = rango di Σ; 2 canali con ρ=1 → 1 solo parametro); correlazione positiva sul fondo → meno cancellazione tra canali → intervallo più largo e Z₀ più bassa. RooFit: A = U√Λ; RooFormulaVar lineare per canale con θ_k; RooGaussian(g_k, θ_k, 1) con g_k = 0.*
 
-**\[DO\] slide 26 — Key Takeaways from Hands-on C (2 min, at the end)**
-
-**SAY:** Statistics. Correlated uncertainties: the covariance matrix Sigma. We write Sigma as A times A transposed, and we give one nuisance parameter to each independent source. **The number of nuisance parameters is the rank of Sigma.** \[PAUSE\] RooFit. numpy eigh gives eigenvalues and eigenvectors: keep the non-zero ones. Each channel gets a RooFormulaVar with the nuisance parameters theta k, and each theta k a RooGaussian constraint.
-
-*IT: statistica: matrice di covarianza Σ = A·Aᵀ, un nuisance per ogni fonte indipendente; numero di nuisance = rango di Σ. RooFit: eigh → autovalori ≠ 0; RooFormulaVar per canale con θ_k; RooGaussian di vincolo per ogni θ_k.*
 
 ---
 
@@ -313,3 +306,20 @@
 | Slow | This step takes a minute. Please be patient. | Ci vuole un minuto |
 | Version | Which ROOT version do you have? | Che versione di ROOT? |
 | Fallback | Please continue in Codespaces. | Continuate in Codespaces |
+
+
+
+
+#### 1. Number of nuisance parameters (\(\rho = 0\) vs \(\rho = 1\)):
+
+For \(\rho = 0\), \[\Sigma _{b}\]⁠ is diagonal with two non-zero eigenvalues (\(\lambda_1 = \lambda_2 = 225\)), so the model needs **2 independent nuisance parameters** (\(\theta_0, \theta_1\)). For \(\rho = 1\), \[\Sigma _{b}\]⁠ has determinant zero and rank 1 (\(\lambda_1 = 450, \lambda_2 = 0\)), so both channels are controlled by **1 shared nuisance parameter** (\[\theta _{0}\]⁠). In general, the number of nuisance parameters equals \(\text{rank}(\Sigma_b)\).
+
+#### 2. Interval width on \[\mu \]⁠ (\(\rho = 0 \to 1\)):
+
+The 68% interval width increases by roughly **25–30%** (from \[\approx 1.06\]⁠ at \(\rho = 0\) to \[\approx 1.36\]⁠ at \(\rho = 1\)). When the two background uncertainties are uncorrelated, independent upward and downward fluctuations partially cancel out when combining the channels; when \(\rho = 1\), both backgrounds shift coherently in the same direction, reducing the precision on \[\mu \]⁠.
+
+#### 3. Why the significance \[Z_{0}\]⁠ drops (\(\approx 2.6\sigma \to \approx 2.1\sigma\)):
+Under the background-only hypothesis (\(\mu = 0\)), the observed excesses in both channels (\[130\]⁠ and \[128\]⁠ vs. \[100\]⁠ expected) must be explained by background fluctuations alone. When \(\rho = 1\), a **single** positive pull of the shared nuisance parameter (\(\theta_0 > 0\)) raises both \[\beta _{e}\]⁠ and \[\beta _{\mu }\]⁠ simultaneously at the cost of only one Gaussian penalty term, making the background-only hypothesis much more compatible with the data and lowering \[Z_{0}\]⁠.
+
+#### 4. What if \[\rho \]⁠ were on the signal uncertainty instead of the background?
+If the correlation were on the **signal** uncertainty, \[Z_{0}\]⁠ would **not change at all** across \(\rho \in \{0, 0.5, 1\}\). Under the null hypothesis \(\mu = 0\), the expected signal term \(\mu s_i\) vanishes identically in the numerator \(L(\mu=0, \hat{\hat{\theta}})\) of the profile likelihood ratio, so signal nuisance parameters have zero effect on the background-only fit (they only widen the interval on \[\^{\mu }\]⁠).

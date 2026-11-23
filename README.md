@@ -58,9 +58,19 @@ Students are encouraged to **bring a laptop with a working ROOT environment, pre
 Binder and Colab are fallback options: sessions are temporary, so download your notebooks before closing.
 
 
-## Where to find a topic
+## Topics and examples
 
-From the statistical problem to the tool, and where it is taught: the [index of the topics](course/topics.md). The [gallery of examples](examples/) shows the same tools on real measurements.
+- [List of topics](course/topics.md)
+- Examples, simplified from real measurements:
+  [LHCb](examples/lhcb-b0-ppbar/) ($B^0\to p\bar p$) ·
+  [D0](examples/top-quark-on-off/) (top quark) ·
+  [OPERA](examples/opera-tau-appearance/) ($\nu_\tau$ appearance) ·
+  [CMS](examples/cms-higgs-4l/) ($H\to4\ell$) ·
+  [MAGIC](examples/magic-gamma-hadron/) (gamma/hadron) ·
+  [CUORE-0](examples/cuore0/) ($0\nu\beta\beta$) ·
+  [IceCube](examples/icecube-oscillations/) ·
+  [MINOS](examples/minos-oscillations/) ·
+  [ENUBET](examples/enubet-test-beam/)
 
 ## References
 

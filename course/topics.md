@@ -48,4 +48,4 @@ For each statistical **problem**: the **concept** that solves it, the **tool** (
 
 ## Where is a topic that is not here?
 
-The [examples](../examples/) show the same tools on real measurements. If a topic is missing, [write to the lecturer](../README.md).
+The [gallery](../gallery/) show the same tools on real measurements. If a topic is missing, [write to the lecturer](../README.md).

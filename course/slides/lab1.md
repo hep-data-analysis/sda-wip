@@ -273,7 +273,7 @@ $$-\ln L = \sum_j \big[\nu_j(\theta) - n_j \ln \nu_j(\theta)\big]$$
 
 # Exercise B (≈ 55 min)
 
-**B1. LHCb $B^0_s$ mass** — file [`examples/lhcb-b0-ppbar/data/b0_invariant_mass.root`](../../examples/lhcb-b0-ppbar/data/b0_invariant_mass.root).
+**B1. LHCb $B^0_s$ mass** — file [`gallery/data/lhcb-b0_invariant_mass.root`](../../gallery/data/lhcb-b0_invariant_mass.root).
 Import the histogram as a `RooDataHist`. Fit a Breit–Wigner. Add a Gaussian
 resolution and compare the result with the PDG mass.
 
@@ -383,7 +383,7 @@ h  = df.Histo1D(("h", ";m;events", 100, 100, 150), "m")
 
 # Exercise C (≈ 35 min)
 
-**C1. Extended fit, signal + background** — [`examples/lhcb-b0-ppbar/data/rarest_b0_decay.dat`](../../examples/lhcb-b0-ppbar/data/rarest_b0_decay.dat)
+**C1. Extended fit, signal + background** — [`gallery/data/lhcb-b0-rarest_decay.dat`](../../gallery/data/lhcb-b0_rarest_decay.dat)
 Gaussian signal + exponential background, extended ML.
 Report $\nu_s$, $\nu_b$ with errors. Plot with the components and the pulls.
 

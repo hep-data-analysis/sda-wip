@@ -12,7 +12,7 @@ Hands-on lab module on ROOT, RooFit, RooStats and HistFactory, for experimental 
 .devcontainer/  environment.yml    the environment (Codespaces / conda)
 course/                            slides, notebooks for the current edition
 docs/                              installation guides and documentation
-examples/                          self-contained physics-inspired exercises and datasets
+gallery/                           self-contained physics-inspired exercises and datasets
 third_party/                       material of the ROOT Project course (LGPL)
 ```
 
@@ -23,7 +23,7 @@ The `third_party/root-cpp-course-roofit` files are copied from
 ## Getting started
 
 - Start here: [`course/README.md`](course/README.md)
-- Use-cases: [`examples/README.md`](examples/README.md)
+- Use-cases: [`gallery/README.md`](gallery/README.md)
 - Previous edition (2025): [`sda2025/`](https://github.com/gabriele-sirri/sda2025)
 
 
@@ -58,19 +58,22 @@ Students are encouraged to **bring a laptop with a working ROOT environment, pre
 Binder and Colab are fallback options: sessions are temporary, so download your notebooks before closing.
 
 
-## Topics and examples
+## Topics
 
 - [List of topics](course/topics.md)
-- Examples, simplified from real measurements:
-  [LHCb](examples/lhcb-b0-ppbar/) ($B^0\to p\bar p$) ·
-  [D0](examples/top-quark-on-off/) (top quark) ·
-  [OPERA](examples/opera-tau-appearance/) ($\nu_\tau$ appearance) ·
-  [CMS](examples/cms-higgs-4l/) ($H\to4\ell$) ·
-  [MAGIC](examples/magic-gamma-hadron/) (gamma/hadron) ·
-  [CUORE-0](examples/cuore0/) ($0\nu\beta\beta$) ·
-  [IceCube](examples/icecube-oscillations/) ·
-  [MINOS](examples/minos-oscillations/) ·
-  [ENUBET](examples/enubet-test-beam/)
+
+## Gallery
+
+- Use-cases, simplified from real measurements:
+  [LHCb](gallery/lhcb-b0-ppbar.md) ($B^0\to p\bar p$) ·
+  [D0](gallery/top-quark-on-off.md) (top quark) ·
+  [OPERA](gallery/opera-tau-appearance.md) ($\nu_\tau$ appearance) ·
+  [CMS](gallery/cms-higgs-4l.md) ($H\to4\ell$) ·
+  [MAGIC](gallery/magic-gamma-hadron.md) (gamma/hadron) ·
+  [CUORE-0](gallery/cuore0.md) ($0\nu\beta\beta$) ·
+  [IceCube](gallery/icecube-oscillations.md) ·
+  [MINOS](gallery/minos-oscillations.md) ·
+  [ENUBET](gallery/enubet-test-beam.md)
 
 ## References
 

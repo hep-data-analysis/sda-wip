@@ -1,6 +1,6 @@
-# Examples: real measurements, simplified for teaching
+# Gallery: real measurements, simplified for teaching
 
-Each case is a **simplified analysis modelled on a real measurement**. Every folder has a `README.md` (the physics, the data and the link to the paper), a `data/` folder and the exercise (`exercise.md`). Solutions are **not** here: see the `solutions` branch.
+
 
 **[LHCb: the rarest $B^0$ decay ever observed](lhcb-b0-ppbar/)** · Labs 1 and 2
 *In 2017 LHCb saw, for the first time, a $B^0$ meson decay into a proton and an antiproton: about one decay in eighty million. A small peak on a flat background: is it a discovery?* Paper: [arXiv:1709.01156](https://arxiv.org/abs/1709.01156).

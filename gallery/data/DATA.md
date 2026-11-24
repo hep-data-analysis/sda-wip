@@ -1,6 +1,6 @@
 # Data sources
 
-Each dataset keeps the license and terms of its original source. This table says where the data of each case in `examples/` come from, as written in the README of the case.
+Each dataset keeps the license and terms of its original source. This table says where the data of each case come from.
 
 | Case | Origin | Type | Terms |
 |---|---|---|---|

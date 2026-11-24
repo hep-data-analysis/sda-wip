@@ -6,7 +6,7 @@ ROOT.gROOT.SetBatch(True); ROOT.gErrorIgnoreLevel = ROOT.kWarning
 ROOT.RooMsgService.instance().getStream(0).minLevel = RF.WARNING
 ROOT.RooMsgService.instance().setGlobalKillBelow(RF.WARNING)
 OUT = "../course/slides/img/"
-DATA = "../examples/lhcb-b0-ppbar/data/rarest_b0_decay.dat"
+DATA = "../gallery/data/lhcb-b0_decay.dat"
 
 # ---------- the model of Lab 1 (Exercise C) and of Lab 2 (Exercise C)
 m     = ROOT.RooRealVar("m", "m [MeV]", 5080, 5540)

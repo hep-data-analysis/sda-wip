@@ -32,8 +32,8 @@ void createModel(RooWorkspace& w)
   
   data.Print();
 
-  cout << "-- read minos_2013_unbinned.dat\n";
-  RooDataSet mc_noosc = *RooDataSet::read("minos_2013_unbinned.dat", e, "v");
+  cout << "-- read minos_2013_mc.dat\n";
+  RooDataSet mc_noosc = *RooDataSet::read("minos_2013_mc.dat", e, "v");
   mc_noosc.Print();
 
   // Create a binned dataset

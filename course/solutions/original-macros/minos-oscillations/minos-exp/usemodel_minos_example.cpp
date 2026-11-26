@@ -11,7 +11,7 @@ void useModel(RooWorkspace& w)
   RooAbsReal* nll = model->createNLL(*data);
 
   // Create MINUIT interface object
-  RooMinuit m(*nll);
+  RooMinimizer m(*nll);
 
   // Activate verbose logging of MINUIT parameter space stepping
   m.setVerbose(kTRUE);

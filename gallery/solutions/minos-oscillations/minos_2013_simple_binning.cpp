@@ -27,13 +27,13 @@ void createModel(RooWorkspace& w)
   e.setBins(27);
 
   cout << "-- read minos_2013_data.dat\n";
-  RooDataSet data = *RooDataSet::read("minos_2013_data.dat", e, "v");
+  RooDataSet data = *RooDataSet::read("../../data/minos_2013_data.dat", e, "v");
   data.SetName("data"); // just to import the object in the RooWorkpsace with a (more) generic name, the default name assigned by read(..) was "dataset"
   
   data.Print();
 
   cout << "-- read minos_2013_mc.dat\n";
-  RooDataSet mc_noosc = *RooDataSet::read("minos_2013_mc.dat", e, "v");
+  RooDataSet mc_noosc = *RooDataSet::read("../../data/minos_2013_mc.dat", e, "v");
   mc_noosc.Print();
 
   // Create a binned dataset

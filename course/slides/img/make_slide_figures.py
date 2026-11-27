@@ -1,4 +1,4 @@
-"""Figures of the slides of Labs 2 and 3, drawn with RooFit (RooPlot) and ROOT in their default style.
+"""Figures of the slides, drawn with RooFit (RooPlot) and ROOT in their default style.
 Run from this folder:  python make_slide_figures.py     Output: *.png in this folder"""
 import ROOT
 from ROOT import RooFit as RF
@@ -103,4 +103,39 @@ for k, n in enumerate((5, 40), 1):
         lg.AddEntry(fp, "Poisson (exact)", "L"); lg.AddEntry(fg, "Gaussian constraint", "L"); lg.Draw(); fs.append(lg)
     fs += [fp, fg]
 c4.SaveAs(OUT + "poisson_vs_gauss.png")
+
+# ---------- Figure 5 (Lab 3 backup): the constraint shapes for b_hat = 3.8, as functions of beta
+# Each curve is scaled to 1 at its maximum. Moment matching: Gamma k = (b0/sigma_b)^2 = n_off, rate = b0/sigma_b^2 = tau;
+# log-normal with ln(kappa) = sigma_b/b0.
+c5 = ROOT.TCanvas("c5", "constraints", 1400, 520); c5.Divide(2, 1)
+keep5 = []
+for k, (n, tau) in enumerate(((40, 10.53), (4, 1.053)), 1):
+    c5.cd(k)
+    b0, sb = n / tau, n**0.5 / tau
+    xmin, xmax = (2.0, 6.0) if n == 40 else (-2.5, 12.0)
+    # Gaussian: defined also for beta < 0
+    fg = ROOT.TF1("c5g%d" % k, "exp(-0.5*pow((x-%g)/%g,2))" % (b0, sb), xmin, xmax)
+    fg.SetTitle("n_{off} = %d  (#sigma_{b} = %.1f);#beta;likelihood (peak = 1)" % (n, sb))
+    fg.SetLineColor(ROOT.kRed); fg.SetLineStyle(2)
+    fg.SetMinimum(0); fg.SetMaximum(1.15)
+    # Poisson, as a function of beta: beta^n exp(-tau beta)
+    fp = ROOT.TF1("c5p%d" % k, "exp(%g*log(%g*x/%g) - %g*x + %g)" % (n, tau, n, tau, n), 0.02, xmax)
+    fp.SetLineColor(ROOT.kBlue)
+    # Gamma, moment matched: beta^(k-1) exp(-rate beta), k = n_off
+    fm = ROOT.TF1("c5m%d" % k, "exp(%g*log(%g*x/%g) - %g*x + %g)" % (n - 1, tau, n - 1, tau, n - 1), 0.02, xmax)
+    fm.SetLineColor(ROOT.kGreen + 2); fm.SetLineStyle(3); fm.SetLineWidth(3)
+    # log-normal: exp(-ln^2(beta/b0) / (2 s^2)), s = sigma_b/b0
+    fl = ROOT.TF1("c5l%d" % k, "exp(-0.5*pow(log(x/%g)/%g,2))" % (b0, sb / b0), 0.02, xmax)
+    fl.SetLineColor(ROOT.kMagenta + 1); fl.SetLineStyle(4)
+    fg.Draw()
+    for f in (fp, fm, fl):
+        f.Draw("same")
+    if k == 1:
+        lg = ROOT.TLegend(0.60, 0.62, 0.93, 0.86); lg.SetBorderSize(0); lg.SetFillStyle(0)
+        lg.AddEntry(fp, "Poisson (exact)", "L"); lg.AddEntry(fm, "Gamma", "L")
+        lg.AddEntry(fg, "Gaussian", "L"); lg.AddEntry(fl, "log-normal", "L"); lg.Draw(); keep5.append(lg)
+    keep5 += [fg, fp, fm, fl]
+c5.SaveAs(OUT + "constraints_comparison.png")
+
+
 print("figures done")

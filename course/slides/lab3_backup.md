@@ -31,10 +31,11 @@ style: |
 
 ---
 
-![bg right:48% fit](img/constraints_comparison.png)
+<!-- ![bg right:48% fit](img/constraints_comparison.png) -->
 
-# Backup: the shapes for $\hat b=3.8$
+# Constraint shapes for $\hat b=3.8$
 
 Left: $n_{\rm off}=40$ ($\sigma_b=0.6$): all agree.  
-Right: $n_{\rm off}=4$ ($\sigma_b=1.9$): Gaussian is  symmetric and leaks to $\beta<0$; Gamma and log-normal are skewed.
+Right: $n_{\rm off}=4$ ($\sigma_b=1.9$): Gaussian is symmetric and leaks to $\beta<0$; Gamma and log-normal are skewed.
 
+![](img/constraints_comparison.png)

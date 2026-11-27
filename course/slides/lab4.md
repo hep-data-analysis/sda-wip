@@ -39,11 +39,11 @@ Today closes the chain: **binned models**, and a first look at **event selection
 
 # Solutions of Lab 3 (15 minutes)
 
-The solutions are in the `solutions` branch: [`solutions/lab3/`](../../solutions/lab3), from today.
+The solutions are in the `solutions` branch: [`solutions/lab3/`](../solutions/lab3), from today.
 
-- **[A](../../solutions/lab3/ex_A_solution.ipynb)**: on/off with a Gaussian constraint, and the significance (A1, A2)
-- **[B](../../solutions/lab3/ex_B_solution.ipynb)**: `ModelConfig`, intervals, and the significance of the background-only hypothesis (B1–B3)
-- **[C](../../solutions/lab3/ex_C_solution.ipynb)**: OPERA: covariance and diagonalisation (C1–C3)
+- **[A](../solutions/lab3/ex_A_solution.ipynb)**: on/off with a Gaussian constraint, and the significance (A1, A2)
+- **[B](../solutions/lab3/ex_B_solution.ipynb)**: `ModelConfig`, intervals, and the significance of the background-only hypothesis (B1–B3)
+- **[C](../solutions/lab3/ex_C_solution.ipynb)**: OPERA: covariance and diagonalisation (C1–C3)
 
 ---
 

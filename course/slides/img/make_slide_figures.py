@@ -1,12 +1,12 @@
 """Figures of the slides of Labs 2 and 3, drawn with RooFit (RooPlot) and ROOT in their default style.
-Run from this folder:  python make_slide_figures.py     Output: ../course/slides/img/*.png"""
+Run from this folder:  python make_slide_figures.py     Output: *.png in this folder"""
 import ROOT
 from ROOT import RooFit as RF
 ROOT.gROOT.SetBatch(True); ROOT.gErrorIgnoreLevel = ROOT.kWarning
 ROOT.RooMsgService.instance().getStream(0).minLevel = RF.WARNING
 ROOT.RooMsgService.instance().setGlobalKillBelow(RF.WARNING)
-OUT = "../course/slides/img/"
-DATA = "../gallery/data/lhcb-b0_decay.dat"
+OUT = ""
+DATA = "../../../gallery/data/lhcb-b0_rarest_decay.dat"
 
 # ---------- the model of Lab 1 (Exercise C) and of Lab 2 (Exercise C)
 m     = ROOT.RooRealVar("m", "m [MeV]", 5080, 5540)

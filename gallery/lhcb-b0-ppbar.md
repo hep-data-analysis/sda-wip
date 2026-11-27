@@ -8,7 +8,7 @@
 
 **Our fit** (Lab 1, Exercise C):
 
-![w:520](fit_result.png)
+![w:520](img/lhcb-b0-ppbar.png)
 
 **Real measurement.** LHCb Collaboration, “First observation of the rare purely baryonic decay B⁰→p p̄”, Phys. Rev. Lett. 119 (2017) 232001: [arXiv:1709.01156](https://arxiv.org/abs/1709.01156), [doi:10.1103/PhysRevLett.119.232001](https://doi.org/10.1103/PhysRevLett.119.232001). The data of this folder are a simplified version built for teaching.
 

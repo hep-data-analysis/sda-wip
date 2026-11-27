@@ -41,11 +41,11 @@ Discuss in pairs, then we compare:
 
 # Solutions of Lab 1 (15 minutes)
 
-The solutions are in the `solutions` branch: [`solutions/lab1/`](../../solutions/lab1), from today.
+The solutions are in the `solutions` branch: [`solutions/lab1/`](../solutions/lab1), from today.
 
-- **[A](../../solutions/lab1/ex_A_solution.ipynb)**: the Gaussian fit and the **ranges** of a parameter and of an observable (A1, A3)
-- **[B](../../solutions/lab1/ex_B_solution.ipynb)**: the **binned** Breit–Wigner fit and the central limit theorem (B1, B2)
-- **[C](../../solutions/lab1/ex_C_solution.ipynb)**: **extended** and **shape-only** fits, and the number of free parameters (C1, C2)
+- **[A](../solutions/lab1/ex_A_solution.ipynb)**: the Gaussian fit and the **ranges** of a parameter and of an observable (A1, A3)
+- **[B](../solutions/lab1/ex_B_solution.ipynb)**: the **binned** Breit–Wigner fit and the central limit theorem (B1, B2)
+- **[C](../solutions/lab1/ex_C_solution.ipynb)**: **extended** and **shape-only** fits, and the number of free parameters (C1, C2)
 
 ---
 

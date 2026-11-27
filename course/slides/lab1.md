@@ -383,7 +383,7 @@ h  = df.Histo1D(("h", ";m;events", 100, 100, 150), "m")
 
 # Exercise C (≈ 35 min)
 
-**C1. Extended fit, signal + background** — [`gallery/data/lhcb-b0-rarest_decay.dat`](../../gallery/data/lhcb-b0_rarest_decay.dat)
+**C1. Extended fit, signal + background** — [`gallery/data/lhcb-b0_rarest_decay.dat`](../../gallery/data/lhcb-b0_rarest_decay.dat)
 Gaussian signal + exponential background, extended ML.
 Report $\nu_s$, $\nu_b$ with errors. Plot with the components and the pulls.
 
